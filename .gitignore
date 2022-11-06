@@ -1,7 +1,13 @@
+# frontend
 frontend/node_modules/
+
+# backend
 backend/venv/
-*__pycache__*
-*.idea*
-*.vscode*
-*/migrations/*
+**__pycache__
+**/migrations/
 !**/migrations/__init__.py
+
+
+# general
+**.idea
+**.vscode
