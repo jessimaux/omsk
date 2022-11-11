@@ -1,6 +1,5 @@
 import axios from '@/api/axios'
 
-
 const getPartners = () => {
   return axios.get('guide/partners/')
 }
@@ -10,11 +9,11 @@ const getProducts = () => {
 }
 
 const exportProducts = () => {
-  return axios.get('guide/products/export', { responseType: 'arraybuffer' })
+  return axios.get('guide/products/export/', { responseType: 'arraybuffer' })
 }
 
 const importProducts = (file) => {
-  return axios.post('guide/products/import', file)
+  return axios.post('guide/products/import/', file)
 }
 
 const getProduct = (id) => {

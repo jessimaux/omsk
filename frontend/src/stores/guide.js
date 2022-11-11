@@ -1,19 +1,18 @@
 import { defineStore } from 'pinia'
 import guideApi from '@/api/guide'
-import guide from '../api/guide'
 
 export const useGuideStore = defineStore('guide', {
   state: () => {
     return {
       data: null,
-      errors: null
+      errors: null,
     }
   },
 
   getters: {
     getData(state) {
       return state.data
-    }
+    },
   },
 
   actions: {
@@ -45,24 +44,22 @@ export const useGuideStore = defineStore('guide', {
 
     // TODO: add then/catch
     async exportProducts() {
-      await guideApi.exportProducts()
-        .then((response) => {
-          const blob = new Blob([response.data], { type: response.data.type });
-          const url = window.URL.createObjectURL(blob);
-          const link = document.createElement('a');
-          link.href = url;
-          const contentDisposition = response.headers['content-disposition'];
-          if (contentDisposition) {
-            const fileNameMatch = contentDisposition.match(/filename="(.+)"/);
-            if (fileNameMatch.length === 2)
-              var fileName = fileNameMatch[1];
-          }
-          link.setAttribute('download', fileName);
-          document.body.appendChild(link);
-          link.click();
-          link.remove();
-          window.URL.revokeObjectURL(url);
-        })
+      await guideApi.exportProducts().then((response) => {
+        const blob = new Blob([response.data], { type: response.data.type })
+        const url = window.URL.createObjectURL(blob)
+        const link = document.createElement('a')
+        link.href = url
+        const contentDisposition = response.headers['content-disposition']
+        if (contentDisposition) {
+          const fileNameMatch = contentDisposition.match(/filename="(.+)"/)
+          if (fileNameMatch.length === 2) var fileName = fileNameMatch[1]
+        }
+        link.setAttribute('download', fileName)
+        document.body.appendChild(link)
+        link.click()
+        link.remove()
+        window.URL.revokeObjectURL(url)
+      })
     },
 
     // TODO: add than / catch
@@ -147,5 +144,5 @@ export const useGuideStore = defineStore('guide', {
           this.errors = result.response.data
         })
     },
-  }
+  },
 })

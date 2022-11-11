@@ -13,7 +13,7 @@ router.register(r'requests', RequestViewSet)
 router.register(r'offers', OfferViewSet)
 
 urlpatterns = [
+    path('products/export/', ProductExportView.as_view(), name='products-export'),
+    path('products/import/', ProductImportView.as_view(), name='products-import'),
     path('', include(router.urls)),
-    path('products/export', ProductExportView.as_view(), name='product-export'),
-    path('products/import', ProductImportView.as_view({'post': 'create'}))
   ]

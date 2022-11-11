@@ -7,71 +7,98 @@
       <form class="row g-3" @submit.prevent="onSubmit">
         <div class="col-12">
           <label class="form-label">Название проекта</label>
-          <input type="text" class="form-control" v-model="project.name">
+          <input
+            type="text"
+            class="form-control"
+            v-model="initialValues.name"
+          />
         </div>
 
         <div class="col-12">
           <label class="form-label">Статус проекта</label>
           <select class="form-select" v-model="project.status">
-            <option value="В работе">В работе</option>
-            <option value="На согласовании">На согласовании</option>
-            <option value="Согласована спека">Согласована спека</option>
-            <option value="Выдали ТЗ">Выдали ТЗ</option>
-            <option value="Разместили аукцион">Разместили аукцион</option>
-            <option value="Закуп">Закуп</option>
-            <option value="Доставка">Доставка</option>
-            <option value="Оплатили">Оплатили</option>
-            <option value="Закрыт">Закрыт</option>
-            <option value="Не состоялся">Не состоялся</option>
+            <option v-for="attribute in statusSelect" :value="attribute">
+              {{ attribute }}
+            </option>
           </select>
         </div>
 
         <div class="col-12">
           <label class="form-label">Наименование учреждения</label>
-          <input type="text" class="form-control" v-model="project.company_name">
+          <input
+            type="text"
+            class="form-control"
+            v-model="project.company_name"
+          />
         </div>
 
         <div class="col-12">
           <label class="form-label">ИНН</label>
-          <input type="text" class="form-control" v-model="project.company_inn">
+          <input
+            type="text"
+            class="form-control"
+            v-model="project.company_inn"
+          />
         </div>
 
         <div class="col-12">
           <label class="form-label">Город</label>
-          <input type="text" class="form-control" v-model="project.company_city">
+          <input
+            type="text"
+            class="form-control"
+            v-model="project.company_city"
+          />
         </div>
 
         <div class="col-12">
           <label class="form-label">Область</label>
-          <input type="text" class="form-control" v-model="project.company_region">
+          <input
+            type="text"
+            class="form-control"
+            v-model="project.company_region"
+          />
         </div>
 
         <div class="col-12">
           <label class="form-label">Партнер</label>
           <select class="form-select" v-model="project.partner">
-            <option v-for="partner in partners" :key="partner.id" :value="partner.id">{{ partner.name }}
+            <option
+              v-for="partner in partners"
+              :key="partner.id"
+              :value="partner.id"
+            >
+              {{ partner.name }}
             </option>
           </select>
         </div>
 
         <div class="col-12">
           <label class="form-label">Номер регистрации проекта</label>
-          <input type="text" class="form-control" v-model="project.reg_no">
+          <input type="text" class="form-control" v-model="project.reg_no" />
         </div>
 
         <div class="col-12">
           <label class="form-label">Количество детей в классе</label>
-          <input type="text" class="form-control" v-model="project.company_children">
+          <input
+            type="text"
+            class="form-control"
+            v-model="project.company_children"
+          />
         </div>
 
         <div class="col-12">
           <label class="form-label">Скидка</label>
-          <input type="text" class="form-control" :value="getDiscount" disabled>
+          <input
+            type="text"
+            class="form-control"
+            :value="getDiscount"
+            disabled
+          />
         </div>
 
         <div class="col-12">
           <label class="form-label">НДС</label>
-          <input type="text" class="form-control" v-model="project.nds">
+          <input type="text" class="form-control" v-model="project.nds" />
         </div>
 
         <!-- <div class="col-12">
@@ -81,67 +108,72 @@
 
         <div class="col-12">
           <label class="form-label">Срок поставки</label>
-          <input type="text" class="form-control" v-model="project.delivery_period">
+          <input
+            type="text"
+            class="form-control"
+            v-model="project.delivery_period"
+          />
         </div>
 
         <div class="col-12">
           <legend class="col-form-label">Наличие договора</legend>
           <div class="form-check">
-            <input type="checkbox" class="form-check-input" v-model="project.contract">
+            <input
+              type="checkbox"
+              class="form-check-input"
+              v-model="project.contract"
+            />
           </div>
         </div>
 
         <div class="col-12">
           <label class="form-label">Комментарий</label>
-          <textarea class="form-control" v-model="project.commentary"></textarea>
+          <textarea
+            class="form-control"
+            v-model="project.commentary"
+          ></textarea>
         </div>
 
         <div class="col-12">
-          <legend class="col-form-label">Опции формирования файла клиента</legend>
+          <legend class="col-form-label">
+            Опции формирования файла клиента
+          </legend>
           <div class="col-sm-10">
-
             <div class="form-check">
-              <input class="form-check-input" type="checkbox">
+              <input class="form-check-input" type="checkbox" />
               <label class="form-check-label">
                 Добавить "Строка по приказу"
               </label>
             </div>
 
             <div class="form-check">
-              <input class="form-check-input" type="checkbox">
-              <label class="form-check-label">
-                Добавить "Ссылка"
-              </label>
+              <input class="form-check-input" type="checkbox" />
+              <label class="form-check-label"> Добавить "Ссылка" </label>
             </div>
 
             <div class="form-check">
-              <input class="form-check-input" type="checkbox">
+              <input class="form-check-input" type="checkbox" />
               <label class="form-check-label">
                 Добавить "Страна производства"
               </label>
             </div>
 
             <div class="form-check">
-              <input class="form-check-input" type="checkbox">
-              <label class="form-check-label">
-                Добавить "Описание"
-              </label>
+              <input class="form-check-input" type="checkbox" />
+              <label class="form-check-label"> Добавить "Описание" </label>
             </div>
 
             <div class="form-check">
-              <input class="form-check-input" type="checkbox">
+              <input class="form-check-input" type="checkbox" />
               <label class="form-check-label">
                 Добавить "Техническое описание"
               </label>
             </div>
 
             <div class="form-check">
-              <input class="form-check-input" type="checkbox">
-              <label class="form-check-label">
-                Добавить "Заявка"
-              </label>
+              <input class="form-check-input" type="checkbox" />
+              <label class="form-check-label"> Добавить "Заявка" </label>
             </div>
-
           </div>
         </div>
 
@@ -174,55 +206,142 @@
             <tbody v-for="(row, index) in requestOffer" :key="`row-${index}`">
               <tr>
                 <td :rowspan="requestOffer[index].offer.length">
-                  <i @click="addRow(requestOffer)" class="bi bi-plus-square"></i>
-                  <i v-show="requestOffer.length > 1" @click="removeRow(index, requestOffer)"
-                    class="bi bi-dash-square"></i>
+                  <i
+                    @click="addRow(requestOffer)"
+                    class="bi bi-plus-square"
+                  ></i>
+                  <i
+                    v-show="requestOffer.length > 1"
+                    @click="removeRow(index, requestOffer)"
+                    class="bi bi-dash-square"
+                  ></i>
                 </td>
-                <td :rowspan="requestOffer[index].offer.length">{{ index }}
+                <td :rowspan="requestOffer[index].offer.length">{{ index }}</td>
+                <td :rowspan="requestOffer[index].offer.length">
+                  <input
+                    type="text"
+                    v-model="requestOffer[index].str_by_order"
+                  />
                 </td>
                 <td :rowspan="requestOffer[index].offer.length">
-                  <input type="text" v-model="requestOffer[index].str_by_order">
+                  <input type="text" v-model="requestOffer[index].name" />
                 </td>
                 <td :rowspan="requestOffer[index].offer.length">
-                  <input type="text" v-model="requestOffer[index].name">
+                  <input type="text" v-model="requestOffer[index].tx" />
                 </td>
                 <td :rowspan="requestOffer[index].offer.length">
-                  <input type="text" v-model="requestOffer[index].tx">
+                  <input type="text" v-model="requestOffer[index].amount" />
                 </td>
                 <td :rowspan="requestOffer[index].offer.length">
-                  <input type="text" v-model="requestOffer[index].amount">
-                </td>
-                <td :rowspan="requestOffer[index].offer.length">
-                  <input type="text" v-model="requestOffer[index].price">
+                  <input type="text" v-model="requestOffer[index].price" />
                 </td>
                 <td :rowspan="requestOffer[index].offer.length">
                   {{ requestOffer[index].price * requestOffer[index].amount }}
                 </td>
-                <td><input type="text" v-model="requestOffer[index].offer[0].article"></td>
-                <td><input type="text" v-model="requestOffer[index].offer[0].name"></td>
-                <td><input type="text" v-model="requestOffer[index].offer[0].count"></td>
-                <td><input type="text" v-model="requestOffer[index].offer[0].price"></td>
-                <td>{{ requestOffer[index].offer[0].count * requestOffer[index].offer[0].price }} </td>
-                <td><input type="text" v-model="requestOffer[index].offer[0].available"></td>
                 <td>
-                  <i @click="addSubRow(requestOffer[index].offer)" class="bi bi-plus-square"></i>
-                  <i v-show="requestOffer[index].offer.length > 1" @click="removeSubRow(0, requestOffer[index].offer)"
-                    class="bi bi-dash-square"></i>
+                  <input
+                    type="text"
+                    v-model="requestOffer[index].offer[0].article"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    v-model="requestOffer[index].offer[0].name"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    v-model="requestOffer[index].offer[0].count"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    v-model="requestOffer[index].offer[0].price"
+                  />
+                </td>
+                <td>
+                  {{
+                    requestOffer[index].offer[0].count *
+                    requestOffer[index].offer[0].price
+                  }}
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    v-model="requestOffer[index].offer[0].available"
+                  />
+                </td>
+                <td>
+                  <i
+                    @click="addSubRow(requestOffer[index].offer)"
+                    class="bi bi-plus-square"
+                  ></i>
+                  <i
+                    v-show="requestOffer[index].offer.length > 1"
+                    @click="removeSubRow(0, requestOffer[index].offer)"
+                    class="bi bi-dash-square"
+                  ></i>
                 </td>
               </tr>
-              <tr v-if="requestOffer[index].offer.length > 1"
-                v-for="(subrow, subindex) in row.offer.slice(1, row.offer.length)" :key="`subrow-${subindex}`">
-                <td><input type="text" v-model="requestOffer[index].offer[subindex + 1].article"></td>
-                <td><input type="text" v-model="requestOffer[index].offer[subindex + 1].name"></td>
-                <td><input type="text" v-model="requestOffer[index].offer[subindex + 1].count"></td>
-                <td><input type="text" v-model="requestOffer[index].offer[subindex + 1].price"></td>
-                <td>{{ requestOffer[index].offer[subindex + 1].count * requestOffer[index].offer[subindex + 1].price }}
-                </td>
-                <td><input type="text" v-model="requestOffer[index].offer[subindex + 1].available"></td>
+              <tr
+                v-if="requestOffer[index].offer.length > 1"
+                v-for="(subrow, subindex) in row.offer.slice(
+                  1,
+                  row.offer.length
+                )"
+                :key="`subrow-${subindex}`"
+              >
                 <td>
-                  <i @click="addSubRow(requestOffer[index].offer)" class="bi bi-plus-square"></i>
-                  <i v-show="requestOffer[index].offer.length > 1"
-                    @click="removeSubRow(subindex + 1, requestOffer[index].offer)" class="bi bi-dash-square"></i>
+                  <input
+                    type="text"
+                    v-model="requestOffer[index].offer[subindex + 1].article"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    v-model="requestOffer[index].offer[subindex + 1].name"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    v-model="requestOffer[index].offer[subindex + 1].count"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    v-model="requestOffer[index].offer[subindex + 1].price"
+                  />
+                </td>
+                <td>
+                  {{
+                    requestOffer[index].offer[subindex + 1].count *
+                    requestOffer[index].offer[subindex + 1].price
+                  }}
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    v-model="requestOffer[index].offer[subindex + 1].available"
+                  />
+                </td>
+                <td>
+                  <i
+                    @click="addSubRow(requestOffer[index].offer)"
+                    class="bi bi-plus-square"
+                  ></i>
+                  <i
+                    v-show="requestOffer[index].offer.length > 1"
+                    @click="
+                      removeSubRow(subindex + 1, requestOffer[index].offer)
+                    "
+                    class="bi bi-dash-square"
+                  ></i>
                 </td>
               </tr>
             </tbody>
@@ -233,7 +352,6 @@
           <button type="submit" class="btn btn-primary">Сохранить</button>
         </div>
       </form>
-
     </div>
   </div>
 </template>
@@ -246,8 +364,8 @@ export default {
   props: {
     initialValues: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   setup() {
     const guideStore = useGuideStore()
@@ -271,6 +389,18 @@ export default {
         commentary: this.initialValues.commentary,
       },
       partners: [],
+      statusSelect: [
+        'В работе',
+        'На согласовании',
+        'Согласована спека',
+        'Выдали ТЗ',
+        'Разместили аукцион',
+        'Закуп',
+        'Доставка',
+        'Оплатили',
+        'Закрыт',
+        'Не состоялся',
+      ],
       requestOffer: [
         {
           str_by_order: '',
@@ -285,9 +415,9 @@ export default {
               count: '',
               price: '',
               available: '',
-            }
-          ]
-        }
+            },
+          ],
+        },
       ],
     }
   },
@@ -321,13 +451,13 @@ export default {
             price: '',
             total: '',
             available: '',
-          }
-        ]
+          },
+        ],
       })
     },
 
     removeRow(index, fieldType) {
-      fieldType.splice(index, 1);
+      fieldType.splice(index, 1)
     },
 
     addSubRow(fieldType) {
@@ -346,10 +476,9 @@ export default {
     },
   },
   created() {
-    this.guideStore.getPartners()
-      .then(() => {
-        this.partners = this.guideStore.data
-      })
-  }
+    this.guideStore.getPartners().then(() => {
+      this.partners = this.guideStore.data
+    })
+  },
 }
 </script>
