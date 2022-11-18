@@ -51,16 +51,16 @@
 </template>
 
 <script>
-import { useGuideStore } from '@/stores/guide.js'
+import { useGuidePartnersStore } from '@/stores/guidePartners.js'
 
 export default {
   name: 'Partners',
   setup() {
-    const guideStore = useGuideStore()
-    return { guideStore }
+    const guidePartnersStore = useGuidePartnersStore()
+    return { guidePartnersStore }
   },
   created() {
-    this.guideStore.getPartners()
+    this.guidePartnersStore.getPartners()
   }
 }
 </script>

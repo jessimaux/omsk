@@ -4,8 +4,8 @@ const getPartners = () => {
   return axios.get('guide/partners/')
 }
 
-const getProducts = () => {
-  return axios.get('guide/products/')
+const getProducts = (query) => {
+  return axios.get('guide/products/', {params: {search: query}})
 }
 
 const exportProducts = () => {

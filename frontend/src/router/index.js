@@ -4,6 +4,7 @@ import HomeView from '../views/HomeView.vue'
 import Login from '@/views/Login.vue'
 import Projects from '@/views/projects/Projects.vue'
 import ProjectsCreate from '@/views/projects/ProjectCreate.vue'
+import ProjectsEdit from '@/views/projects/ProjectEdit.vue'
 import GuideProducts from '@/views/guide/Products.vue'
 import CreateGuideProduct from '@/views/guide/ProductCreate.vue'
 import EditGuideProduct from '@/views/guide/ProductEdit.vue'
@@ -41,6 +42,14 @@ const router = createRouter({
       path: '/projects/create',
       name: 'project-create',
       component: ProjectsCreate,
+      meta: {
+        requiresAuth: true,
+      }
+    },
+    {
+      path: '/projects/:id/edit',
+      name: 'project-edit',
+      component: ProjectsEdit,
       meta: {
         requiresAuth: true,
       }

@@ -1,18 +1,23 @@
 <template>
   <main id="main" class="main">
+    <div class="pagetitle">
+      <h1>Продукт</h1>
+    </div>
+
     <section class="section">
-      <div class="row">
-        <div class="col-lg-12">
-          <product-form :initialValues="initialValues" @productSubmit="onSubmit"></product-form>
+      <form @submit.prevent="onSubmit">
+        <product-form :product="product"></product-form>
+
+        <div class="text-end mb-3">
+          <button type="submit" class="btn btn-primary">Сохранить</button>
         </div>
-      </div>
+      </form>
     </section>
   </main>
 </template>
 
 <script>
-import { useGuideStore } from '@/stores/guide'
-
+import { useGuideProductsStore } from '@/stores/guideProducts'
 import ProductForm from '@/components/Guide/ProductForm.vue'
 
 export default {
@@ -21,12 +26,12 @@ export default {
     ProductForm,
   },
   setup() {
-    const guideStore = useGuideStore()
-    return { guideStore }
+    const guideProductsStore = useGuideProductsStore()
+    return { guideProductsStore }
   },
   data() {
     return {
-      initialValues: {
+      product: {
         str_by_order: '',
         article: '',
         name: '',
@@ -46,9 +51,9 @@ export default {
   },
 
   methods: {
-    onSubmit(productFormInput) {
-      this.guideStore
-        .addProduct(productFormInput)
+    onSubmit() {
+      this.guideProductsStore
+        .addProduct(this.product)
         .then(() => {
           this.$router.push({ name: 'guide-products' })
         })

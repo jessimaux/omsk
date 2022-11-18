@@ -1,18 +1,23 @@
 <template>
   <main id="main" class="main">
+    <div class="pagetitle">
+      <h1>Продукт</h1>
+    </div>
+
     <section class="section">
-      <div class="row">
-        <div class="col-lg-12">
-          <product-form v-if="initialValues" :initialValues="initialValues" @productSubmit="onSubmit"></product-form>
+      <form @submit.prevent="onSubmit">
+        <product-form :product="product"></product-form>
+
+        <div class="text-end mb-3">
+          <button type="submit" class="btn btn-primary">Сохранить</button>
         </div>
-      </div>
+      </form>
     </section>
   </main>
 </template>
 
 <script>
-import { useGuideStore } from '@/stores/guide'
-
+import { useGuideProductsStore } from '@/stores/guideProducts'
 import ProductForm from '@/components/Guide/ProductForm.vue'
 
 export default {
@@ -21,38 +26,40 @@ export default {
     ProductForm,
   },
   setup() {
-    const guideStore = useGuideStore()
-    return { guideStore }
+    const guideProductsStore = useGuideProductsStore()
+    return { guideProductsStore }
   },
   computed: {
-    initialValues() {
-      if (!this.guideStore.data) {
+    product() {
+      if (!this.guideProductsStore.data) {
         return null
       }
-      return {
-        str_by_order: this.guideStore.data.str_by_order,
-        article: this.guideStore.data.article,
-        name: this.guideStore.data.name,
-        price_rrc: this.guideStore.data.price_rrc,
-        price_buy: this.guideStore.data.price_buy,
-        link: this.guideStore.data.link,
-        country: this.guideStore.data.country,
-        description: this.guideStore.data.description,
-        description_tech: this.guideStore.data.description_tech,
-        description_add: this.guideStore.data.description_add,
-        recommendation: this.guideStore.data.recommendation,
-        provider: this.guideStore.data.provider,
-        nds: this.guideStore.data.nds,
-        available: this.guideStore.data.available
+      else {
+        return {
+          str_by_order: this.guideProductsStore.data.str_by_order,
+          article: this.guideProductsStore.data.article,
+          name: this.guideProductsStore.data.name,
+          price_rrc: this.guideProductsStore.data.price_rrc,
+          price_buy: this.guideProductsStore.data.price_buy,
+          link: this.guideProductsStore.data.link,
+          country: this.guideProductsStore.data.country,
+          description: this.guideProductsStore.data.description,
+          description_tech: this.guideProductsStore.data.description_tech,
+          description_add: this.guideProductsStore.data.description_add,
+          recommendation: this.guideProductsStore.data.recommendation,
+          provider: this.guideProductsStore.data.provider,
+          nds: this.guideProductsStore.data.nds,
+          available: this.guideProductsStore.data.available
+        }
       }
     }
   },
 
   methods: {
-    onSubmit(productFormInput) {
+    onSubmit() {
       const id = this.$route.params.id
-      this.guideStore
-        .editProduct(id, productFormInput)
+      this.guideProductsStore
+        .editProduct(id, this.product)
         .then(() => {
           this.$router.push({ name: 'guide-products' })
         })
@@ -61,7 +68,7 @@ export default {
 
   created() {
     const id = this.$route.params.id
-    this.guideStore.getProduct(id)
+    this.guideProductsStore.getProduct(id)
   },
 
 }

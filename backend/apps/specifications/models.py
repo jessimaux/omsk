@@ -5,7 +5,7 @@ from apps.guide.models import ProductGuide
 
 
 class Specification(models.Model):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    project = models.OneToOneField(Project, on_delete=models.CASCADE)
 
 
 class Request(models.Model):
@@ -15,9 +15,11 @@ class Request(models.Model):
     tx = models.CharField(max_length=255, blank=True, null=True)
     amount = models.PositiveIntegerField(default=0)
     price = models.PositiveIntegerField(default=0)
-
+    
 
 class Offer(models.Model):
     request = models.ForeignKey(Request, on_delete=models.CASCADE)
-    product = models.ForeignKey(ProductGuide, on_delete=models.CASCADE)
+    product = models.ForeignKey(ProductGuide, on_delete=models.CASCADE, null=True)
+    article = models.CharField(max_length=255, null=True, blank=True)
+    name = models.CharField(max_length=255, null=True, blank=True)
     count = models.PositiveIntegerField(default=0)

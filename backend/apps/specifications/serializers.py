@@ -3,19 +3,23 @@ from rest_framework import serializers
 from .models import Specification, Request, Offer
 
 
-class SpecificationSerializer(serializers.ModelSerializer):
+class OfferSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Specification
+        model = Offer
         fields = '__all__'
 
 
 class RequestSerializer(serializers.ModelSerializer):
+    offer = OfferSerializer(many=True, source="offer_set")
+    
     class Meta:
         model = Request
         fields = '__all__'
+                
 
-
-class OfferSerializer(serializers.ModelSerializer):
+class SpecificationSerializer(serializers.ModelSerializer):
+    requestOffer = RequestSerializer(many=True, source="request_set")
+    
     class Meta:
-        model = Offer
+        model = Specification
         fields = '__all__'

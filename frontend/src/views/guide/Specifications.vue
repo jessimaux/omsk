@@ -36,16 +36,16 @@
 </template>
 
 <script>
-import { useGuideStore } from '@/stores/guide.js'
+import { useGuideSpecificationsStore } from '@/stores/guideSpecifications.js'
 
 export default {
   name: 'Specifications',
   setup() {
-    const guideStore = useGuideStore()
-    return { guideStore }
+    const guideSpecificationsStore = useGuideSpecificationsStore()
+    return { guideSpecificationsStore }
   },
   created() {
-    this.guideStore.getSpecifications()
+    this.guideSpecificationsStore.getSpecifications()
   }
 }
 </script>

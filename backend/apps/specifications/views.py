@@ -6,7 +6,6 @@ from .serializers import SpecificationSerializer, RequestSerializer, OfferSerial
 
 
 class SpecificationsViewSet(mixins.CreateModelMixin,
-                            mixins.DestroyModelMixin,
                             mixins.RetrieveModelMixin,
                             viewsets.GenericViewSet):
     queryset = Specification.objects.all()

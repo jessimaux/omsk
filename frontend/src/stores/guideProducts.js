@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import guideApi from '@/api/guide'
 
-export const useGuideStore = defineStore('guide', {
+export const useGuideProductsStore = defineStore('guideProducts', {
   state: () => {
     return {
       data: null,
@@ -15,25 +15,12 @@ export const useGuideStore = defineStore('guide', {
     },
   },
 
-  actions: {
-    async getPartners() {
+  actions:{
+    async getProducts(query=null) {
       this.data = null
       this.errors = null
       await guideApi
-        .getPartners()
-        .then((response) => {
-          this.data = response.data
-        })
-        .catch((result) => {
-          this.errors = result.response.data
-        })
-    },
-
-    async getProducts() {
-      this.data = null
-      this.errors = null
-      await guideApi
-        .getProducts()
+        .getProducts(query)
         .then((response) => {
           this.data = response.data
         })
@@ -90,6 +77,7 @@ export const useGuideStore = defineStore('guide', {
         })
         .catch((result) => {
           this.errors = result.response.data
+          throw result.response.data
         })
     },
 
@@ -103,6 +91,7 @@ export const useGuideStore = defineStore('guide', {
         })
         .catch((result) => {
           this.errors = result.response.data
+          throw result.response.data
         })
     },
 
@@ -118,31 +107,5 @@ export const useGuideStore = defineStore('guide', {
           this.errors = result.response.data
         })
     },
-
-    async getProviders() {
-      this.data = null
-      this.errors = null
-      await guideApi
-        .getProviders()
-        .then((response) => {
-          this.data = response.data
-        })
-        .catch((result) => {
-          this.errors = result.response.data
-        })
-    },
-
-    async getSpecifications() {
-      this.data = null
-      this.errors = null
-      await guideApi
-        .getSpecifications()
-        .then((response) => {
-          this.data = response.data
-        })
-        .catch((result) => {
-          this.errors = result.response.data
-        })
-    },
-  },
+  }
 })

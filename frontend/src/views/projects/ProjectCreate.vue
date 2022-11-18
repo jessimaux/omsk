@@ -1,25 +1,32 @@
 <template>
   <main id="main" class="main">
+    <div class="pagetitle">
+      <h1>Проект</h1>
+    </div>
+
     <section class="section">
-      <div class="row">
-        <div class="col-lg-12">
-          <project-form :initialValues="initialValues" @projectSubmit="onSubmit">
-          </project-form>
+      <form @submit.prevent="onSubmit">
+        <project-form :project="project" @projectFormSubmit="onStageSubmit"></project-form>
+        <specification :requestOffer="requestOffer" @submit.prevent="onSubmit"></specification>
+
+        <div class="text-end mb-3">
+          <button type="submit" class="btn btn-primary">Сохранить</button>
         </div>
-      </div>
+      </form>
     </section>
   </main>
 </template>
 
 <script>
 import { useProjectsStore } from '@/stores/projects'
-
 import ProjectForm from '@/components/Projects/ProjectForm.vue'
+import Specification from '@/components/Specifications/Specification.vue'
 
 export default {
   name: 'ProjectCreate',
   components: {
     ProjectForm,
+    Specification,
   },
   setup() {
     const projectsStore = useProjectsStore()
@@ -27,29 +34,49 @@ export default {
   },
   data() {
     return {
-      initialValues: {
-        name: '1',
-        status: '1',
-        company_name: '1',
-        company_inn: '1',
-        company_city: '1',
-        company_region: '1',
-        company_children: '1',
-        reg_no: '1',
-        nds: false,
-        partner: '1',
-        delivery_period: '2000-01-01',
-        contract: false,
+      project: {
+        name: '',
+        status: '',
+        company_name: '',
+        company_inn: '',
+        company_city: '',
+        company_region: '',
+        company_children: '',
+        reg_no: '',
+        nds: true,
+        partner: '',
         commentary: '',
-      }
+      },
+      requestOffer: [
+        {
+          str_by_order: '',
+          name: '',
+          tx: '',
+          amount: '',
+          price: '',
+          offer: [{
+            product: '',
+            article: '',
+            name: '',
+            count: '',
+            price: '0',
+            available: '0',
+          }],
+        },
+      ],
     }
   },
 
   methods: {
-    onSubmit(projectFormInput) {
-      this.projectsStore.addFullProject(projectFormInput)
-    }
-  }
-
+    onSubmit() {
+      this.projectsStore.addProject(this.project)
+        .then(() => {
+          this.projectsStore.addSpecification()
+            .then(() => {
+              this.projectsStore.addRequestOffer(this.requestOffer)
+            })
+        })
+    },
+  },
 }
 </script>

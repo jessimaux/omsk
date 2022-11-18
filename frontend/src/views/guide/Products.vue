@@ -1,21 +1,29 @@
 <template>
   <main id="main" class="main">
+    <div class="pagetitle">
+      <h1>Продукты</h1>
+    </div>
+
     <section class="section">
       <div class="row">
         <div class="col-lg-12">
           <div class="card">
-            <div class="card-header">
-              <h5 class="card-title">Продукты</h5>
-              <router-link :to="{ name: 'guide-products-create' }">
-                <button class="btn btn-primary"><i class="bi bi-plus-square"></i>Добавить</button>
-              </router-link>
-
-              <button class="btn btn-primary" @click="exportProducts"><i class="bi bi-download"></i>Экспорт</button>
-
-              <input type="file" @change="importProducts" ref="file">
-            </div>
             <div class="card-body">
-              <!-- Default Table -->
+              <div class="support-bar d-flex flex-row justify-content-end py-2">
+                <router-link class="btn btn-primary me-2" :to="{ name: 'guide-products-create' }">
+                  <i class="bi bi-plus-square"></i>&nbspДобавить
+                </router-link>
+
+                <button class="btn btn-primary me-2" @click="exportProducts">
+                  <i class="bi bi-download"></i>&nbspЭкспорт
+                </button>
+
+                <div class="btn-import">
+                  <label for="btn-import" class="btn btn-primary"><i class="bi bi-upload"></i>&nbspИмпорт</label>
+                  <input type="file" id="btn-import" @change="importProducts" ref="file" hidden>
+                </div>
+              </div>
+
               <div class="table-responsive">
                 <table class="table">
                   <thead>
@@ -39,7 +47,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="item in   guideStore.getData" :key="item.id">
+                    <tr v-for="item in guideProductsStore.getData" :key="item.id">
                       <td>{{ item.id }}</td>
                       <td>{{ item.str_by_order }}</td>
                       <td>{{ item.article }}</td>
@@ -56,9 +64,13 @@
                       <td>{{ item.nds }}</td>
                       <td>{{ item.available }}</td>
                       <td>
-                        <i class="bi bi-x-square" @click="onClickProductDelete(item.id)"></i>
-                        <router-link :to="{ name: 'guide-products-edit', params: { id: item.id } }"><i
-                            class="bi bi-pencil-square"></i></router-link>
+                        <div class="d-flex flex-row">
+                          <button type="button" class="btn btn-primary me-2"><i class="bi bi-x-square"
+                              @click="onClickProductDelete(item.id)"></i></button>
+                          <router-link class="btn btn-primary"
+                            :to="{ name: 'guide-products-edit', params: { id: item.id } }"><i
+                              class="bi bi-pencil-square"></i></router-link>
+                        </div>
                       </td>
                     </tr>
                   </tbody>
@@ -74,13 +86,13 @@
 </template>
 
 <script>
-import { useGuideStore } from '@/stores/guide.js'
+import { useGuideProductsStore } from '@/stores/guideProducts.js'
 
 export default {
   name: 'Products',
   setup() {
-    const guideStore = useGuideStore()
-    return { guideStore }
+    const guideProductsStore = useGuideProductsStore()
+    return { guideProductsStore }
   },
   data() {
     return {
@@ -89,29 +101,29 @@ export default {
   },
   methods: {
     onClickProductDelete(id) {
-      this.guideStore.deleteProduct(id)
+      this.guideProductsStore.deleteProduct(id)
         .then(() => {
-          this.guideStore.getProducts()
+          this.guideProductsStore.getProducts()
         })
     },
 
     exportProducts() {
-      this.guideStore.exportProducts()
+      this.guideProductsStore.exportProducts()
     },
 
     importProducts() {
       this.file = this.$refs.file.files[0]
       const formData = new FormData()
       formData.append('file', this.file)
-      this.guideStore.importProducts(formData)
+      this.guideProductsStore.importProducts(formData)
         .then(() => {
-          this.guideStore.getProducts()
+          this.guideProductsStore.getProducts()
         })
       this.$refs.file.value = null;
     }
   },
   created() {
-    this.guideStore.getProducts()
+    this.guideProductsStore.getProducts()
   }
 }
 </script>

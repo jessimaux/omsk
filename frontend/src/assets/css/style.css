@@ -1265,3 +1265,19 @@ h6 {
 	font-size: 13px;
 	color: #012970;
 }
+
+/*--------------------------------------------------------------
+  # Autocomplete
+  --------------------------------------------------------------*/
+
+.autocomplete {
+	position: relative;
+
+}
+
+.autocomplete__result {
+	position: absolute;
+	z-index: 999;
+	width: 100%;
+	background-color: hsl(0, 0%, 100%);
+}

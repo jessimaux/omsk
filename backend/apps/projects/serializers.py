@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from .models import Project
+from apps.specifications.serializers import SpecificationSerializer
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -12,3 +13,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = '__all__'
+        
+        
+class ProjectGetSerializer(ProjectSerializer):
+    specification = SpecificationSerializer()

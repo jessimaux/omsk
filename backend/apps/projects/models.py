@@ -19,8 +19,6 @@ class Project(models.Model):
 
     # general section
     commentary = models.TextField(blank=True, null=True)
-    delivery_period = models.DateField(default="2000-01-01")
-    contract = models.BooleanField(default=False)
 
     # log section
     created_by = models.ForeignKey(User, related_name="project_created_by", on_delete=models.SET_NULL, null=True)
