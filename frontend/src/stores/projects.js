@@ -37,6 +37,7 @@ export const useProjectsStore = defineStore('projects', {
       this.errors = null
       this.data = null
       this.loading = true
+      this.project = id
       await projectsApi
         .getProject(id)
         .then((response) => {
@@ -66,12 +67,57 @@ export const useProjectsStore = defineStore('projects', {
         })
     },
 
+    async editProject(credentialsProject, credentialsRequestOffer) {
+      this.errors = null
+      this.loading = true
+      await projectsApi
+        .editProject(this.project, credentialsProject)
+        .then(async () => {
+          for (const request of credentialsRequestOffer) {
+            if ('id' in request) projectsApi
+              .editRequest(request.id, request)
+              .then(() => {
+                for (const offer of request.offer) {
+                  if ('id' in offer) projectsApi
+                    .editOffer(offer.id, offer)
+                    .catch((result) => {
+                      this.errors = result.response.data
+                    })
+                  else projectsApi
+                    .addOffer(offer)
+                    .catch((result) => {
+                      this.errors = result.response.data
+                    })
+                }
+              })
+              .catch((result) => {
+                this.errors = result.response.data
+              })
+            else projectsApi
+              .addRequest(request)
+              .then((response) => {
+                for (const offer of request.offer) {
+                  if ('id' in offer) projectsApi.editOffer(offer.id, offer)
+                  else projectsApi.addOffer(offer)
+                }
+              })
+              .catch((result) => {
+                this.errors = result.response.data
+              })
+          }
+        })
+        .catch((result) => {
+          this.errors = result.response.data
+        })
+      this.loading = false
+    },
+
     async addSpecification() {
       this.errors = null
       this.data = null
       this.specification = null
       await projectsApi
-        .addSpecification({project: this.project.id})
+        .addSpecification({ project: this.project.id })
         .then((response) => {
           this.data = response.data
           this.specification = response.data

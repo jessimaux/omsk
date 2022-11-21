@@ -7,7 +7,7 @@ const getProjects = () => {
 }
 
 const getProject = (id) => {
-  return axios.get(`projects/${id}`)
+  return axios.get(`projects/${id}/`)
 }
 
 const addProject = (project) => {
@@ -31,7 +31,7 @@ const getRequests = () => {
 }
 
 const getRequest = (id) => {
-  return axios.get(`specifications/requests/${id}`)
+  return axios.get(`specifications/requests/${id}/`)
 }
 
 const addRequest = (request) => {
@@ -39,7 +39,11 @@ const addRequest = (request) => {
 }
 
 const editRequest = (id, request) => {
-  return axios.put(`specifications/requests/${id}`, request)
+  return axios.put(`specifications/requests/${id}/`, request)
+}
+
+const deleteRequest = (id) => {
+  return axios.delete(`specification/requests/${id}/`)
 }
 
 // OFFER
@@ -49,7 +53,7 @@ const getOffers = () => {
 }
 
 const getOffer = (id) => {
-  return axios.get(`specifications/offers/${id}`)
+  return axios.get(`specifications/offers/${id}/`)
 }
 
 const addOffer = (offer) => {
@@ -57,7 +61,11 @@ const addOffer = (offer) => {
 }
 
 const editOffer = (id, offer) => {
-  return axios.post(`specifications/offer/${id}`, offer)
+  return axios.put(`specifications/offers/${id}/`, offer)
+}
+
+const deleteOffer = (id) => {
+  return axios.delete(`specification/offers/${id}/`)
 }
 
 export default {
@@ -70,8 +78,10 @@ export default {
   getOffer,
   addOffer,
   editOffer,
+  deleteOffer,
   getRequests,
   getRequest,
   addRequest,
-  editRequest
+  editRequest,
+  deleteRequest,
 }

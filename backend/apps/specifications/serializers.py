@@ -7,9 +7,15 @@ class OfferSerializer(serializers.ModelSerializer):
     class Meta:
         model = Offer
         fields = '__all__'
-
+        
 
 class RequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Request
+        fields = '__all__'
+
+
+class RequestOfferSerializer(serializers.ModelSerializer):
     offer = OfferSerializer(many=True, source="offer_set")
     
     class Meta:
@@ -18,7 +24,7 @@ class RequestSerializer(serializers.ModelSerializer):
                 
 
 class SpecificationSerializer(serializers.ModelSerializer):
-    requestOffer = RequestSerializer(many=True, source="request_set")
+    requestOffer = RequestOfferSerializer(many=True, source="request_set")
     
     class Meta:
         model = Specification
