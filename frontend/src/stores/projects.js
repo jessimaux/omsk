@@ -1,6 +1,7 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import projectsApi from '@/api/projects'
+import projects from '../api/projects'
 
 export const useProjectsStore = defineStore('projects', {
   state: () => {
@@ -34,15 +35,18 @@ export const useProjectsStore = defineStore('projects', {
     },
 
     async getProject(id) {
-      this.errors = null
       this.data = null
+      this.project = null
+      this.specification = null
+      this.errors = null
       this.loading = true
-      this.project = id
       await projectsApi
         .getProject(id)
         .then((response) => {
           this.loading = false
           this.data = response.data
+          this.project = response.data.id
+          this.specification = response.data.specification.id
         })
         .catch((result) => {
           this.loading = false
@@ -67,48 +71,64 @@ export const useProjectsStore = defineStore('projects', {
         })
     },
 
-    async editProject(credentialsProject, credentialsRequestOffer) {
+    async editProject(credentialsProject, credentialsRequestOffer, deleteRequests, deleteOffers) {
       this.errors = null
       this.loading = true
-      await projectsApi
-        .editProject(this.project, credentialsProject)
-        .then(async () => {
-          for (const request of credentialsRequestOffer) {
-            if ('id' in request) projectsApi
-              .editRequest(request.id, request)
-              .then(() => {
-                for (const offer of request.offer) {
-                  if ('id' in offer) projectsApi
-                    .editOffer(offer.id, offer)
-                    .catch((result) => {
-                      this.errors = result.response.data
-                    })
-                  else projectsApi
-                    .addOffer(offer)
-                    .catch((result) => {
-                      this.errors = result.response.data
-                    })
-                }
-              })
+      await projectsApi.editProject(this.project, credentialsProject)
+        .catch((result) => {
+          this.errors = result.response.data
+        })
+
+      // add or edit(if exists) requestOffer
+      for (const request of credentialsRequestOffer) {
+        var request_id = null
+        if ('id' in request) {
+          request_id = request.id
+          await projectsApi.editRequest(request.id, request)
+            .catch((result) => {
+              this.errors = result.response.data
+            })
+        }
+        else {
+          request.specification = this.specification
+          await projectsApi.addRequest(request)
+            .then((response) => {
+              request_id = response.data.id
+            })
+            .catch((result) => {
+              this.errors = result.response.data
+            })
+        }
+
+        for (const offer of request.offer) {
+          if ('id' in offer)
+            await projectsApi.editOffer(offer.id, offer)
               .catch((result) => {
                 this.errors = result.response.data
               })
-            else projectsApi
-              .addRequest(request)
-              .then((response) => {
-                for (const offer of request.offer) {
-                  if ('id' in offer) projectsApi.editOffer(offer.id, offer)
-                  else projectsApi.addOffer(offer)
-                }
-              })
+          else {
+            offer.request = request_id
+            await projectsApi.addOffer(offer)
               .catch((result) => {
                 this.errors = result.response.data
               })
           }
-        })
-        .catch((result) => {
-          this.errors = result.response.data
-        })
+        }
+      }
+
+      // delete exists offers and requests if they have been deleted from table
+      for (const offer_id of deleteOffers)
+        await projectsApi.deleteOffer(offer_id)
+          .catch((result) => {
+            this.errors = result.response.data
+          })
+
+      for (const request_id of deleteRequests)
+        await projectsApi.deleteRequest(request_id)
+          .catch((result) => {
+            this.errors = result.response.data
+          })
+
       this.loading = false
     },
 
@@ -128,6 +148,7 @@ export const useProjectsStore = defineStore('projects', {
         })
     },
 
+    // TODO: rewrite with property add
     async addRequestOffer(credentials) {
       this.errors = null
       this.data = null

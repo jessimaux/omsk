@@ -7,8 +7,8 @@
     <section class="section">
       <form v-if="!projectsStore.loading" @submit.prevent="onSubmit">
         <project-form :project="project"></project-form>
-        <specification :requestOffer="requestOffer"></specification>
-
+        <specification :requestOffer="requestOffer" :deleteRequests="deleteRequests" :deleteOffers="deleteOffers">
+        </specification>
         <div class="text-end mb-3">
           <button type="submit" class="btn btn-primary">Сохранить</button>
         </div>
@@ -32,6 +32,12 @@ export default {
     const projectsStore = useProjectsStore()
     return { projectsStore }
   },
+  data() {
+    return {
+      deleteRequests: [],
+      deleteOffers: []
+    }
+  },
   computed: {
     project() {
       return {
@@ -48,14 +54,14 @@ export default {
         commentary: this.projectsStore.data.commentary
       }
     },
-    requestOffer(){
+    requestOffer() {
       return this.projectsStore.data.specification.requestOffer
     }
   },
-  methods:{
-    onSubmit(){
+  methods: {
+    onSubmit() {
       this.projectsStore
-      .editProject(this.project, this.requestOffer)
+        .editProject(this.project, this.requestOffer, this.deleteRequests, this.deleteOffers)
       // .then(()=>{
       //   this.$router.push({ name: 'projects' })
       // })

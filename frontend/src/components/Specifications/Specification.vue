@@ -96,6 +96,14 @@ export default {
     requestOffer: {
       type: Object,
       required: true,
+    },
+    deleteRequests:{
+      type: Object,
+      required: false
+    },
+    deleteOffers: {
+      type: Object,
+      required: false
     }
   },
   setup() {
@@ -123,6 +131,9 @@ export default {
     },
 
     removeRow(index, fieldType) {
+      if(this.deleteRequests && 'id' in fieldType[index]){
+        this.deleteRequests.push(fieldType[index].id)
+      }
       fieldType.splice(index, 1)
     },
 
@@ -138,6 +149,9 @@ export default {
     },
 
     removeSubRow(index, fieldType) {
+      if(this.deleteOffers && 'id' in fieldType[index]){
+        this.deleteOffers.push(fieldType[index].id)
+      }
       fieldType.splice(index, 1)
     },
   },

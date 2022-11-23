@@ -43,7 +43,7 @@ const editRequest = (id, request) => {
 }
 
 const deleteRequest = (id) => {
-  return axios.delete(`specification/requests/${id}/`)
+  return axios.delete(`specifications/requests/${id}/`)
 }
 
 // OFFER
@@ -65,7 +65,7 @@ const editOffer = (id, offer) => {
 }
 
 const deleteOffer = (id) => {
-  return axios.delete(`specification/offers/${id}/`)
+  return axios.delete(`specifications/offers/${id}/`)
 }
 
 export default {

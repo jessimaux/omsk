@@ -14,3 +14,4 @@ class ProjectsViewSet(viewsets.ModelViewSet):
             return ProjectGetSerializer
         else:
             return ProjectSerializer
+        
