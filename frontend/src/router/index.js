@@ -2,13 +2,19 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import HomeView from '../views/HomeView.vue'
 import Login from '@/views/Login.vue'
+
 import Projects from '@/views/projects/Projects.vue'
 import ProjectsCreate from '@/views/projects/ProjectCreate.vue'
 import ProjectsEdit from '@/views/projects/ProjectEdit.vue'
+
 import GuideProducts from '@/views/guide/products/Products.vue'
 import CreateGuideProduct from '@/views/guide/products/ProductCreate.vue'
 import EditGuideProduct from '@/views/guide/products/ProductEdit.vue'
+
 import GuidePartners from '@/views/guide/partners/Partners.vue'
+import CreateGuidePartner from '@/views/guide/partners/PartnerCreate.vue'
+import EditGuidePartner from '@/views/guide/partners/PartnerEdit.vue'
+
 import GuideProviders from '@/views/guide/providers/Providers.vue'
 import GuideSpecifications from '@/views/guide/specifications/Specifications.vue'
 
@@ -30,6 +36,8 @@ const router = createRouter({
       name: 'login',
       component: Login
     },
+
+    // PROJECTS
     {
       path: '/projects',
       name: 'projects',
@@ -54,6 +62,8 @@ const router = createRouter({
         requiresAuth: true,
       }
     },
+
+    // PRODUCTS
     {
       path: '/guide/products',
       name: 'guide-products',
@@ -78,6 +88,8 @@ const router = createRouter({
         requiresAuth: true,
       }
     },
+
+    // PARTNERS
     {
       path: '/guide/partners',
       name: 'guide-partners',
@@ -87,6 +99,24 @@ const router = createRouter({
       }
     },
     {
+      path: '/guide/partners/create',
+      name: 'guide-partners-create',
+      component: CreateGuidePartner,
+      meta: {
+        requiresAuth: true,
+      }
+    },
+    {
+      path: '/guide/partners/:id/edit',
+      name: 'guide-partners-edit',
+      component: EditGuidePartner,
+      meta: {
+        requiresAuth: true,
+      }
+    },
+
+    // PROVIDERS
+    {
       path: '/guide/providers',
       name: 'guide-providers',
       component: GuideProviders,
@@ -94,6 +124,8 @@ const router = createRouter({
         requiresAuth: true,
       }
     },
+
+    // SPECIFICATIONS
     {
       path: '/guide/specifications',
       name: 'guide-specifications',

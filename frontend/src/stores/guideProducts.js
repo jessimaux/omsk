@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import guideApi from '@/api/guide'
+import guideProductsApi from '@/api/guideProducts'
 
 export const useGuideProductsStore = defineStore('guideProducts', {
   state: () => {
@@ -15,7 +15,7 @@ export const useGuideProductsStore = defineStore('guideProducts', {
       this.data = null
       this.errors = null
       this.loading = true
-      await guideApi.getProducts(query)
+      await guideProductsApi.getProducts(query)
         .then((response) => {
           this.data = response.data
           this.loading = false
@@ -30,7 +30,7 @@ export const useGuideProductsStore = defineStore('guideProducts', {
       this.data = null
       this.errors = null
       this.loading = true
-      await guideApi.getProduct(id)
+      await guideProductsApi.getProduct(id)
         .then((response) => {
           this.data = response.data
           this.loading = false
@@ -44,7 +44,7 @@ export const useGuideProductsStore = defineStore('guideProducts', {
     async addProduct(credentials) {
       this.data = null
       this.errors = null
-      await guideApi
+      await guideProductsApi
         .addProduct(credentials)
         .then((response) => {
           this.data = response.data
@@ -58,7 +58,7 @@ export const useGuideProductsStore = defineStore('guideProducts', {
     async editProduct(id, credentials) {
       this.data = null
       this.errors = null
-      await guideApi
+      await guideProductsApi
         .editProduct(id, credentials)
         .then((response) => {
           this.data = response.data
@@ -72,7 +72,7 @@ export const useGuideProductsStore = defineStore('guideProducts', {
     async deleteProduct(id) {
       this.data = null
       this.errors = null
-      await guideApi
+      await guideProductsApi
         .deleteProduct(id)
         .then((response) => {
           this.data = response.data
@@ -84,7 +84,7 @@ export const useGuideProductsStore = defineStore('guideProducts', {
 
     // TODO: add then/catch
     async exportProducts() {
-      await guideApi.exportProducts().then((response) => {
+      await guideProductsApi.exportProducts().then((response) => {
         const blob = new Blob([response.data], { type: response.data.type })
         const url = window.URL.createObjectURL(blob)
         const link = document.createElement('a')
@@ -104,7 +104,7 @@ export const useGuideProductsStore = defineStore('guideProducts', {
 
     // TODO: add than / catch
     async importProducts(file) {
-      await guideApi.importProducts(file)
+      await guideProductsApi.importProducts(file)
     },
   }
 })

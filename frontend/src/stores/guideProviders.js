@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import guideApi from '@/api/guide'
+import guideProvidersApi from '@/api/guideProviders'
 
 export const useGuideProvidersStore = defineStore('guideProviders', {
   state: () => {
@@ -9,12 +9,11 @@ export const useGuideProvidersStore = defineStore('guideProviders', {
     }
   },
 
-  actions:{
+  actions: {
     async getProviders() {
       this.data = null
       this.errors = null
-      await guideApi
-        .getProviders()
+      await guideProvidersApi.getProviders()
         .then((response) => {
           this.data = response.data
         })
