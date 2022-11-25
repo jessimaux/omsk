@@ -5,8 +5,8 @@
 </template>
 
 <script>
-import Navbar from './components/Navbar/Navbar.vue'
-import Sidebar from './components/Sidebar/Sidebar.vue'
+import Navbar from './components/navbar/Navbar.vue'
+import Sidebar from './components/sidebar/Sidebar.vue'
 import { useGlobalStore } from '@/stores/global'
 import { useAuthStore } from '@/stores/auth'
 

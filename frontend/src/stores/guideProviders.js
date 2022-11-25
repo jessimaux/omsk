@@ -9,12 +9,6 @@ export const useGuideProvidersStore = defineStore('guideProviders', {
     }
   },
 
-  getters: {
-    getData(state) {
-      return state.data
-    },
-  },
-
   actions:{
     async getProviders() {
       this.data = null

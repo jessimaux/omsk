@@ -7,7 +7,6 @@
     <section class="section">
       <form @submit.prevent="onSubmit">
         <product-form :product="product"></product-form>
-
         <div class="text-end mb-3">
           <button type="submit" class="btn btn-primary">Сохранить</button>
         </div>
@@ -18,7 +17,7 @@
 
 <script>
 import { useGuideProductsStore } from '@/stores/guideProducts'
-import ProductForm from '@/components/Guide/ProductForm.vue'
+import ProductForm from '@/components/guide/ProductForm.vue'
 
 export default {
   name: 'ProductsCreate',

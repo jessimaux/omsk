@@ -1,18 +1,22 @@
 <template>
   <main id="main" class="main">
+    <div class="pagetitle">
+      <h1>Поставщики</h1>
+    </div>
+
     <section class="section">
       <div class="row">
         <div class="col-lg-12">
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title">Партнеры</h5>
+              <h5 class="card-title">Продукты</h5>
 
-              <!-- Default Table -->
               <div class="table-responsive">
                 <table class="table">
                   <thead>
                     <tr>
                       <th scope="col" rowspan="2">#</th>
+                      <th scope="col" rowspan="2">Направление</th>
                       <th scope="col" rowspan="2">Наименование</th>
                       <th scope="col" rowspan="2">ИНН</th>
                       <th scope="col" rowspan="2">Город / Регион</th>
@@ -27,8 +31,9 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="item in guideStore.getData" :key="item.id">
+                    <tr v-for="item in guideProvidersStore.data" :key="item.id">
                       <td>{{ item.id }}</td>
+                      <td>{{ item.sphere }}</td>
                       <td>{{ item.name }}</td>
                       <td>{{ item.inn }}</td>
                       <td>{{ item.region }}</td>
@@ -51,16 +56,16 @@
 </template>
 
 <script>
-import { useGuidePartnersStore } from '@/stores/guidePartners.js'
+import { useGuideProvidersStore } from '@/stores/guideProviders.js'
 
 export default {
-  name: 'Partners',
+  name: 'Providers',
   setup() {
-    const guidePartnersStore = useGuidePartnersStore()
-    return { guidePartnersStore }
+    const guideProvidersStore = useGuideProvidersStore()
+    return { guideProvidersStore }
   },
   created() {
-    this.guidePartnersStore.getPartners()
+    this.guideProvidersStore.getProviders()
   }
 }
 </script>

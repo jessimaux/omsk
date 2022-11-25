@@ -85,7 +85,7 @@
 
 <script>
 import { useProjectsStore } from '@/stores/projects'
-import ProductSearchField from '@/components/Projects/ProductSearchField.vue'
+import ProductSearchField from '@/components/projects/ProductSearchField.vue'
 
 export default {
   name: 'Specification',
@@ -97,7 +97,7 @@ export default {
       type: Object,
       required: true,
     },
-    deleteRequests:{
+    deleteRequests: {
       type: Object,
       required: false
     },
@@ -131,7 +131,7 @@ export default {
     },
 
     removeRow(index, fieldType) {
-      if(this.deleteRequests && 'id' in fieldType[index]){
+      if (this.deleteRequests && 'id' in fieldType[index]) {
         this.deleteRequests.push(fieldType[index].id)
       }
       fieldType.splice(index, 1)
@@ -149,7 +149,7 @@ export default {
     },
 
     removeSubRow(index, fieldType) {
-      if(this.deleteOffers && 'id' in fieldType[index]){
+      if (this.deleteOffers && 'id' in fieldType[index]) {
         this.deleteOffers.push(fieldType[index].id)
       }
       fieldType.splice(index, 1)

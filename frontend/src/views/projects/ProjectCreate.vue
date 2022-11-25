@@ -19,8 +19,8 @@
 
 <script>
 import { useProjectsStore } from '@/stores/projects'
-import ProjectForm from '@/components/Projects/ProjectForm.vue'
-import Specification from '@/components/Specifications/Specification.vue'
+import ProjectForm from '@/components/projects/ProjectForm.vue'
+import Specification from '@/components/specifications/Specification.vue'
 
 export default {
   name: 'ProjectCreate',

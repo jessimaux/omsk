@@ -6,42 +6,46 @@
           <h5 class="card-title">Общее</h5>
           <div class="col-12">
             <label class="form-label">№ по приказу</label>
-            <input type="text" class="form-control" v-model="product.str_by_order">
+            <input type="text" class="form-control" v-model="product.str_by_order" required>
           </div>
 
           <div class="col-12">
             <label class="form-label">Артикул</label>
-            <input type="text" class="form-control" v-model="product.article">
+            <input type="text" class="form-control" v-model="product.article" required>
           </div>
 
           <div class="col-12">
             <label class="form-label">Наименование</label>
-            <input type="text" class="form-control" v-model="product.name">
+            <input type="text" class="form-control" v-model="product.name" required>
           </div>
 
           <div class="col-12">
             <label class="form-label">РРЦ</label>
-            <input type="text" class="form-control" v-model="product.price_rrc">
+            <input type="text" class="form-control" v-model="product.price_rrc" required>
           </div>
 
           <div class="col-12">
             <label class="form-label">Закупочная стоимость</label>
-            <input type="text" class="form-control" v-model="product.price_buy">
+            <input type="text" class="form-control" v-model="product.price_buy" required>
           </div>
 
           <div class="col-12">
             <label class="form-label">Поставщик</label>
-            <input type="text" class="form-control" v-model="product.provider">
+            <select class="form-select" required>
+              <option v-for="provider in guideProvidersStore.data" :key="provider.id" :value="provider.id">
+                {{ provider.name }}
+              </option>
+            </select>
           </div>
 
           <div class="col-12">
             <label class="form-label">НДС</label>
-            <input type="text" class="form-control" v-model="product.nds">
+            <input type="number" min="0" class="form-control" v-model="product.nds">
           </div>
 
           <div class="col-12">
             <label class="form-label">Наличие</label>
-            <input type="text" class="form-control" v-model="product.available">
+            <input type="number" min="0" class="form-control" v-model="product.available">
           </div>
         </div>
       </div>
@@ -63,22 +67,22 @@
 
           <div class="col-12">
             <label class="form-label">Описание</label>
-            <input type="text" class="form-control" v-model="product.description">
+            <textarea class="form-control" style="resize:none" rows="5" v-model="product.description"></textarea>
           </div>
 
           <div class="col-12">
             <label class="form-label">ТЗ</label>
-            <input type="text" class="form-control" v-model="product.description_tech">
+            <textarea class="form-control" style="resize:none" rows="5" v-model="product.description_tech"></textarea>
           </div>
 
           <div class="col-12">
             <label class="form-label">Заявка</label>
-            <input type="text" class="form-control" v-model="product.description_add">
+            <textarea class="form-control" style="resize:none" rows="5" v-model="product.description_add"></textarea>
           </div>
 
           <div class="col-12">
             <label class="form-label">Рекомендации</label>
-            <input type="text" class="form-control" v-model="product.recommendation">
+            <textarea class="form-control" style="resize:none" rows="5" v-model="product.recommendation"></textarea>
           </div>
         </div>
       </div>
@@ -87,6 +91,8 @@
 </template>
 
 <script>
+import { useGuideProvidersStore } from '@/stores/guideProviders'
+
 export default {
   name: 'ProductForm',
   props: {
@@ -95,5 +101,12 @@ export default {
       required: true
     }
   },
+  setup() {
+    const guideProvidersStore = useGuideProvidersStore()
+    return { guideProvidersStore }
+  },
+  created() {
+    this.guideProvidersStore.getProviders()
+  }
 }
 </script>
