@@ -16,6 +16,9 @@ import CreateGuidePartner from '@/views/guide/partners/PartnerCreate.vue'
 import EditGuidePartner from '@/views/guide/partners/PartnerEdit.vue'
 
 import GuideProviders from '@/views/guide/providers/Providers.vue'
+import CreateGuideProvider from '@/views/guide/providers/ProviderCreate.vue'
+import EditGuideProvider from '@/views/guide/providers/ProviderEdit.vue'
+
 import GuideSpecifications from '@/views/guide/specifications/Specifications.vue'
 
 import { getItem } from '@/tools/persistanceStorage.js'
@@ -124,6 +127,22 @@ const router = createRouter({
         requiresAuth: true,
       }
     },
+    {
+      path: '/guide/providers/create',
+      name: 'guide-providers-create',
+      component: CreateGuideProvider,
+      meta: {
+        requiresAuth: true,
+      }
+    },
+    {
+      path: '/guide/providers/:id/edit',
+      name: 'guide-providers-edit',
+      component: EditGuideProvider,
+      meta: {
+        requiresAuth: true,
+      }
+    },
 
     // SPECIFICATIONS
     {
@@ -137,7 +156,6 @@ const router = createRouter({
   ]
 })
 
-// TODO: (bug) need submit twice on login page
 router.beforeEach((to, from, next) => {
   const userIsAuthenticated = Boolean(getItem('accessToken'))
   if (to.matched.some((record) => record.meta.requiresAuth)) {

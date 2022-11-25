@@ -1,12 +1,12 @@
 <template>
   <main id="main" class="main">
     <div class="pagetitle">
-      <h1>Партнер</h1>
+      <h1>Поставщик</h1>
     </div>
 
     <section class="section">
-      <form v-if="!guidePartnersStore.loading" @submit.prevent="onSubmit">
-        <partner-form :partner="partner"></partner-form>
+      <form v-if="!guideProvidersStore.loading" @submit.prevent="onSubmit">
+        <provider-form :provider="provider"></provider-form>
         <div class="text-end mb-3">
           <button type="submit" class="btn btn-primary">Сохранить</button>
         </div>
@@ -16,37 +16,37 @@
 </template>
 
 <script>
-import { useGuidePartnersStore } from '@/stores/guidePartners'
-import PartnerForm from '@/components/guide/PartnerForm.vue'
+import { useGuideProvidersStore } from '@/stores/guideProviders'
+import ProviderForm from '@/components/guide/ProviderForm.vue'
 
 export default {
-  name: 'PartnerEdit',
+  name: 'ProviderEdit',
   components: {
-    PartnerForm,
+    ProviderForm,
   },
   setup() {
-    const guidePartnersStore = useGuidePartnersStore()
-    return { guidePartnersStore }
+    const guideProvidersStore = useGuideProvidersStore()
+    return { guideProvidersStore }
   },
   computed: {
-    partner() {
-      return this.guidePartnersStore.data
+    provider() {
+      return this.guideProvidersStore.data
     }
   },
 
   methods: {
     onSubmit() {
       const id = this.$route.params.id
-      this.guidePartnersStore.editPartner(id, this.partner)
+      this.guideProvidersStore.editProvider(id, this.provider)
         .then(() => {
-          this.$router.push({ name: 'guide-partners' })
+          this.$router.push({ name: 'guide-providers' })
         })
     }
   },
 
   created() {
     const id = this.$route.params.id
-    this.guidePartnersStore.getPartner(id)
+    this.guideProvidersStore.getProvider(id)
   },
 
 }

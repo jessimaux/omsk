@@ -1,12 +1,12 @@
 <template>
   <main id="main" class="main">
     <div class="pagetitle">
-      <h1>Партнер</h1>
+      <h1>Поставщик</h1>
     </div>
 
     <section class="section">
       <form @submit.prevent="onSubmit">
-        <partner-form :partner="partner"></partner-form>
+        <provider-form :provider="provider"></provider-form>
         <div class="text-end mb-3">
           <button type="submit" class="btn btn-primary">Сохранить</button>
         </div>
@@ -16,22 +16,23 @@
 </template>
 
 <script>
-import { useGuidePartnersStore } from '@/stores/guidePartners'
-import PartnerForm from '@/components/guide/PartnerForm.vue'
+import { useGuideProvidersStore } from '@/stores/guideProviders'
+import ProviderForm from '@/components/guide/ProviderForm.vue'
 
 export default {
-  name: 'PartnerCreate',
+  name: 'ProviderCreate',
   components: {
-    PartnerForm,
+    ProviderForm,
   },
   setup() {
-    const guidePartnersStore = useGuidePartnersStore()
-    return { guidePartnersStore }
+    const guideProvidersStore = useGuideProvidersStore()
+    return { guideProvidersStore }
   },
   data() {
     return {
-      partner: {
+      provider: {
         name: '',
+        sphere: '',
         inn: '',
         region: '',
         discount: '',
@@ -45,9 +46,9 @@ export default {
 
   methods: {
     onSubmit() {
-      this.guidePartnersStore.addPartner(this.partner)
+      this.guideProvidersStore.addProvider(this.provider)
         .then(() => {
-          this.$router.push({ name: 'guide-partners' })
+          this.$router.push({ name: 'guide-providers' })
         })
     }
   }

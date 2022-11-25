@@ -6,6 +6,7 @@ export const useGuideProvidersStore = defineStore('guideProviders', {
     return {
       data: null,
       errors: null,
+      loading: false,
     }
   },
 
@@ -13,7 +14,66 @@ export const useGuideProvidersStore = defineStore('guideProviders', {
     async getProviders() {
       this.data = null
       this.errors = null
+      this.loading = true
       await guideProvidersApi.getProviders()
+        .then((response) => {
+          this.data = response.data
+          this.loading = false
+        })
+        .catch((result) => {
+          this.errors = result.response.data
+          this.loading = false
+        })
+    },
+
+    async getProvider(id) {
+      this.data = null
+      this.errors = null
+      this.loading = true
+      await guideProvidersApi.getProvider(id)
+        .then((response) => {
+          this.data = response.data
+          this.loading = false
+        })
+        .catch((result) => {
+          this.errors = result.response.data
+          this.loading = false
+        })
+    },
+
+    async addProvider(credentials) {
+      this.data = null
+      this.errors = null
+      await guideProvidersApi.addProvider(credentials)
+        .then((response) => {
+          this.data = response.data
+        })
+        .catch((result) => {
+          this.errors = result.response.data
+          throw result.response.data
+        })
+    },
+
+    async editProvider(id, credentials) {
+      this.data = null
+      this.errors = null
+      this.loading = true
+      await guideProvidersApi.editProvider(id, credentials)
+        .then((response) => {
+          this.data = response.data
+          this.loading = false
+        })
+        .catch((result) => {
+          this.errors = result.response.data
+          this.loading = false
+          throw result.response.data
+        })
+    },
+
+    async deleteProvider(id) {
+      this.data = null
+      this.errors = null
+      await guideProvidersApi.deleteProvider(id)
         .then((response) => {
           this.data = response.data
         })
