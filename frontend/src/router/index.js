@@ -20,6 +20,8 @@ import CreateGuideProvider from '@/views/guide/providers/ProviderCreate.vue'
 import EditGuideProvider from '@/views/guide/providers/ProviderEdit.vue'
 
 import GuideSpecifications from '@/views/guide/specifications/Specifications.vue'
+import CreateGuideSpecification from '@/views/guide/specifications/SpecificationCreate.vue'
+import EditGuideSpecification from '@/views/guide/specifications/SpecificationEdit.vue'
 
 import { getItem } from '@/tools/persistanceStorage.js'
 
@@ -149,6 +151,22 @@ const router = createRouter({
       path: '/guide/specifications',
       name: 'guide-specifications',
       component: GuideSpecifications,
+      meta: {
+        requiresAuth: true,
+      }
+    },
+    {
+      path: '/guide/specifications/create',
+      name: 'guide-specifications-create',
+      component: CreateGuideSpecification,
+      meta: {
+        requiresAuth: true,
+      }
+    },
+    {
+      path: '/guide/specifications/:id/edit',
+      name: 'guide-specifications-edit',
+      component: EditGuideSpecification,
       meta: {
         requiresAuth: true,
       }

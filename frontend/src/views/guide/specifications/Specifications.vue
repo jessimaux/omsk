@@ -9,7 +9,11 @@
         <div class="col-lg-12">
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title">Спецификации</h5>
+              <div class="support-bar d-flex flex-row justify-content-end py-2">
+                <router-link class="btn btn-primary me-2" :to="{ name: 'guide-specifications-create' }">
+                  <i class="bi bi-plus-square"></i>&nbspДобавить
+                </router-link>
+              </div>
 
               <div class="table-responsive">
                 <table class="table">
@@ -18,6 +22,7 @@
                       <th scope="col">#</th>
                       <th scope="col">Наименование</th>
                       <th scope="col">Количество позиций</th>
+                      <th scope="col">Операция</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -25,6 +30,16 @@
                       <td>{{ item.id }}</td>
                       <td>{{ item.name }}</td>
                       <td> ? </td>
+                      <td>
+                        <div class="d-flex flex-row">
+                          <button type="button" class="btn btn-primary me-2"><i class="bi bi-x-square"
+                              @click="onClickSpecificationDelete(item.id)"></i></button>
+
+                          <router-link class="btn btn-primary"
+                            :to="{ name: 'guide-specifications-edit', params: { id: item.id } }"><i
+                              class="bi bi-pencil-square"></i></router-link>
+                        </div>
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -46,6 +61,14 @@ export default {
   setup() {
     const guideSpecificationsStore = useGuideSpecificationsStore()
     return { guideSpecificationsStore }
+  },
+  methods: {
+    onClickSpecificationDelete(id) {
+      this.guideSpecificationsStore.deleteSpecification(id)
+        .then(() => {
+          this.guideSpecificationsStore.getSpecifications()
+        })
+    },
   },
   created() {
     this.guideSpecificationsStore.getSpecifications()

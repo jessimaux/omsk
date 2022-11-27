@@ -14,12 +14,6 @@ export const useProjectsStore = defineStore('projects', {
     }
   },
 
-  getters: {
-    getData(state) {
-      return state.data
-    },
-  },
-
   actions: {
     async getProjects() {
       this.errors = null
@@ -43,10 +37,10 @@ export const useProjectsStore = defineStore('projects', {
       await projectsApi
         .getProject(id)
         .then((response) => {
-          this.loading = false
           this.data = response.data
           this.project = response.data.id
           this.specification = response.data.specification.id
+          this.loading = false
         })
         .catch((result) => {
           this.loading = false
@@ -68,6 +62,18 @@ export const useProjectsStore = defineStore('projects', {
         .catch((result) => {
           this.errors = result.response.data
           throw result.response.data
+        })
+    },
+
+    async deleteProject(id) {
+      this.errors = null
+      this.data = null
+      await projectsApi.deleteProject(id)
+        .then((response) => {
+          this.data = response.data
+        })
+        .catch((result) => {
+          this.errors = result.response.data
         })
     },
 

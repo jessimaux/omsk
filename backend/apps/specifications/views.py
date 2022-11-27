@@ -1,20 +1,38 @@
 import datetime
-from django.shortcuts import render
+
 from django.http import HttpResponse
-from rest_framework import viewsets, mixins, views
+from rest_framework import viewsets, views, mixins
 
 from .models import Specification, Request, Offer
-from .serializers import SpecificationSerializer, RequestSerializer, RequestOfferSerializer,OfferSerializer
+from .serializers import SpecificationSerializer, SpecificationRetrieveSerializer, RequestSerializer, RequestOfferSerializer, OfferSerializer
 from .utils import render_to_pdf
 
 
-class SpecificationsViewSet(mixins.CreateModelMixin,
-                            mixins.RetrieveModelMixin,
+class SpecificationsViewSet(mixins.RetrieveModelMixin,
+                            mixins.CreateModelMixin,
                             viewsets.GenericViewSet):
     queryset = Specification.objects.all()
     serializer_class = SpecificationSerializer
     my_tags = ['Specification']
     
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return SpecificationRetrieveSerializer
+        else:
+            return SpecificationSerializer
+    
+
+class GuideSpecificationsViewSet(viewsets.ModelViewSet):
+    queryset = Specification.objects.filter(guide=True)
+    serializer_class = SpecificationSerializer
+    my_tags = ['SpecificationGuide']
+    
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return SpecificationRetrieveSerializer
+        else:
+            return SpecificationSerializer
+        
     
 class SpecificationsPDFExportView(views.APIView):
     my_tag = ['Specification']
@@ -27,8 +45,8 @@ class SpecificationsPDFExportView(views.APIView):
         
         if pdf:
             response = HttpResponse(pdf, content_type = 'application/pdf')
-            # response['Access-Control-Expose-Headers'] = "Content-Disposition"
-            # response['Content-Disposition'] = f'attachment; filename="{datetime.date.today()}.pdf"'
+            response['Access-Control-Expose-Headers'] = "Content-Disposition"
+            response['Content-Disposition'] = f'attachment; filename="{datetime.date.today()}.pdf"'
             return response
 
 

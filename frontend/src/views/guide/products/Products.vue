@@ -47,7 +47,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="item in guideProductsStore.getData" :key="item.id">
+                    <tr v-for="item in guideProductsStore.data" :key="item.id">
                       <td>{{ item.id }}</td>
                       <td>{{ item.str_by_order }}</td>
                       <td>{{ item.article }}</td>

@@ -1,16 +1,13 @@
 import datetime
 
 from django.http import HttpResponse
-from rest_framework import viewsets, mixins, views, generics, status
-from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework import viewsets, views, generics, status
 from rest_framework.response import Response
 from rest_framework import filters
-from django.db.models import Q
 from tablib import Dataset
 
-from .models import ProductGuide, PartnerGuide, ProviderGuide, SpecificationGuide, RequestGuide, OfferGuide
-from .serializers import ProductGuideSerializer, PartnerGuideSerializer, ProviderGuideSerializer, SpecificationGuideSerializer, \
-    RequestGuideSerializer, OfferGuideSerializer, ProductGuideImportSerializer
+from .models import ProductGuide, PartnerGuide, ProviderGuide
+from .serializers import ProductGuideSerializer, PartnerGuideSerializer, ProviderGuideSerializer, ProductGuideImportSerializer
 from .resources import ProductGuideResource
 
 
@@ -70,21 +67,3 @@ class ProviderViewSet(viewsets.ModelViewSet):
     queryset = ProviderGuide.objects.all()
     serializer_class = ProviderGuideSerializer
     my_tags = ['ProvidersGuide']
-
-
-class SpecificationViewSet(viewsets.ModelViewSet):
-    queryset = SpecificationGuide.objects.all()
-    serializer_class = SpecificationGuideSerializer
-    my_tags = ['SpecificationsGuide']
-
-
-class RequestViewSet(viewsets.ModelViewSet):
-    queryset = RequestGuide.objects.all()
-    serializer_class = RequestGuideSerializer
-    my_tags = ['RequestsGuide']
-
-
-class OfferViewSet(viewsets.ModelViewSet):
-    queryset = OfferGuide.objects.all()
-    serializer_class = OfferGuideSerializer
-    my_tags = ['OffersGuide']

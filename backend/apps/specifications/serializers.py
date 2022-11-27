@@ -23,9 +23,15 @@ class RequestOfferSerializer(serializers.ModelSerializer):
         fields = '__all__'
                 
 
-class SpecificationSerializer(serializers.ModelSerializer):
+class SpecificationRetrieveSerializer(serializers.ModelSerializer):
     requestOffer = RequestOfferSerializer(many=True, source="request_set")
     
+    class Meta:
+        model = Specification
+        fields = '__all__'
+        
+        
+class SpecificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Specification
         fields = '__all__'

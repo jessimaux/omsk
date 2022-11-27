@@ -60,11 +60,10 @@ export default {
   },
   methods: {
     onSubmit() {
-      this.projectsStore
-        .editProject(this.project, this.requestOffer, this.deleteRequests, this.deleteOffers)
-      // .then(()=>{
-      //   this.$router.push({ name: 'projects' })
-      // })
+      this.projectsStore.editProject(this.project, this.requestOffer, this.deleteRequests, this.deleteOffers)
+      .then(()=>{
+        this.$router.push({ name: 'projects' })
+      })
     }
   },
   created() {

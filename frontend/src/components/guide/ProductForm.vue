@@ -31,7 +31,7 @@
 
           <div class="col-12">
             <label class="form-label">Поставщик</label>
-            <select class="form-select" required>
+            <select class="form-select" v-model="product.provider">
               <option v-for="provider in guideProvidersStore.data" :key="provider.id" :value="provider.id">
                 {{ provider.name }}
               </option>

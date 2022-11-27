@@ -1,0 +1,83 @@
+<template>
+  <main id="main" class="main">
+    <div class="pagetitle">
+      <h1>Спецификация</h1>
+    </div>
+
+    <section class="section">
+      <form @submit.prevent="onSubmit">
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Общее</h5>
+                <div class="col-12">
+                  <label class="form-label">Название спецификации</label>
+                  <input type="text" class="form-control" v-model="specification.name" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <specification :requestOffer="requestOffer"></specification>
+
+        <div class="text-end mb-3">
+          <button type="submit" class="btn btn-primary">Сохранить</button>
+        </div>
+      </form>
+    </section>
+  </main>
+</template>
+
+<script>
+import { useGuideSpecificationsStore } from '@/stores/guideSpecifications'
+import Specification from '@/components/specifications/Specification.vue'
+
+export default {
+  name: 'SpecificationCreate',
+  components: {
+    Specification,
+  },
+  setup() {
+    const guideSpecificationsStore = useGuideSpecificationsStore()
+    return { guideSpecificationsStore }
+  },
+  data() {
+    return {
+      specification: {
+        name: '',
+      },
+      requestOffer: [
+        {
+          str_by_order: '',
+          name: '',
+          tx: '',
+          amount: '',
+          price: '',
+          offer: [{
+            product: '',
+            article: '',
+            name: '',
+            count: '',
+            price: '0',
+            available: '0',
+          }],
+        },
+      ],
+    }
+  },
+
+  methods: {
+    onSubmit() {
+      this.guideSpecificationsStore.addSpecification(this.specification)
+        .then(() => {
+          this.guideSpecificationsStore.addRequestOffer(this.requestOffer)
+            .then(() => {
+              this.$router.push({ name: 'guide-specifications' })
+            })
+        })
+    }
+  }
+}
+</script>

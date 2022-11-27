@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from .models import Project
-from apps.specifications.serializers import SpecificationSerializer
+from apps.specifications.serializers import SpecificationRetrieveSerializer
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -16,4 +16,4 @@ class ProjectSerializer(serializers.ModelSerializer):
         
         
 class ProjectGetSerializer(ProjectSerializer):
-    specification = SpecificationSerializer()
+    specification = SpecificationRetrieveSerializer()

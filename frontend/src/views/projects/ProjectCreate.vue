@@ -74,6 +74,9 @@ export default {
           this.projectsStore.addSpecification()
             .then(() => {
               this.projectsStore.addRequestOffer(this.requestOffer)
+                .then(() => {
+                  this.$router.push({ name: 'projects' })
+                })
             })
         })
     },

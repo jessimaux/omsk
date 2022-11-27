@@ -1,12 +1,10 @@
 from django.db import models
 
-from apps.projects.models import Project
-from apps.guide.models import ProductGuide
-
 
 class Specification(models.Model):
-    project = models.OneToOneField(Project, on_delete=models.CASCADE)
-
+    project = models.OneToOneField('projects.Project', on_delete=models.CASCADE, null=True)
+    name = models.CharField(max_length=255, blank=True, null=True)
+    guide = models.BooleanField(default=False)
 
 class Request(models.Model):
     specification = models.ForeignKey(Specification, on_delete=models.CASCADE)
@@ -19,7 +17,7 @@ class Request(models.Model):
 
 class Offer(models.Model):
     request = models.ForeignKey(Request, on_delete=models.CASCADE)
-    product = models.ForeignKey(ProductGuide, on_delete=models.CASCADE, null=True)
+    product = models.ForeignKey('guide.ProductGuide', on_delete=models.CASCADE, null=True)
     article = models.CharField(max_length=255, null=True, blank=True)
     name = models.CharField(max_length=255, null=True, blank=True)
     count = models.PositiveIntegerField(default=0)

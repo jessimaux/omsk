@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import ProductGuide, PartnerGuide, ProviderGuide, SpecificationGuide, OfferGuide, RequestGuide
+
+from .models import ProductGuide, PartnerGuide, ProviderGuide
 
 
 class ProductGuideSerializer(serializers.ModelSerializer):
@@ -36,37 +37,4 @@ class ProviderGuideSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProviderGuide
-        fields = '__all__'
-
-
-class SpecificationGuideSerializer(serializers.ModelSerializer):
-    created_by = serializers.HiddenField(default=serializers.CreateOnlyDefault(serializers.CurrentUserDefault()))
-    updated_by = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    created_at = serializers.SkipField()
-    updated_at = serializers.SkipField()
-
-    class Meta:
-        model = SpecificationGuide
-        fields = '__all__'
-
-
-class RequestGuideSerializer(serializers.ModelSerializer):
-    created_by = serializers.HiddenField(default=serializers.CreateOnlyDefault(serializers.CurrentUserDefault()))
-    updated_by = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    created_at = serializers.SkipField()
-    updated_at = serializers.SkipField()
-
-    class Meta:
-        model = RequestGuide
-        fields = '__all__'
-
-
-class OfferGuideSerializer(serializers.ModelSerializer):
-    created_by = serializers.HiddenField(default=serializers.CreateOnlyDefault(serializers.CurrentUserDefault()))
-    updated_by = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    created_at = serializers.SkipField()
-    updated_at = serializers.SkipField()
-
-    class Meta:
-        model = OfferGuide
         fields = '__all__'

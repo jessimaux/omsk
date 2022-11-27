@@ -18,6 +18,10 @@ const editProject = (id, project) => {
   return axios.put(`projects/${id}/`, project)
 }
 
+const deleteProject = (id) => {
+  return axios.delete(`projects/${id}/`)
+}
+
 // SPECIFICATIONS
 
 const addSpecification = (specification) => {
@@ -73,6 +77,7 @@ export default {
   getProject,
   editProject,
   addProject,
+  deleteProject,
   addSpecification,
   getOffers,
   getOffer,

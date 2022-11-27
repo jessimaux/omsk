@@ -24,10 +24,11 @@
                       <th scope="col">Срок поставки</th>
                       <th scope="col">Комментарии</th>
                       <th scope="col">Наличие товара</th>
+                      <th scope="col">Операция</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="item in projectsStore.getData" :key="item.id">
+                    <tr v-for="item in projectsStore.data" :key="item.id">
                       <td>{{ item.id }}</td>
                       <td>?</td>
                       <td>{{ item.status }}</td>
@@ -39,6 +40,15 @@
                       <td>{{ item.delivery_period }}</td>
                       <td>{{ item.commentary }}</td>
                       <td>?</td>
+                      <td>
+                        <div class="d-flex flex-row">
+                          <button type="button" class="btn btn-primary me-2"><i class="bi bi-x-square"
+                              @click="onClickProjectDelete(item.id)"></i></button>
+
+                          <router-link class="btn btn-primary" :to="{ name: 'project-edit', params: { id: item.id } }">
+                            <i class="bi bi-pencil-square"></i></router-link>
+                        </div>
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -59,6 +69,14 @@ export default {
   setup() {
     const projectsStore = useProjectsStore()
     return { projectsStore }
+  },
+  methods: {
+    onClickProjectDelete(id) {
+      this.projectsStore.deleteProject(id)
+        .then(() => {
+          this.projectsStore.getProjects()
+        })
+    },
   },
   created() {
     this.projectsStore.getProjects()
