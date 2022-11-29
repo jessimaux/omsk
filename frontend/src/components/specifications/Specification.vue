@@ -49,9 +49,9 @@
                 <product-search-field :row="row.offer[0]" v-model="row.offer[0].name"></product-search-field>
               </td>
               <td><input type="text" v-model="row.offer[0].count" /></td>
-              <td>{{ row.offer[0].price }}</td>
-              <td>{{ row.offer[0].count * row.offer[0].price }}</td>
-              <td>{{ row.offer[0].available }}</td>
+              <td>{{ row.offer[0].product.price_buy }}</td>
+              <td>{{ row.offer[0].count * row.offer[0].product.price_buy }}</td>
+              <td>{{ row.offer[0].product.available }}</td>
               <td>
                 <i @click="addSubRow(row.offer)" class="bi bi-plus-square"></i>
                 <i v-show="row.offer.length > 1" @click="removeSubRow(0, row.offer)" class="bi bi-dash-square"></i>
@@ -67,9 +67,9 @@
                 <product-search-field :row="subrow" v-model="subrow.name"></product-search-field>
               </td>
               <td><input type="text" v-model="subrow.count" /></td>
-              <td>{{ subrow.price }}</td>
+              <td>{{ subrow.product.price }}</td>
               <td>{{ subrow.count * subrow.price }}</td>
-              <td>{{ subrow.available }}</td>
+              <td>{{ subrow.product.available }}</td>
               <td>
                 <i @click="addSubRow(row.offer)" class="bi bi-plus-square"></i>
                 <i v-show="row.offer.length > 1" @click="removeSubRow(subindex + 1, row.offer)"

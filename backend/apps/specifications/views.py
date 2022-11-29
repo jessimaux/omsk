@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from rest_framework import viewsets, views, mixins
 
 from .models import Specification, Request, Offer
-from .serializers import SpecificationSerializer, SpecificationRetrieveSerializer, RequestSerializer, RequestOfferSerializer, OfferSerializer
+from .serializers import SpecificationSerializer, RequestSerializer, OfferSerializer
 from .utils import render_to_pdf
 
 
@@ -15,23 +15,11 @@ class SpecificationsViewSet(mixins.RetrieveModelMixin,
     serializer_class = SpecificationSerializer
     my_tags = ['Specification']
     
-    def get_serializer_class(self):
-        if self.action == 'retrieve':
-            return SpecificationRetrieveSerializer
-        else:
-            return SpecificationSerializer
-    
 
 class GuideSpecificationsViewSet(viewsets.ModelViewSet):
     queryset = Specification.objects.filter(guide=True)
     serializer_class = SpecificationSerializer
     my_tags = ['SpecificationGuide']
-    
-    def get_serializer_class(self):
-        if self.action == 'retrieve':
-            return SpecificationRetrieveSerializer
-        else:
-            return SpecificationSerializer
         
     
 class SpecificationsPDFExportView(views.APIView):
@@ -54,12 +42,6 @@ class RequestViewSet(viewsets.ModelViewSet):
     queryset = Request.objects.all()
     serializer_class = RequestSerializer
     my_tags = ['Request']
-    
-    def get_serializer_class(self):
-        if self.action == 'list':
-            return RequestOfferSerializer
-        else:
-            return RequestSerializer
 
 
 class OfferViewSet(viewsets.ModelViewSet):

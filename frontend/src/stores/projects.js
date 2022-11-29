@@ -175,8 +175,7 @@ export const useProjectsStore = defineStore('projects', {
                   article: offer.article,
                   name: offer.name,
                   count: offer.count,
-                  price: offer.price,
-                  available: offer.available,
+                  product: offer.product,
                   request: response.data.id
                 })
                 .catch((result) => {
