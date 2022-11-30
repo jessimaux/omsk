@@ -20,7 +20,7 @@
           </div>
         </div>
 
-        <specification :requestOffer="requestOffer"></specification>
+        <specification :requestOffer="specification.requests"></specification>
 
         <div class="text-end mb-3">
           <button type="submit" class="btn btn-primary">Сохранить</button>
@@ -47,36 +47,32 @@ export default {
     return {
       specification: {
         name: '',
-      },
-      requestOffer: [
+        guide: true,
+        requests: [
         {
           str_by_order: '',
           name: '',
           tx: '',
           amount: '',
           price: '',
-          offer: [{
+          offers: [{
             product: '',
             article: '',
             name: '',
             count: '',
-            price: '0',
-            available: '0',
           }],
         },
       ],
+      },
     }
   },
 
   methods: {
     onSubmit() {
       this.guideSpecificationsStore.addSpecification(this.specification)
-        .then(() => {
-          this.guideSpecificationsStore.addRequestOffer(this.requestOffer)
-            .then(() => {
-              this.$router.push({ name: 'guide-specifications' })
-            })
-        })
+      .then(()=>{
+        this.$router.push({ name: 'guide-specifications' })
+      })
     }
   }
 }

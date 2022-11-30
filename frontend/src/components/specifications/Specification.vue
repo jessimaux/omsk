@@ -30,35 +30,35 @@
 
           <tbody v-for="(row, index) in requestOffer" :key="`row-${index}`">
             <tr>
-              <td :rowspan="row.offer.length">
+              <td :rowspan="row.offers.length">
                 <i @click="addRow(requestOffer)" class="bi bi-plus-square"></i>
                 <i v-show="requestOffer.length > 1" @click="removeRow(index, requestOffer)"
                   class="bi bi-dash-square"></i>
               </td>
-              <td :rowspan="row.offer.length">{{ index }}</td>
-              <td :rowspan="row.offer.length"><input type="text" v-model="row.str_by_order" /></td>
-              <td :rowspan="row.offer.length"><input type="text" v-model="row.name" /></td>
-              <td :rowspan="row.offer.length"><input type="text" v-model="row.tx" /></td>
-              <td :rowspan="row.offer.length"><input type="text" v-model="row.amount" /></td>
-              <td :rowspan="row.offer.length"><input type="text" v-model="row.price" /></td>
-              <td :rowspan="row.offer.length">{{ row.price * row.amount }}</td>
+              <td :rowspan="row.offers.length">{{ index }}</td>
+              <td :rowspan="row.offers.length"><input type="text" v-model="row.str_by_order" /></td>
+              <td :rowspan="row.offers.length"><input type="text" v-model="row.name" /></td>
+              <td :rowspan="row.offers.length"><input type="text" v-model="row.tx" /></td>
+              <td :rowspan="row.offers.length"><input type="text" v-model="row.amount" /></td>
+              <td :rowspan="row.offers.length"><input type="text" v-model="row.price" /></td>
+              <td :rowspan="row.offers.length">{{ row.price * row.amount }}</td>
               <td>
-                <product-search-field :row="row.offer[0]" v-model="row.offer[0].article"></product-search-field>
+                <product-search-field :row="row.offers[0]" v-model="row.offers[0].article"></product-search-field>
               </td>
               <td>
-                <product-search-field :row="row.offer[0]" v-model="row.offer[0].name"></product-search-field>
+                <product-search-field :row="row.offers[0]" v-model="row.offers[0].name"></product-search-field>
               </td>
-              <td><input type="text" v-model="row.offer[0].count" /></td>
-              <td>{{ row.offer[0].product.price_buy }}</td>
-              <td>{{ row.offer[0].count * row.offer[0].product.price_buy }}</td>
-              <td>{{ row.offer[0].product.available }}</td>
+              <td><input type="text" v-model="row.offers[0].count" /></td>
+              <td>{{ row.offers[0].product ? row.offers[0].product.price_buy : '' }}</td>
+              <td>{{ row.offers[0].product && row.offers[0].count ? row.offers[0].count * row.offers[0].product.price_buy : '' }}</td>
+              <td>{{ row.offers[0].product ? row.offers[0].product.available : '' }}</td>
               <td>
-                <i @click="addSubRow(row.offer)" class="bi bi-plus-square"></i>
-                <i v-show="row.offer.length > 1" @click="removeSubRow(0, row.offer)" class="bi bi-dash-square"></i>
+                <i @click="addSubRow(row.offers)" class="bi bi-plus-square"></i>
+                <i v-show="row.offers.length > 1" @click="removeSubRow(0, row.offers)" class="bi bi-dash-square"></i>
               </td>
             </tr>
 
-            <tr v-if="row.offer.length > 1" v-for="(subrow, subindex) in row.offer.slice(1, row.offer.length)"
+            <tr v-if="row.offers.length > 1" v-for="(subrow, subindex) in row.offers.slice(1, row.offers.length)"
               :key="`subrow-${subindex}`">
               <td>
                 <product-search-field :row="subrow" v-model="subrow.article"></product-search-field>
@@ -67,12 +67,12 @@
                 <product-search-field :row="subrow" v-model="subrow.name"></product-search-field>
               </td>
               <td><input type="text" v-model="subrow.count" /></td>
-              <td>{{ subrow.product.price }}</td>
-              <td>{{ subrow.count * subrow.price }}</td>
-              <td>{{ subrow.product.available }}</td>
+              <td>{{ subrow.product ? subrow.product.price_buy : '' }}</td>
+              <td>{{ subrow.product && subrow.count ? subrow.count * subrow.product.price_buy : '' }}</td>
+              <td>{{ subrow.product ? subrow.product.available : '' }}</td>
               <td>
-                <i @click="addSubRow(row.offer)" class="bi bi-plus-square"></i>
-                <i v-show="row.offer.length > 1" @click="removeSubRow(subindex + 1, row.offer)"
+                <i @click="addSubRow(row.offers)" class="bi bi-plus-square"></i>
+                <i v-show="row.offers.length > 1" @click="removeSubRow(subindex + 1, row.offers)"
                   class="bi bi-dash-square"></i>
               </td>
             </tr>
@@ -96,14 +96,6 @@ export default {
     requestOffer: {
       type: Object,
       required: true,
-    },
-    deleteRequests: {
-      type: Object,
-      required: false
-    },
-    deleteOffers: {
-      type: Object,
-      required: false
     }
   },
   setup() {
@@ -119,21 +111,16 @@ export default {
         tx: '',
         amount: '',
         price: '',
-        offer: [{
+        offers: [{
           product: '',
           article: '',
           name: '',
           count: '',
-          price: '0',
-          available: '0',
         }],
       })
     },
 
     removeRow(index, fieldType) {
-      if (this.deleteRequests && 'id' in fieldType[index]) {
-        this.deleteRequests.push(fieldType[index].id)
-      }
       fieldType.splice(index, 1)
     },
 
@@ -143,15 +130,10 @@ export default {
         article: '',
         name: '',
         count: '',
-        price: '0',
-        available: '0',
       })
     },
 
     removeSubRow(index, fieldType) {
-      if (this.deleteOffers && 'id' in fieldType[index]) {
-        this.deleteOffers.push(fieldType[index].id)
-      }
       fieldType.splice(index, 1)
     },
   },

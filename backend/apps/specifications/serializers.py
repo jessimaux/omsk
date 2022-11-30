@@ -1,13 +1,16 @@
 from rest_framework import serializers
 
 from .models import Specification, Request, Offer
+from apps.guide.serializers import ProductGuideSerializer
         
         
 class OfferSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)
-    
+    product_id = serializers.IntegerField(write_only=True, required=False)
+
     class Meta:
         model = Offer
+        depth = 1
         exclude = ['request']
         
 
@@ -53,9 +56,9 @@ class SpecificationSerializer(serializers.ModelSerializer):
                 request_obj = Request.objects.get(id=request['id'])
                 request_obj.str_by_order = request.get('str_by_order', request_obj.str_by_order)
                 request_obj.name = request.get('name', request_obj.name)
-                request_obj.tx = request_obj.get('tx', request_obj.tx)
-                request_obj.amount = request_obj.get('amount', request_obj.amount)
-                request_obj.price = request_obj.get('price', request_obj.price)
+                request_obj.tx = request.get('tx', request_obj.tx)
+                request_obj.amount = request.get('amount', request_obj.amount)
+                request_obj.price = request.get('price', request_obj.price)
                 request_obj.save()
             else:
                 request_obj = Request.objects.create(specification_id=instance.id, **request)

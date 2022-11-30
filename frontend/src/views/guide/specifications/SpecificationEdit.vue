@@ -20,7 +20,7 @@
           </div>
         </div>
 
-        <specification :requestOffer="requestOffer" :deleteRequests="deleteRequests" :deleteOffers="deleteOffers"></specification>
+        <specification :requestOffer="specification.requests" :deleteRequests="deleteRequests" :deleteOffers="deleteOffers"></specification>
 
         <div class="text-end mb-3">
           <button type="submit" class="btn btn-primary">Сохранить</button>
@@ -46,27 +46,15 @@ export default {
     return { guideSpecificationsStore }
   },
 
-  data() {
-    return {
-      deleteRequests: [],
-      deleteOffers: []
-    }
-  },
-
   computed: {
     specification() {
-      return {
-        name: this.guideSpecificationsStore.data.name
-      }
-    },
-    requestOffer(){
-      return this.guideSpecificationsStore.data.requestOffer
+      return this.guideSpecificationsStore.data
     }
   },
 
   methods: {
     onSubmit() {
-      this.guideSpecificationsStore.editSpecification(this.specification, this.requestOffer, this.deleteRequests, this.deleteOffers)
+      this.guideSpecificationsStore.editSpecification(this.specification.id, this.specification)
         // .then(() => {
         //   this.$router.push({ name: 'guide-specifications' })
         // })

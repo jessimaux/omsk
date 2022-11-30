@@ -31,9 +31,10 @@ export default {
   },
   methods: {
     searchProducts() {
-      if (this.row.article) {
+      if (this.modelValue) {
         this.state = true
-        this.guideProductsStore.getProducts(this.row.article)
+        this.row.product = ''
+        this.guideProductsStore.getProducts(this.modelValue)
       }
       else this.state = false
     },
@@ -43,11 +44,10 @@ export default {
     },
 
     setProduct(index) {
-      this.row.product = this.guideProductsStore.data[index].id
+      this.row.product_id = this.guideProductsStore.data[index].id
       this.row.article = this.guideProductsStore.data[index].article
       this.row.name = this.guideProductsStore.data[index].name
-      this.row.price = this.guideProductsStore.data[index].price_rrc
-      this.row.available = this.guideProductsStore.data[index].available
+      this.row.product = this.guideProductsStore.data[index]
     }
   }
 };
