@@ -11,5 +11,5 @@ router.register(r'offers', OfferViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('export_pdf/', SpecificationsPDFExportView.as_view(), name='export-pdf')
+    path('<int:pk>/export_pdf/', SpecificationsPDFExportView.as_view(), name='export-pdf')
 ]

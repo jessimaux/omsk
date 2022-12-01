@@ -20,7 +20,7 @@
           </div>
         </div>
 
-        <specification :requestOffer="specification.requests"></specification>
+        <specification :specification="specification"></specification>
 
         <div class="text-end mb-3">
           <button type="submit" class="btn btn-primary">Сохранить</button>
@@ -57,6 +57,7 @@ export default {
           price: '',
           offers: [{
             product: '',
+            product_id: '',
             article: '',
             name: '',
             count: '',

@@ -1,7 +1,8 @@
 import datetime
 
 from django.http import HttpResponse
-from rest_framework import viewsets, views, mixins
+from rest_framework import viewsets, views, mixins, status
+from rest_framework.response import Response
 
 from .models import Specification, Request, Offer
 from .serializers import SpecificationSerializer, RequestSerializer, OfferSerializer
@@ -25,16 +26,19 @@ class GuideSpecificationsViewSet(viewsets.ModelViewSet):
 class SpecificationsPDFExportView(views.APIView):
     my_tag = ['Specification']
     
-    def get(self, request):
-        data = {
-            'specification': Specification.objects.all()
-        }
+    def get(self, request, *args, **kwargs):
+        try:
+            data = {
+                'specification': Specification.objects.get(id=kwargs['pk'])
+            }
+        except Specification.DoesNotExist:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
         pdf = render_to_pdf('specifications/pdf.html', data)
         
         if pdf:
             response = HttpResponse(pdf, content_type = 'application/pdf')
-            response['Access-Control-Expose-Headers'] = "Content-Disposition"
-            response['Content-Disposition'] = f'attachment; filename="{datetime.date.today()}.pdf"'
+            # response['Access-Control-Expose-Headers'] = "Content-Disposition"
+            # response['Content-Disposition'] = f'attachment; filename="{datetime.date.today()}.pdf"'
             return response
 
 

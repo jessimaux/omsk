@@ -7,8 +7,28 @@
     <section class="section">
       <form @submit.prevent="onSubmit">
         <project-form :project="project" @projectFormSubmit="onStageSubmit"></project-form>
-        <specification :requestOffer="requestOffer" @submit.prevent="onSubmit"></specification>
 
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Импорт спецификации</h5>
+                <div class="col-12">
+                  <label class="form-label">Шаблон типовой спецификации</label>
+                  <select class="form-select" @change="applySpecification($event)">
+                    <option value="">Не выбрано</option>
+                    <option v-for="(specification, index) in guideSpecificationsStore.data" :key="specification.id"
+                      :value="index">
+                      {{ specification.name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <specification :specification="project.specification" @submit.prevent="onSubmit"></specification>
         <div class="text-end mb-3">
           <button type="submit" class="btn btn-primary">Сохранить</button>
         </div>
@@ -19,6 +39,7 @@
 
 <script>
 import { useProjectsStore } from '@/stores/projects'
+import { useGuideSpecificationsStore } from '@/stores/guideSpecifications'
 import ProjectForm from '@/components/projects/ProjectForm.vue'
 import Specification from '@/components/specifications/Specification.vue'
 
@@ -30,7 +51,8 @@ export default {
   },
   setup() {
     const projectsStore = useProjectsStore()
-    return { projectsStore }
+    const guideSpecificationsStore = useGuideSpecificationsStore()
+    return { projectsStore, guideSpecificationsStore }
   },
   data() {
     return {
@@ -46,40 +68,44 @@ export default {
         nds: true,
         partner: '',
         commentary: '',
+        specification: {
+          guide: false,
+          requests: [
+            {
+              str_by_order: '',
+              name: '',
+              tx: '',
+              amount: '',
+              price: '',
+              offers: [{
+                product: '',
+                product_id: '',
+                article: '',
+                name: '',
+                count: ''
+              }],
+            },
+          ],
+        }
       },
-      requestOffer: [
-        {
-          str_by_order: '',
-          name: '',
-          tx: '',
-          amount: '',
-          price: '',
-          offer: [{
-            product: '',
-            article: '',
-            name: '',
-            count: '',
-            price: '0',
-            available: '0',
-          }],
-        },
-      ],
     }
   },
 
   methods: {
+    applySpecification(event) {
+      this.project.specification.requests = this.guideSpecificationsStore.data[event.target.value].requests
+    },
+
     onSubmit() {
       this.projectsStore.addProject(this.project)
         .then(() => {
-          this.projectsStore.addSpecification()
-            .then(() => {
-              this.projectsStore.addRequestOffer(this.requestOffer)
-                .then(() => {
-                  this.$router.push({ name: 'projects' })
-                })
-            })
+          this.$router.push({ name: 'projects' })
         })
     },
   },
+
+  created() {
+    this.guideSpecificationsStore.getSpecifications()
+  }
 }
 </script>

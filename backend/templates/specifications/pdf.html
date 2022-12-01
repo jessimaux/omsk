@@ -1,16 +1,122 @@
-<html>
+{% load my_filters %}
+
+<html lang="en">
 
 <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8" />
   <style>
     @page {
       size: letter landscape;
-      margin: 2cm;
+      margin: 1.5cm;
+    }
+
+    @font-face {
+      font-family: 'Arial Regular';
+      font-style: normal;
+      font-weight: normal;
+      src: local('Arial Regular'), url('templates/specifications/arial.ttf') format('ttf');
+    }
+
+    body {
+      font-family: 'Arial Regular', sans-serif;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    table,
+    th,
+    td {
+      border: 1px solid black;
+    }
+
+    th {
+      font-weight: bold;
+    }
+
+    th,
+    td {
+      text-align: center;
+      padding: 5px 0;
     }
   </style>
 </head>
 
 <body>
-  {{ specification.0.id }}
+  <div class="table-responsive mb-3">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col" colspan="7" class="text-center">Запрос</th>
+          <th scope="col" colspan="6" class="text-center">Предложение</th>
+        </tr>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Приказ</th>
+          <th scope="col">Наименование</th>
+          <th scope="col">ТХ</th>
+          <th scope="col">Количество</th>
+          <th scope="col">Цена</th>
+          <th scope="col">Сумма</th>
+          <th scope="col">Артикул</th>
+          <th scope="col">Наименование</th>
+          <th scope="col">Количество</th>
+          <th scope="col">Цена</th>
+          <th scope="col">Сумма</th>
+          <th scope="col">Наличие</th>
+        </tr>
+      </thead>
+      {% for request in specification.request_set.all %}
+      <tbody>
+        <tr>
+          <td rowspan="{{ request.offer_set.all|length }}">{{ forloop.counter }}</td>
+          <td rowspan="{{ request.offer_set.all|length }}">{{ request.str_by_order }}</td>
+          <td rowspan="{{ request.offer_set.all|length }}">{{ request.name }}</td>
+          <td rowspan="{{ request.offer_set.all|length }}">{{ request.tx }}</td>
+          <td rowspan="{{ request.offer_set.all|length }}">{{ request.amount }}</td>
+          <td rowspan="{{ request.offer_set.all|length }}">{{ request.price }}</td>
+          <td rowspan="{{ request.offer_set.all|length }}">{{ request.price|multiply:request.amount }}</td>
+          <td>{{ request.offer_set.all.0.article }}</td>
+          <td>{{ request.offer_set.all.0.name }}</td>
+          <td>{{ request.offer_set.all.0.count }}</td>
+          <td>
+            {{ request.offer_set.all.0.product.price_buy }}
+          </td>
+          <td>
+            {% if request.offer_set.all.0.product %}
+            {{ request.offer_set.all.0.count|multiply:request.offer_set.all.0.product.price_buy }}
+            {% endif %}
+          </td>
+          <td>
+            {{ request.offer_set.all.0.product_set.all.0.available }}
+          </td>
+        </tr>
+        {% if request.offer_set.all|length > 1 %}
+        {% with requests_len=request.offer_set.all|length %}
+        {% for i in 1|range:requests_len %}
+        <tr>
+          {% with offer=request.offer_set.all|index:i %}
+          <td>{{ offer.article }}</td>
+          <td>{{ offer.name }}</td>
+          <td>{{ offer.count }}</td>
+          <td>{{ offer.product.price_buy }}</td>
+          <td>
+            {% if offer.product %}
+            {{ offer.product.price|multiply:offer.count }}
+            {% endif %}
+          </td>
+          <td>{{ offer.product.available }}</td>
+          {% endwith %}
+        </tr>
+        {% endfor %}
+        {% endwith %}
+        {% endif %}
+      </tbody>
+      {% endfor %}
+    </table>
+  </div>
 </body>
 
 </html>

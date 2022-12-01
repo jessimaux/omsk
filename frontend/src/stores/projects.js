@@ -37,24 +37,43 @@ export const useProjectsStore = defineStore('projects', {
           this.loading = false
         })
         .catch((result) => {
-          this.loading = false
           this.errors = result.response.data
+          this.loading = false
         })
     },
 
     async addProject(credentials) {
       this.errors = null
       this.data = null
-      await projectsApi
-        .addProject(credentials)
+      this.loading = true
+      await projectsApi.addProject(credentials)
         .then((response) => {
           this.data = response.data
-          this.project = response.data
+          this.loading = false
         })
         .catch((result) => {
           this.errors = result.response.data
+          this.loading = false
+          throw result.response.data
         })
     },
+
+    async editProject(id, credentials) {
+      this.data = null
+      this.errors = null
+      this.loading = true
+      await projectsApi.editProject(id, credentials)
+        .then((response) => {
+          this.data = response.data
+          this.loading = false
+        })
+        .catch((result) => {
+          this.errors = result.response.data
+          this.loading = false
+          throw result.response.data
+        })
+    },
+
 
     async deleteProject(id) {
       this.errors = null

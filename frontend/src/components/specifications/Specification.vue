@@ -28,11 +28,11 @@
             </tr>
           </thead>
 
-          <tbody v-for="(row, index) in requestOffer" :key="`row-${index}`">
+          <tbody v-for="(row, index) in specification.requests" :key="`row-${index}`">
             <tr>
               <td :rowspan="row.offers.length">
-                <i @click="addRow(requestOffer)" class="bi bi-plus-square"></i>
-                <i v-show="requestOffer.length > 1" @click="removeRow(index, requestOffer)"
+                <i @click="addRow(specification.requests)" class="bi bi-plus-square"></i>
+                <i v-show="specification.requests.length > 1" @click="removeRow(index, specification.requests)"
                   class="bi bi-dash-square"></i>
               </td>
               <td :rowspan="row.offers.length">{{ index }}</td>
@@ -50,7 +50,9 @@
               </td>
               <td><input type="text" v-model="row.offers[0].count" /></td>
               <td>{{ row.offers[0].product ? row.offers[0].product.price_buy : '' }}</td>
-              <td>{{ row.offers[0].product && row.offers[0].count ? row.offers[0].count * row.offers[0].product.price_buy : '' }}</td>
+              <td>{{ row.offers[0].product && row.offers[0].count ? row.offers[0].count *
+                  row.offers[0].product.price_buy : ''
+              }}</td>
               <td>{{ row.offers[0].product ? row.offers[0].product.available : '' }}</td>
               <td>
                 <i @click="addSubRow(row.offers)" class="bi bi-plus-square"></i>
@@ -93,7 +95,7 @@ export default {
     ProductSearchField,
   },
   props: {
-    requestOffer: {
+    specification: {
       type: Object,
       required: true,
     }
@@ -102,7 +104,6 @@ export default {
     const projectsStore = useProjectsStore()
     return { projectsStore }
   },
-
   methods: {
     addRow(fieldType) {
       fieldType.push({
@@ -113,6 +114,7 @@ export default {
         price: '',
         offers: [{
           product: '',
+          product_id: '',
           article: '',
           name: '',
           count: '',
@@ -127,6 +129,7 @@ export default {
     addSubRow(fieldType) {
       fieldType.push({
         product: '',
+        product_id: '',
         article: '',
         name: '',
         count: '',

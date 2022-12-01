@@ -43,6 +43,7 @@
               <input type="checkbox" class="form-check-input" v-model="project.nds" />
             </div>
           </div>
+
         </div>
       </div>
     </div>
@@ -125,9 +126,6 @@ export default {
         }
       }
     },
-  },
-
-  methods: {
   },
 
   created() {

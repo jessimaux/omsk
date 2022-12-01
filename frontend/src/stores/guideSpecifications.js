@@ -42,24 +42,32 @@ export const useGuideSpecificationsStore = defineStore('guideSpecifications', {
     async addSpecification(credentials) {
       this.data = null
       this.errors = null
+      this.loading = true
       await guideSpecificationsApi.addSpecification(credentials)
         .then((response) => {
           this.data = response.data
+          this.loading = false
         })
         .catch((result) => {
           this.errors = result.response.data
+          this.loading = false
+          throw result.response.data
         })
     },
 
     async editSpecification(id, credentials) {
       this.data = null
       this.errors = null
+      this.loading = true
       await guideSpecificationsApi.editSpecification(id, credentials)
         .then((response) => {
           this.data = response.data
+          this.loading = false
         })
         .catch((result) => {
           this.errors = result.response.data
+          this.loading = false
+          throw result.response.data
         })
     },
 
