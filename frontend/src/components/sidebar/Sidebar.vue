@@ -11,7 +11,7 @@
                     <i class="bi bi-grid"></i>
                     <span>Главная</span>
                 </router-link>
-            </li><!-- End Dashboard Nav -->
+            </li>
 
             <li class="nav-item">
                 <router-link class="nav-link" :to="{ name: 'projects' }" active-class="active">
@@ -27,25 +27,29 @@
                 </a>
                 <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                     <li>
-                        <router-link :to="{ name: 'guide-products' }" active-class="active">
+                        <router-link :to="{ name: 'guide-products' }" active-class="active"
+                            :class="{ 'active': isActiveProducts }">
                             <i class="bi bi-circle"></i><span>Товары</span>
                         </router-link>
                     </li>
 
                     <li>
-                        <router-link :to="{ name: 'guide-partners' }" active-class="active">
+                        <router-link :to="{ name: 'guide-partners' }" active-class="active"
+                            :class="{ 'active': isActivePartners }">
                             <i class="bi bi-circle"></i><span>Партнеры</span>
                         </router-link>
                     </li>
 
                     <li>
-                        <router-link :to="{ name: 'guide-providers' }" active-class="active">
+                        <router-link :to="{ name: 'guide-providers' }" active-class="active"
+                            :class="{ 'active': isActiveProviders }">
                             <i class="bi bi-circle"></i><span>Поставщики</span>
                         </router-link>
                     </li>
 
                     <li>
-                        <router-link :to="{ name: 'guide-specifications' }" active-class="active">
+                        <router-link :to="{ name: 'guide-specifications' }" active-class="active"
+                            :class="{ 'active': isActiveSpecifications }">
                             <i class="bi bi-circle"></i><span>Спецификации</span>
                         </router-link>
                     </li>
@@ -62,9 +66,19 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
     name: "Sidebar",
-});
+    computed: {
+        isActiveProducts() {
+            return this.$route.name === 'guide-products-create' || this.$route.name === 'guide-products-edit'
+        },
+        isActiveProviders() {
+            return this.$route.name === 'guide-providers-create' || this.$route.name === 'guide-providers-edit'
+        },
+        isActivePartners() {
+            return this.$route.name === 'guide-partners-create' || this.$route.name === 'guide-partners-edit'
+        },
+        isActiveSpecifications() {
+            return this.$route.name === 'guide-specifications-create' || this.$route.name === 'guide-specifications-edit'
+        },
+    }
+})
 </script>
-
-<style scoped>
-
-</style>
