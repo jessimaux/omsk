@@ -54,11 +54,11 @@
                         </router-link>
                     </li>
                 </ul>
-            </li><!-- End Components Nav -->
+            </li>
 
         </ul>
 
-    </aside><!-- End Sidebar-->
+    </aside>
 </template>
 
 <script>

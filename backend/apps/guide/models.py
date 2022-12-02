@@ -7,10 +7,6 @@ class PartnerGuide(models.Model):
     inn = models.CharField(max_length=255)
     region = models.CharField(max_length=255)
     discount = models.PositiveIntegerField(default=0)
-    contact_fio = models.CharField(max_length=255)
-    contact_role = models.CharField(max_length=255)
-    contact_phone = models.CharField(max_length=255)
-    contact_email = models.EmailField(max_length=255)
 
     # log section
     created_by = models.ForeignKey(User, related_name="partner_created_by", on_delete=models.SET_NULL, null=True)
@@ -19,16 +15,20 @@ class PartnerGuide(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
+class ContactPartner(models.Model):
+    partner = models.ForeignKey(PartnerGuide, related_name='contact_partner', on_delete=models.CASCADE)
+    fio = models.CharField(max_length=255)
+    role = models.CharField(max_length=255)
+    phone = models.CharField(max_length=255)
+    email = models.EmailField(max_length=255)
+    
+
 class ProviderGuide(models.Model):
     sphere = models.CharField(max_length=255)
     name = models.CharField(max_length=255)
     inn = models.CharField(max_length=255)
     region = models.CharField(max_length=255)
     discount = models.PositiveIntegerField(default=0)
-    contact_fio = models.CharField(max_length=255)
-    contact_role = models.CharField(max_length=255)
-    contact_phone = models.CharField(max_length=255)
-    contact_email = models.EmailField(max_length=255)
 
     # log section
     created_by = models.ForeignKey(User, related_name="provider_created_by", on_delete=models.SET_NULL, null=True)
@@ -36,6 +36,14 @@ class ProviderGuide(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+
+class ContactProvider(models.Model):
+    provider = models.ForeignKey(ProviderGuide, related_name='contact_provider', on_delete=models.CASCADE)
+    fio = models.CharField(max_length=255)
+    role = models.CharField(max_length=255)
+    phone = models.CharField(max_length=255)
+    email = models.EmailField(max_length=255)
+    
 
 class ProductGuide(models.Model):
     str_by_order = models.CharField(max_length=255)

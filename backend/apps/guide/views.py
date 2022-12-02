@@ -67,3 +67,4 @@ class ProviderViewSet(viewsets.ModelViewSet):
     queryset = ProviderGuide.objects.all()
     serializer_class = ProviderGuideSerializer
     my_tags = ['ProvidersGuide']
+
