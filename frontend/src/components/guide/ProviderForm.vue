@@ -32,29 +32,35 @@
         </div>
       </div>
     </div>
+  </div>
 
-    <div class="col-lg-6">
+  <div class="row">
+    <div v-for="(contact, index) in provider.contacts" :key="provider.id" class="col-lg-6">
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title">Контактное лицо</h5>
+          <h5 class="card-title">Контактное лицо
+            <i class="bi bi-plus-square" @click="addContact(provider.contacts)"></i>
+            <i v-show="(provider.contacts.length > 1)" class="bi bi-dash-square"
+              @click="deleteContact(provider.contacts, index)"></i>
+          </h5>
           <div class="col-12">
             <label class="form-label">ФИО</label>
-            <input type="text" class="form-control" v-model="provider.contact_fio">
+            <input type="text" class="form-control" v-model="contact.fio">
           </div>
 
           <div class="col-12">
             <label class="form-label">Роль</label>
-            <input type="text" class="form-control" v-model="provider.contact_role">
+            <input type="text" class="form-control" v-model="contact.role">
           </div>
 
           <div class="col-12">
             <label class="form-label">Контактный телефон</label>
-            <input type="text" class="form-control" v-model="provider.contact_phone">
+            <input type="text" class="form-control" v-model="contact.phone">
           </div>
 
           <div class="col-12">
             <label class="form-label">E-mail</label>
-            <input type="text" class="form-control" v-model="provider.contact_email">
+            <input type="text" class="form-control" v-model="contact.email">
           </div>
 
         </div>
@@ -70,6 +76,19 @@ export default {
     provider: {
       type: Object,
       required: true
+    }
+  },
+  methods: {
+    addContact(fieldType) {
+      fieldType.push({
+        fio: '',
+        role: '',
+        phone: '',
+        email: ''
+      })
+    },
+    deleteContact(fieldType, index) {
+      fieldType.splice(index, 1)
     }
   }
 }

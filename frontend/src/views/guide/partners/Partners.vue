@@ -19,19 +19,12 @@
                 <table class="table">
                   <thead>
                     <tr>
-                      <th scope="col" rowspan="2">#</th>
-                      <th scope="col" rowspan="2">Наименование</th>
-                      <th scope="col" rowspan="2">ИНН</th>
-                      <th scope="col" rowspan="2">Регион</th>
-                      <th scope="col" rowspan="2">Базовая скидка</th>
-                      <th class="text-center" scope="col" colspan="4">Контактное лицо</th>
-                      <th scope="col" rowspan="2">Операция</th>
-                    </tr>
-                    <tr>
-                      <th scope="col">ФИО</th>
-                      <th scope="col">Роль</th>
-                      <th scope="col">Телефон</th>
-                      <th scope="col">Почта</th>
+                      <th scope="col">#</th>
+                      <th scope="col">Наименование</th>
+                      <th scope="col">ИНН</th>
+                      <th scope="col">Регион</th>
+                      <th scope="col">Базовая скидка</th>
+                      <th scope="col">Операция</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -41,10 +34,6 @@
                       <td>{{ item.inn }}</td>
                       <td>{{ item.region }}</td>
                       <td>{{ item.discount }}</td>
-                      <td>{{ item.contact_fio }}</td>
-                      <td>{{ item.contact_role }}</td>
-                      <td>{{ item.contact_phone }}</td>
-                      <td>{{ item.contact_email }}</td>
                       <td>
                         <div class="d-flex flex-row">
                           <button type="button" class="btn btn-primary me-2" @click="onClickPartnerDelete(item.id)">

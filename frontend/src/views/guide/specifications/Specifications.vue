@@ -21,7 +21,7 @@
                     <tr>
                       <th scope="col">#</th>
                       <th scope="col">Наименование</th>
-                      <th scope="col">Количество позиций</th>
+                      <th scope="col">Описание</th>
                       <th scope="col">Операция</th>
                     </tr>
                   </thead>
@@ -29,7 +29,7 @@
                     <tr v-for="item in guideSpecificationsStore.data" :key="item.id">
                       <td>{{ item.id }}</td>
                       <td>{{ item.name }}</td>
-                      <td> ? </td>
+                      <td>{{ item.description }}</td>
                       <td>
                         <div class="d-flex flex-row">
                           <button type="button" class="btn btn-primary me-2"><i class="bi bi-x-square"

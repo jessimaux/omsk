@@ -15,6 +15,11 @@
                   <label class="form-label">Название спецификации</label>
                   <input type="text" class="form-control" v-model="specification.name" />
                 </div>
+
+                <div class="col-12">
+                  <label class="form-label">Описание спецификации</label>
+                  <textarea class="form-control" style="resize:none" rows="5" v-model="specification.description" />
+                </div>
               </div>
             </div>
           </div>
@@ -47,6 +52,7 @@ export default {
     return {
       specification: {
         name: '',
+        description: '',
         guide: true,
         requests: [
         {

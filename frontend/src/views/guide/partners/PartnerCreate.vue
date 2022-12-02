@@ -35,10 +35,12 @@ export default {
         inn: '',
         region: '',
         discount: '',
-        contact_fio: '',
-        contact_role: '',
-        contact_phont: '',
-        contact_email: ''
+        contacts: [{
+          fio: '',
+          role: '',
+          phone: '',
+          email: ''
+        }],
       }
     }
   },

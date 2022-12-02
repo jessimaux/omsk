@@ -27,29 +27,34 @@
         </div>
       </div>
     </div>
+  </div>
 
-    <div class="col-lg-6">
+  <div class="row">
+    <div v-for="(contact, index) in partner.contacts" :key="contact.id" class="col-lg-6">
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title">Контактное лицо</h5>
+          <h5 class="card-title">Контактное лицо
+              <i class="bi bi-plus-square" @click="addContact(partner.contacts)"></i>
+              <i v-show="(partner.contacts.length > 1)" class="bi bi-dash-square" @click="deleteContact(partner.contacts, index)"></i>
+          </h5>
           <div class="col-12">
             <label class="form-label">ФИО</label>
-            <input type="text" class="form-control" v-model="partner.contact_fio">
+            <input type="text" class="form-control" v-model="contact.fio">
           </div>
 
           <div class="col-12">
             <label class="form-label">Роль</label>
-            <input type="text" class="form-control" v-model="partner.contact_role">
+            <input type="text" class="form-control" v-model="contact.role">
           </div>
 
           <div class="col-12">
             <label class="form-label">Контактный телефон</label>
-            <input type="text" class="form-control" v-model="partner.contact_phone">
+            <input type="text" class="form-control" v-model="contact.phone">
           </div>
 
           <div class="col-12">
             <label class="form-label">E-mail</label>
-            <input type="text" class="form-control" v-model="partner.contact_email">
+            <input type="text" class="form-control" v-model="contact.email">
           </div>
 
         </div>
@@ -65,6 +70,19 @@ export default {
     partner: {
       type: Object,
       required: true
+    }
+  },
+  methods: {
+    addContact(fieldType) {
+      fieldType.push({
+        fio: '',
+        role: '',
+        phone: '',
+        email: ''
+      })
+    },
+    deleteContact(fieldType, index) {
+      fieldType.splice(index, 1)
     }
   }
 }

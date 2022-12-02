@@ -4,6 +4,7 @@ from django.db import models
 class Specification(models.Model):
     project = models.OneToOneField('projects.Project', on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=255, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
     guide = models.BooleanField(default=False)
 
 
