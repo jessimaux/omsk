@@ -74,6 +74,10 @@ class PartnerGuideSerializer(serializers.ModelSerializer):
             if contact_id not in contacts_id_pool:
                 ContactPartner.objects.filter(id=contact_id).delete()
         return instance
+    
+    
+class PartnerGuideImportSerializer(serializers.Serializer):
+    file = serializers.FileField(max_length=None, allow_empty_file=False)
 
 
 class ProviderGuideSerializer(serializers.ModelSerializer):
@@ -118,3 +122,7 @@ class ProviderGuideSerializer(serializers.ModelSerializer):
             if contact_id not in contacts_id_pool:
                 ContactProvider.objects.filter(id=contact_id).delete()
         return instance
+    
+    
+class ProviderGuideImportSerializer(serializers.Serializer):
+    file = serializers.FileField(max_length=None, allow_empty_file=False)

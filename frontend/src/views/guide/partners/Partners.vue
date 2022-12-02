@@ -13,6 +13,15 @@
                 <router-link class="btn btn-primary me-2" :to="{ name: 'guide-partners-create' }">
                   <i class="bi bi-plus-square"></i>&nbspДобавить
                 </router-link>
+
+                <button class="btn btn-primary me-2" @click="exportPartners">
+                  <i class="bi bi-download"></i>&nbspЭкспорт
+                </button>
+
+                <div class="btn-import">
+                  <label for="btn-import" class="btn btn-primary"><i class="bi bi-upload"></i>&nbspИмпорт</label>
+                  <input type="file" id="btn-import" @change="importPartners" ref="file" hidden>
+                </div>
               </div>
 
               <div class="table-responsive">
@@ -75,6 +84,21 @@ export default {
           this.guidePartnersStore.getPartners()
         })
     },
+
+    exportPartners() {
+      this.guidePartnersStore.exportPartners()
+    },
+
+    importPartners() {
+      this.file = this.$refs.file.files[0]
+      const formData = new FormData()
+      formData.append('file', this.file)
+      this.guidePartnersStore.importPartners(formData)
+        .then(() => {
+          this.guidePartnersStore.getPartners()
+        })
+      this.$refs.file.value = null;
+    }
   },
   created() {
     this.guidePartnersStore.getPartners()

@@ -13,6 +13,15 @@
                 <router-link class="btn btn-primary me-2" :to="{ name: 'guide-providers-create' }">
                   <i class="bi bi-plus-square"></i>&nbspДобавить
                 </router-link>
+
+                <button class="btn btn-primary me-2" @click="exportProviders">
+                  <i class="bi bi-download"></i>&nbspЭкспорт
+                </button>
+
+                <div class="btn-import">
+                  <label for="btn-import" class="btn btn-primary"><i class="bi bi-upload"></i>&nbspИмпорт</label>
+                  <input type="file" id="btn-import" @change="importProviders" ref="file" hidden>
+                </div>
               </div>
 
               <div class="table-responsive">
@@ -75,6 +84,21 @@ export default {
           this.guideProvidersStore.getProviders()
         })
     },
+
+    exportProviders() {
+      this.guideProvidersStore.exportProviders()
+    },
+
+    importProviders() {
+      this.file = this.$refs.file.files[0]
+      const formData = new FormData()
+      formData.append('file', this.file)
+      this.guideProvidersStore.importProviders(formData)
+        .then(() => {
+          this.guideProvidersStore.getProviders()
+        })
+      this.$refs.file.value = null;
+    }
   },
   created() {
     this.guideProvidersStore.getProviders()
