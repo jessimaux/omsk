@@ -10,6 +10,12 @@
           <div v-if="!guidePartnersStore.loading" class="card">
             <div class="card-body">
               <div class="support-bar d-flex flex-row justify-content-end py-2">
+                <div class="search">
+                  <form method="GET" name='search' @submit.prevent="onSearch">
+                    <input type="text" class="form-control" v-model="search">
+                  </form>
+                </div>
+
                 <router-link class="btn btn-primary me-2" :to="{ name: 'guide-partners-create' }">
                   <i class="bi bi-plus-square"></i>&nbspДобавить
                 </router-link>
@@ -60,7 +66,8 @@
                 </table>
               </div>
 
-              <pagination :currentPage="currentPage" :perPage="perPage" :total="guidePartnersStore.data.count" @pageChanged="onPageChanged"></pagination>
+              <pagination :currentPage="currentPage" :perPage="perPage" :total="guidePartnersStore.data.count"
+                @pageChanged="onPageChanged"></pagination>
 
             </div>
           </div>
@@ -83,21 +90,27 @@ export default {
     const guidePartnersStore = useGuidePartnersStore()
     return { guidePartnersStore }
   },
-  data(){
+  data() {
     return {
-        currentPage: Number(this.$route.query.page) ? Number(this.$route.query.page) : 1,
-        perPage: 2
+      search: '',
+      currentPage: Number(this.$route.query.page) ? Number(this.$route.query.page) : 1,
+      perPage: 2
     }
   },
   methods: {
-    onOrderingChanged(field){
-      this.$router.push({path: this.$route.fullPath, query: {page: this.currentPage, ordering: field} })
+    onSearch(){
+      this.$router.push({ path: this.$route.fullPath, query: { page: this.currentPage, ordering: 'id', search: this.search } })
+      this.guidePartnersStore.getPartners(this.currentPage, 'id', this.search)
+    },
+
+    onOrderingChanged(field) {
+      this.$router.push({ path: this.$route.fullPath, query: { page: this.currentPage, ordering: field } })
       this.guidePartnersStore.getPartners(this.currentPage, field)
     },
 
     onPageChanged(page) {
       this.currentPage = page
-      this.$router.push({path: this.$route.fullPath, query: {page: page} })
+      this.$router.push({ path: this.$route.fullPath, query: { page: page } })
       this.guidePartnersStore.getPartners(page)
     },
 

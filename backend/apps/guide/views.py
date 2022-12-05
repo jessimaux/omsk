@@ -63,7 +63,8 @@ class PartnerViewSet(viewsets.ModelViewSet):
     queryset = PartnerGuide.objects.all()
     serializer_class = PartnerGuideSerializer
     pagination_class = PageNumberPagination
-    filter_backends = [filters.OrderingFilter]
+    filter_backends = [filters.OrderingFilter, filters.SearchFilter]
+    search_fields = ['name']
     ordering_fields = '__all__'
     ordering = ['id']
     my_tags = ['PartnersGuide']
