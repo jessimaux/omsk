@@ -9,7 +9,7 @@
               <router-link :to="{ name: 'project-create' }"><button class="btn btn-primary"><i
                     class="bi bi-plus-square"></i>Добавить</button></router-link>
               <!-- Default Table -->
-              <div class="table-responsive">
+              <div v-if="!projectsStore.loading" class="table-responsive">
                 <table class="table">
                   <thead>
                     <tr>
@@ -28,7 +28,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="item in projectsStore.data" :key="item.id">
+                    <tr v-for="item in projectsStore.data.results" :key="item.id">
                       <td>{{ item.id }}</td>
                       <td>?</td>
                       <td>{{ item.status }}</td>

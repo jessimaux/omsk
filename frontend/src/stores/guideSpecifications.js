@@ -15,12 +15,15 @@ export const useGuideSpecificationsStore = defineStore('guideSpecifications', {
     async getSpecifications() {
       this.data = null
       this.errors = null
+      this.loading = true
       await guideSpecificationsApi.getSpecifications()
         .then((response) => {
           this.data = response.data
+          this.loading = false
         })
         .catch((result) => {
           this.errors = result.response.data
+          this.loading = false
         })
     },
 

@@ -7,7 +7,7 @@
     <section class="section">
       <div class="row">
         <div class="col-lg-12">
-          <div class="card">
+          <div v-if="!guidePartnersStore.loading" class="card">
             <div class="card-body">
               <div class="support-bar d-flex flex-row justify-content-end py-2">
                 <router-link class="btn btn-primary me-2" :to="{ name: 'guide-partners-create' }">
@@ -37,7 +37,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="item in guidePartnersStore.data" :key="item.id">
+                    <tr v-for="item in guidePartnersStore.data.results" :key="item.id">
                       <td>{{ item.id }}</td>
                       <td>{{ item.name }}</td>
                       <td>{{ item.inn }}</td>
@@ -60,6 +60,8 @@
                 </table>
               </div>
 
+              <pagination :currentPage="currentPage" :perPage="perPage" :total="guidePartnersStore.data.count" @pageChanged="onPageChanged"></pagination>
+
             </div>
           </div>
         </div>
@@ -70,14 +72,30 @@
 
 <script>
 import { useGuidePartnersStore } from '@/stores/guidePartners.js'
+import Pagination from '@/components/Pagination.vue'
 
 export default {
   name: 'Partners',
+  components: {
+    Pagination
+  },
   setup() {
     const guidePartnersStore = useGuidePartnersStore()
     return { guidePartnersStore }
   },
+  data(){
+    return {
+        currentPage: Number(this.$route.query.page) ? Number(this.$route.query.page) : 1,
+        perPage: 2
+    }
+  },
   methods: {
+    onPageChanged(page) {
+      this.currentPage = page
+      this.$router.push({path: this.$route.fullPath, query: {page: page} })
+      this.guidePartnersStore.getPartners(page)
+    },
+
     onClickPartnerDelete(id) {
       this.guidePartnersStore.deletePartner(id)
         .then(() => {

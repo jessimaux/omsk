@@ -3,6 +3,7 @@ import datetime
 from django.http import HttpResponse
 from rest_framework import viewsets, views, mixins, status
 from rest_framework.response import Response
+from rest_framework.pagination import PageNumberPagination
 
 from .models import Specification, Request, Offer
 from .serializers import SpecificationSerializer, RequestSerializer, OfferSerializer
@@ -20,6 +21,7 @@ class SpecificationsViewSet(mixins.RetrieveModelMixin,
 class GuideSpecificationsViewSet(viewsets.ModelViewSet):
     queryset = Specification.objects.filter(guide=True)
     serializer_class = SpecificationSerializer
+    pagination_class = PageNumberPagination
     my_tags = ['SpecificationGuide']
         
     

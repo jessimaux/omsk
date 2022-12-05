@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from rest_framework import viewsets, views, generics, status
 from rest_framework.response import Response
 from rest_framework import filters
+from rest_framework.pagination import PageNumberPagination
 from tablib import Dataset
 
 from .models import ProductGuide, PartnerGuide, ProviderGuide
@@ -15,6 +16,7 @@ from .resources import ProductGuideResource, PartnerGuideResource, ProviderGuide
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = ProductGuide.objects.all()
     serializer_class = ProductGuideSerializer
+    pagination_class = PageNumberPagination
     filter_backends = [filters.SearchFilter]
     search_fields = ['article', 'name']
     my_tags = ['ProductsGuide']
@@ -60,6 +62,7 @@ class ProductImportView(generics.CreateAPIView):
 class PartnerViewSet(viewsets.ModelViewSet):
     queryset = PartnerGuide.objects.all()
     serializer_class = PartnerGuideSerializer
+    pagination_class = PageNumberPagination
     my_tags = ['PartnersGuide']
 
 
@@ -103,6 +106,7 @@ class PartnerImportView(generics.CreateAPIView):
 class ProviderViewSet(viewsets.ModelViewSet):
     queryset = ProviderGuide.objects.all()
     serializer_class = ProviderGuideSerializer
+    pagination_class = PageNumberPagination
     my_tags = ['ProvidersGuide']
 
 

@@ -24,7 +24,7 @@
                 </div>
               </div>
 
-              <div class="table-responsive">
+              <div v-if="!guideProvidersStore.loading" class="table-responsive">
                 <table class="table">
                   <thead>
                     <tr>
@@ -38,7 +38,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="item in guideProvidersStore.data" :key="item.id">
+                    <tr v-for="item in guideProvidersStore.data.results" :key="item.id">
                       <td>{{ item.id }}</td>
                       <td>{{ item.sphere }}</td>
                       <td>{{ item.name }}</td>

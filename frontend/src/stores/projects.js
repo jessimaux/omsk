@@ -16,13 +16,15 @@ export const useProjectsStore = defineStore('projects', {
     async getProjects() {
       this.errors = null
       this.data = null
-      await projectsApi
-        .getProjects()
+      this.loading = true
+      await projectsApi.getProjects()
         .then((response) => {
           this.data = response.data
+          this.loading = false
         })
         .catch((result) => {
           this.errors = result.response.data
+          this.loading = false
         })
     },
 

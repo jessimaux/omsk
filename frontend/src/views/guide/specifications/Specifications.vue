@@ -15,7 +15,7 @@
                 </router-link>
               </div>
 
-              <div class="table-responsive">
+              <div v-if="!guideSpecificationsStore.loading" class="table-responsive">
                 <table class="table">
                   <thead>
                     <tr>
@@ -26,7 +26,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="item in guideSpecificationsStore.data" :key="item.id">
+                    <tr v-for="item in guideSpecificationsStore.data.results" :key="item.id">
                       <td>{{ item.id }}</td>
                       <td>{{ item.name }}</td>
                       <td>{{ item.description }}</td>
