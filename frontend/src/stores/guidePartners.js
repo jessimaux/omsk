@@ -11,11 +11,11 @@ export const useGuidePartnersStore = defineStore('guidePartners', {
   },
 
   actions: {
-    async getPartners(page) {
+    async getPartners(page, field) {
       this.data = null
       this.errors = null
       this.loading = true
-      await guidePartnersApi.getPartners(page)
+      await guidePartnersApi.getPartners(page, field)
         .then((response) => {
           this.data = response.data
           this.loading = false

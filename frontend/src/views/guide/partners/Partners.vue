@@ -28,8 +28,8 @@
                 <table class="table">
                   <thead>
                     <tr>
-                      <th scope="col">#</th>
-                      <th scope="col">Наименование</th>
+                      <th scope="col" @click.prevent="onOrderingChanged('id')">#</th>
+                      <th scope="col" @click.prevent="onOrderingChanged('name')">Наименование</th>
                       <th scope="col">ИНН</th>
                       <th scope="col">Регион</th>
                       <th scope="col">Базовая скидка</th>
@@ -90,6 +90,11 @@ export default {
     }
   },
   methods: {
+    onOrderingChanged(field){
+      this.$router.push({path: this.$route.fullPath, query: {page: this.currentPage, ordering: field} })
+      this.guidePartnersStore.getPartners(this.currentPage, field)
+    },
+
     onPageChanged(page) {
       this.currentPage = page
       this.$router.push({path: this.$route.fullPath, query: {page: page} })
