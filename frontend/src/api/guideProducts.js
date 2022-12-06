@@ -1,5 +1,8 @@
 import axios from '@/api/axios'
 
+const searchProducts = (query) => {
+  return axios.get('guide/products-search/', {params: {search: query}})
+}
 
 const getProducts = (query) => {
   return axios.get('guide/products/', {params: {search: query}})
@@ -31,6 +34,7 @@ const deleteProduct = (id) => {
 
 
 export default {
+  searchProducts,
   getProducts,
   exportProducts,
   importProducts,

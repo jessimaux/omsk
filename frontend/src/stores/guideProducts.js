@@ -11,6 +11,21 @@ export const useGuideProductsStore = defineStore('guideProducts', {
   },
 
   actions: {
+    async searchProducts(query = null) {
+      this.data = null
+      this.errors = null
+      this.loading = true
+      await guideProductsApi.searchProducts(query)
+        .then((response) => {
+          this.data = response.data
+          this.loading = false
+        })
+        .catch((result) => {
+          this.errors = result.response.data
+          this.loading = false
+        })
+    },
+
     async getProducts(query = null) {
       this.data = null
       this.errors = null

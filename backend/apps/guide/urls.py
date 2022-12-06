@@ -2,11 +2,12 @@ from django.urls import path, re_path, include
 from rest_framework import routers
 
 from .views import ProductViewSet, PartnerViewSet, ProviderViewSet, ProductExportView, ProductImportView, \
-  ProviderExportView, ProviderImportView, PartnerExportView, PartnerImportView
+  ProviderExportView, ProviderImportView, PartnerExportView, PartnerImportView, ProductSearchViewSet
 from apps.specifications.views import GuideSpecificationsViewSet
 
 router = routers.SimpleRouter()
 router.register(r'products', ProductViewSet)
+router.register(r'products-search', ProductSearchViewSet)
 router.register(r'partners', PartnerViewSet)
 router.register(r'providers', ProviderViewSet)
 router.register(r'specifications', GuideSpecificationsViewSet)

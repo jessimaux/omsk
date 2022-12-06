@@ -23,3 +23,4 @@ class Offer(models.Model):
     article = models.CharField(max_length=255, null=True, blank=True)
     name = models.CharField(max_length=255, null=True, blank=True)
     count = models.PositiveIntegerField(default=0)
+    price = models.FloatField(null=True)

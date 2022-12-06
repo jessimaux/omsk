@@ -1,19 +1,19 @@
 <template>
   <div class="d-flex justify-content-center">
     <ul class="pagination">
-      <li class="page-item">
+      <li v-if="currentPage != 1" class="page-item">
         <a class="page-link" href="#" @click.prevent="pageChanged(1)">В начало</a>
       </li>
 
-      <li class="page-item">
+      <li v-if="currentPage > 1" class="page-item">
         <a class="page-link" href="#" @click.prevent="pageChanged(currentPage - 1)">Предыдущее</a>
       </li>
 
-      <li class="page-item">
+      <li v-if="currentPage < Math.ceil(total / perPage)" class="page-item">
         <a class="page-link" href="#" @click.prevent="pageChanged(currentPage + 1)">Следующее</a>
       </li>
 
-      <li class="page-item">
+      <li v-if="currentPage != Math.ceil(total / perPage)" class="page-item">
         <a class="page-link" href="#" @click.prevent="pageChanged(Math.ceil(total / perPage))">В
           конец</a>
       </li>

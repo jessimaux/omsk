@@ -6,7 +6,7 @@ from apps.guide.serializers import ProductGuideSerializer
         
 class OfferSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)
-    product_id = serializers.IntegerField(write_only=True, required=False)
+    product_id = serializers.IntegerField(write_only=True, allow_null=True, required=False)
 
     class Meta:
         model = Offer
@@ -71,6 +71,7 @@ class SpecificationSerializer(serializers.ModelSerializer):
                     offer_obj = Offer.objects.get(id=offer['id'])
                     offer_obj.article = offer.get('article', offer_obj.article)
                     offer_obj.name = offer.get('name', offer_obj.name)
+                    offer_obj.price = offer.get('price', offer_obj.price)
                     offer_obj.count = offer.get('count', offer_obj.count)
                     offer_obj.product = offer.get('product', offer_obj.product)
                     offer_obj.save()

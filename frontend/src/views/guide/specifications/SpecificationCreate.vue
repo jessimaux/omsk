@@ -62,10 +62,9 @@ export default {
           amount: '',
           price: '',
           offers: [{
-            product: '',
-            product_id: '',
             article: '',
             name: '',
+            price: '',
             count: '',
           }],
         },

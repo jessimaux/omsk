@@ -23,7 +23,7 @@
                       <th scope="col">Товары</th>
                       <th scope="col">Срок поставки</th>
                       <th scope="col">Комментарии</th>
-                      <th scope="col">Наличие товара</th>
+                      <th scope="col">Наличие договора</th>
                       <th scope="col">Операция</th>
                     </tr>
                   </thead>

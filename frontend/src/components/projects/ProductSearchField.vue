@@ -34,19 +34,21 @@ export default {
       if (this.modelValue) {
         this.state = true
         this.row.product = ''
-        this.guideProductsStore.getProducts(this.modelValue)
+        this.row.product_id = null
+        this.guideProductsStore.searchProducts(this.modelValue)
       }
       else this.state = false
     },
 
     fieldUnfocus() {
-      setTimeout(() => this.state = false, 100)
+      setTimeout(() => this.state = false, 500)
     },
 
     setProduct(index) {
       this.row.product_id = this.guideProductsStore.data[index].id
       this.row.article = this.guideProductsStore.data[index].article
       this.row.name = this.guideProductsStore.data[index].name
+      this.row.price = this.guideProductsStore.data[index].price_buy
       this.row.product = this.guideProductsStore.data[index]
     }
   }

@@ -13,6 +13,14 @@ from .serializers import ProductGuideSerializer, PartnerGuideSerializer, Provide
 from .resources import ProductGuideResource, PartnerGuideResource, ProviderGuideResource
 
 
+class ProductSearchViewSet(viewsets.ModelViewSet):
+    queryset = ProductGuide.objects.all()
+    serializer_class = ProductGuideSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['article', 'name']
+    my_tags = ['ProductsSearchGuide']
+
+
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = ProductGuide.objects.all()
     serializer_class = ProductGuideSerializer

@@ -49,10 +49,8 @@
                 <product-search-field :row="row.offers[0]" v-model="row.offers[0].name"></product-search-field>
               </td>
               <td><input type="text" v-model="row.offers[0].count" /></td>
-              <td>{{ row.offers[0].product ? row.offers[0].product.price_buy : '' }}</td>
-              <td>{{ row.offers[0].product && row.offers[0].count ? row.offers[0].count *
-                  row.offers[0].product.price_buy : ''
-              }}</td>
+              <td><input type="text" v-model="row.offers[0].price" /></td>
+              <td>{{ row.offers[0].count ? row.offers[0].count * row.offers[0].price : '' }}</td>
               <td>{{ row.offers[0].product ? row.offers[0].product.available : '' }}</td>
               <td>
                 <i @click="addSubRow(row.offers)" class="bi bi-plus-square"></i>
@@ -69,8 +67,8 @@
                 <product-search-field :row="subrow" v-model="subrow.name"></product-search-field>
               </td>
               <td><input type="text" v-model="subrow.count" /></td>
-              <td>{{ subrow.product ? subrow.product.price_buy : '' }}</td>
-              <td>{{ subrow.product && subrow.count ? subrow.count * subrow.product.price_buy : '' }}</td>
+              <td><input type="text" v-model="subrow.price" /></td>
+              <td>{{ subrow.count ? subrow.count * subrow.price : '' }}</td>
               <td>{{ subrow.product ? subrow.product.available : '' }}</td>
               <td>
                 <i @click="addSubRow(row.offers)" class="bi bi-plus-square"></i>
@@ -80,6 +78,25 @@
             </tr>
           </tbody>
         </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Спецификация - Итог</h5>
+          <div class="row">
+            <div class="col-lg-6 label ">Итого(Запросы):</div>
+            <div class="col-lg-6">{{ totalRequest }}</div>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-6 label ">Итого(Предложения):</div>
+            <div class="col-lg-6">{{ totalOffers }}</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -104,6 +121,25 @@ export default {
     const projectsStore = useProjectsStore()
     return { projectsStore }
   },
+  computed: {
+    totalRequest() {
+      let total = 0
+      this.specification.requests.forEach(request => {
+        total += Number(request.price)
+      })
+      return total
+    },
+
+    totalOffers() {
+      let total = 0
+      this.specification.requests.forEach(request => {
+        request.offers.forEach(offer => {
+          if (offer.price) total += Number(offer.price)
+        })
+      })
+      return total
+    }
+  },
   methods: {
     addRow(fieldType) {
       fieldType.push({
@@ -113,10 +149,9 @@ export default {
         amount: '',
         price: '',
         offers: [{
-          product: '',
-          product_id: '',
           article: '',
           name: '',
+          price: '',
           count: '',
         }],
       })
@@ -128,10 +163,9 @@ export default {
 
     addSubRow(fieldType) {
       fieldType.push({
-        product: '',
-        product_id: '',
         article: '',
         name: '',
+        price: '',
         count: '',
       })
     },

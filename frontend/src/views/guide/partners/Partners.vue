@@ -9,24 +9,27 @@
         <div class="col-lg-12">
           <div v-if="!guidePartnersStore.loading" class="card">
             <div class="card-body">
-              <div class="support-bar d-flex flex-row justify-content-end py-2">
-                <div class="search">
-                  <form method="GET" name='search' @submit.prevent="onSearch">
-                    <input type="text" class="form-control" v-model="search">
-                  </form>
-                </div>
+              <div class="support-bar d-flex flex-row justify-content-between py-2">
 
-                <router-link class="btn btn-primary me-2" :to="{ name: 'guide-partners-create' }">
-                  <i class="bi bi-plus-square"></i>&nbspДобавить
-                </router-link>
+                <form method="GET" name='search' @submit.prevent="onSearch">
+                  <div class="search">
+                    <input type="text" class="form-control" v-model="search" placeholder="Поиск...">
+                  </div>
+                </form>
 
-                <button class="btn btn-primary me-2" @click="exportPartners">
-                  <i class="bi bi-download"></i>&nbspЭкспорт
-                </button>
+                <div class="control-section d-flex flex-row">
+                  <router-link class="btn btn-primary me-2" :to="{ name: 'guide-partners-create' }">
+                    <i class="bi bi-plus-square"></i>&nbspДобавить
+                  </router-link>
 
-                <div class="btn-import">
-                  <label for="btn-import" class="btn btn-primary"><i class="bi bi-upload"></i>&nbspИмпорт</label>
-                  <input type="file" id="btn-import" @change="importPartners" ref="file" hidden>
+                  <button class="btn btn-primary me-2" @click="exportPartners">
+                    <i class="bi bi-download"></i>&nbspЭкспорт
+                  </button>
+
+                  <div class="btn-import">
+                    <label for="btn-import" class="btn btn-primary"><i class="bi bi-upload"></i>&nbspИмпорт</label>
+                    <input type="file" id="btn-import" @change="importPartners" ref="file" hidden>
+                  </div>
                 </div>
               </div>
 
@@ -92,26 +95,28 @@ export default {
   },
   data() {
     return {
-      search: '',
+      search: this.$route.query.search ? this.$route.query.search : '',
+      ordering: this.$route.query.ordering ? this.$route.query.ordering : '',
       currentPage: Number(this.$route.query.page) ? Number(this.$route.query.page) : 1,
       perPage: 2
     }
   },
   methods: {
-    onSearch(){
-      this.$router.push({ path: this.$route.fullPath, query: { page: this.currentPage, ordering: 'id', search: this.search } })
-      this.guidePartnersStore.getPartners(this.currentPage, 'id', this.search)
+    onSearch() {
+      this.$router.push({ path: this.$route.fullPath, query: { page: 1, ordering: this.ordering, search: this.search } })
+      this.guidePartnersStore.getPartners(1, this.ordering, this.search)
     },
 
     onOrderingChanged(field) {
-      this.$router.push({ path: this.$route.fullPath, query: { page: this.currentPage, ordering: field } })
-      this.guidePartnersStore.getPartners(this.currentPage, field)
+      this.ordering = this.ordering === field ? '-' + field : field
+      this.$router.push({ path: this.$route.fullPath, query: { page: this.currentPage, ordering: this.ordering, search: this.search } })
+      this.guidePartnersStore.getPartners(this.currentPage, this.ordering, this.search)
     },
 
     onPageChanged(page) {
       this.currentPage = page
-      this.$router.push({ path: this.$route.fullPath, query: { page: page } })
-      this.guidePartnersStore.getPartners(page)
+      this.$router.push({ path: this.$route.fullPath, query: { page: page, ordering: this.ordering, search: this.search } })
+      this.guidePartnersStore.getPartners(page, this.ordering, this.search)
     },
 
     onClickPartnerDelete(id) {
