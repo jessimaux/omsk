@@ -7,7 +7,7 @@ from rest_framework.pagination import PageNumberPagination
 
 from .models import Specification, Request, Offer
 from .serializers import SpecificationSerializer, RequestSerializer, OfferSerializer
-from .utils import render_to_pdf
+from .utils import render_to_pdf, excel_report
 
 
 class SpecificationsViewSet(mixins.RetrieveModelMixin,
@@ -23,6 +23,21 @@ class GuideSpecificationsViewSet(viewsets.ModelViewSet):
     serializer_class = SpecificationSerializer
     pagination_class = PageNumberPagination
     my_tags = ['SpecificationGuide']
+    
+    
+class SpecificationExportView(views.APIView):
+    my_tags = ['Specification']
+
+    def get(self, request, *args, **kwargs):
+        try:
+            specification_obj = Specification.objects.get(id=kwargs['pk'])
+            response = HttpResponse(excel_report(specification_obj, params=request.query_params), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            response['Access-Control-Expose-Headers'] = "Content-Disposition"
+            response['Content-Disposition'] = 'attachment; filename="myexport.xlsx"'
+            return response
+        except Specification.DoesNotExist:
+            return Response(status=status.HTTP_400_BAD_REQUEST) 
+
         
     
 class SpecificationsPDFExportView(views.APIView):

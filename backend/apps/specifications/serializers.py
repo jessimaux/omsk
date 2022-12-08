@@ -73,7 +73,7 @@ class SpecificationSerializer(serializers.ModelSerializer):
                     offer_obj.name = offer.get('name', offer_obj.name)
                     offer_obj.price = offer.get('price', offer_obj.price)
                     offer_obj.count = offer.get('count', offer_obj.count)
-                    offer_obj.product = offer.get('product', offer_obj.product)
+                    offer_obj.product_id = offer.get('product_id', offer_obj.product_id)
                     offer_obj.save()
                 else:
                     offer_obj = Offer.objects.create(request_id=request_obj.id, **offer)
