@@ -28,6 +28,12 @@ const exportSpecification = (id, params) => {
   return axios.get(`specifications/${id}/export/`, {params: params, responseType: 'arraybuffer' })
 }
 
+// REGISTRATION FORM
+
+const exportRegistrationForm = (id) => {
+  return axios.get(`projects/${id}/registration-form/`, {responseType: 'arraybuffer' })
+}
+
 export default {
   getProjects,
   getProject,
@@ -35,4 +41,5 @@ export default {
   addProject,
   deleteProject,
   exportSpecification,
+  exportRegistrationForm,
 }

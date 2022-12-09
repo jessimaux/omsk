@@ -26,14 +26,3 @@ class Project(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-
-# TODO: Need to check with customer (in Project or not)
-class RegistrationForm(models.Model):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    diller_fio = models.CharField(max_length=255)
-    diller = models.CharField(max_length=255)
-    auction_price = models.FloatField(default=0)
-    auction_date = models.DateField(default="2000-01-01")
-    project_link = models.URLField(blank=True, null=True)
-    announcement_date = models.DateField(default="2000-01-01")
-    auction_no = models.PositiveIntegerField(default=0)

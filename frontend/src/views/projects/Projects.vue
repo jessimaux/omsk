@@ -42,6 +42,8 @@
                       <td>?</td>
                       <td>
                         <div class="d-flex flex-row">
+                          <button type="button" class="btn btn-primary me-2" @click="onClickExportRegistrationForm(item.id)"><i class="bi bi-layout-text-window-reverse"></i></button>
+
                           <button type="button" class="btn btn-primary me-2"><i class="bi bi-x-square"
                               @click="onClickProjectDelete(item.id)"></i></button>
 
@@ -77,6 +79,10 @@ export default {
           this.projectsStore.getProjects()
         })
     },
+
+    onClickExportRegistrationForm(id) {
+      this.projectsStore.exportRegistrationForm(id)
+    }
   },
   created() {
     this.projectsStore.getProjects()

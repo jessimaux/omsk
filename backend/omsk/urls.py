@@ -18,11 +18,10 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-   #path('admin/', admin.site.urls),
    path('api/auth/', include('djoser.urls')),
    path('api/auth/', include('djoser.urls.authtoken')),
 
-   path('api/', include('apps.projects.urls')),
+   path('api/projects/', include('apps.projects.urls')),
    path('api/guide/', include('apps.guide.urls')),
    path('api/purchases/', include('apps.purchases.urls')),
    path('api/specifications/', include('apps.specifications.urls')),
