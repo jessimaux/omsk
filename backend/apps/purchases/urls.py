@@ -8,4 +8,5 @@ router.register(r'', views.PurchaseViewSet)
 
 urlpatterns = [
   path('', include(router.urls)),
+  path('<int:pk>/export/', views.PurchaseExportView.as_view(), name='purchase-export'),
 ]

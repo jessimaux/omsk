@@ -88,6 +88,9 @@
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">Форма закупок</h5>
+          <button type="button" class="btn btn-primary me-2" @click="onClickExportPurchases()">
+            <i class="bi bi-download"></i>&nbspЭкспорт
+          </button>
           <div class="table-responsive mb-3">
             <table class="table">
               <thead>
@@ -144,9 +147,7 @@
                   <td><input type="text" v-model="item.nds_base"></td>
                   <td><input type="text" v-model="item.nds_sell"></td>
                   <td>{{ 1 - item.price_buy / item.offer.price }}</td>
-                  <td>{{ item.offer.request.amount * item.offer.count * item.price_buy - item.offer.request.amount *
-                      item.offer.count * item.offer.price
-                  }}</td>
+                  <td>{{ item.offer.request.amount * item.offer.count * (item.price_buy - item.offer.price) }}</td>
                   <td><input type="text" v-model="item.delivery_period"></td>
                   <td><input type="text" v-model="item.prepayment"></td>
                   <td><input type="text" v-model="item.bill_income"></td>
@@ -164,6 +165,7 @@
 
 <script>
 import { useGuidePartnersStore } from '@/stores/guidePartners'
+import { usePurchasesStore } from '@/stores/purchase'
 
 export default {
   name: 'PurchaseForm',
@@ -179,7 +181,8 @@ export default {
   },
   setup() {
     const guidePartnersStore = useGuidePartnersStore()
-    return { guidePartnersStore }
+    const purchasesStore = usePurchasesStore()
+    return { guidePartnersStore, purchasesStore }
   },
   data() {
     return {
@@ -195,6 +198,11 @@ export default {
         }
       }
     },
+  },
+  methods:{
+    onClickExportPurchases(){
+      this.purchasesStore.exportPurchases(this.purchase.id)
+    }
   },
   created() {
     this.guidePartnersStore.getPartners()
