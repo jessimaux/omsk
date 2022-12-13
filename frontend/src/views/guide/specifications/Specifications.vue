@@ -9,18 +9,36 @@
         <div class="col-lg-12">
           <div class="card">
             <div class="card-body">
-              <div class="support-bar d-flex flex-row justify-content-end py-2">
-                <router-link class="btn btn-primary me-2" :to="{ name: 'guide-specifications-create' }">
-                  <i class="bi bi-plus-square"></i>&nbspДобавить
-                </router-link>
+              <div class="row justify-content-between">
+                <div class="col-auto search-bar">
+                  <form class="search-form d-flex align-items-center" method="GET" @submit.prevent="onSearch">
+                    <input type="text" class="form-control" name="search" v-model="search" placeholder="Поиск...">
+                    <button v-if="search" type="button" class="btn" @click="resetSearch"><i
+                        class="bi bi-x-lg"></i></button>
+                  </form>
+                </div>
+
+                <div class="col-auto">
+                  <router-link class="btn btn-primary me-2" :to="{ name: 'guide-specifications-create' }">
+                    <i class="bi bi-plus-square"></i>&nbspДобавить
+                  </router-link>
+                </div>
               </div>
 
               <div v-if="!guideSpecificationsStore.loading" class="table-responsive">
                 <table class="table">
                   <thead>
                     <tr>
-                      <th scope="col">#</th>
-                      <th scope="col">Наименование</th>
+                      <th scope="col" @click="onOrderingChanged('id')">
+                        #
+                        <i v-if="ordering == 'id'" class="bi bi-sort-up-alt"></i>
+                        <i v-if="ordering == '-id'" class="bi bi-sort-down"></i>
+                      </th>
+                      <th scope="col" @click="onOrderingChanged('name')">
+                        Наименование
+                        <i v-if="ordering == 'name'" class="bi bi-sort-up-alt"></i>
+                        <i v-if="ordering == '-name'" class="bi bi-sort-down"></i>
+                      </th>
                       <th scope="col">Описание</th>
                       <th scope="col">Операция</th>
                     </tr>
@@ -62,7 +80,38 @@ export default {
     const guideSpecificationsStore = useGuideSpecificationsStore()
     return { guideSpecificationsStore }
   },
+  data() {
+    return {
+      search: this.$route.query.search ? this.$route.query.search : '',
+      ordering: this.$route.query.ordering ? this.$route.query.ordering : 'id',
+      currentPage: Number(this.$route.query.page) ? Number(this.$route.query.page) : 1,
+      perPage: 25
+    }
+  },
   methods: {
+    onSearch() {
+      this.$router.push({ path: this.$route.fullPath, query: { page: 1, ordering: this.ordering, search: this.search } })
+      this.guideSpecificationsStore.getSpecifications(1, this.ordering, this.search)
+    },
+
+    resetSearch(){
+      this.search = ''
+      this.$router.push({ path: this.$route.fullPath, query: { page: 1, ordering: this.ordering, search: this.search } })
+      this.guideSpecificationsStore.getSpecifications(1, this.ordering, this.search)
+    },
+
+    onOrderingChanged(field) {
+      this.ordering = this.ordering === field ? '-' + field : field
+      this.$router.push({ path: this.$route.fullPath, query: { page: this.currentPage, ordering: this.ordering, search: this.search } })
+      this.guideSpecificationsStore.getSpecifications(this.currentPage, this.ordering, this.search)
+    },
+
+    onPageChanged(page) {
+      this.currentPage = page
+      this.$router.push({ path: this.$route.fullPath, query: { page: page, ordering: this.ordering, search: this.search } })
+      this.guideSpecificationsStore.getSpecifications(page, this.ordering, this.search)
+    },
+
     onClickSpecificationDelete(id) {
       this.guideSpecificationsStore.deleteSpecification(id)
         .then(() => {

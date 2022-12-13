@@ -1,7 +1,7 @@
 import axios from '@/api/axios'
 
-const getProviders = () => {
-  return axios.get('guide/providers/')
+const getProviders = (page, field, search) => {
+  return axios.get('guide/providers/', {params: {page: page, ordering: field, search: search}})
 }
 
 const exportProviders = () => {

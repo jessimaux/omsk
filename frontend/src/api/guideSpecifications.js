@@ -1,7 +1,7 @@
 import axios from '@/api/axios'
 
-const getSpecifications = () => {
-  return axios.get('guide/specifications/')
+const getSpecifications = (page, field, search) => {
+  return axios.get('guide/specifications/', {params: {page: page, ordering: field, search: search}})
 }
 
 const getSpecification = (id) => {

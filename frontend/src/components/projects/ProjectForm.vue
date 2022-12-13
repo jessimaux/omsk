@@ -21,7 +21,7 @@
           <div class="col-12">
             <label class="form-label">Партнер</label>
             <select class="form-select" v-model="project.partner">
-              <option v-for="partner in guidePartnersStore.data" :key="partner.id" :value="partner.id">
+              <option v-if="!guidePartnersStore.loading" v-for="partner in guidePartnersStore.data.results" :key="partner.id" :value="partner.id">
                 {{ partner.name }}
               </option>
             </select>
@@ -121,7 +121,7 @@ export default {
   computed: {
     getDiscount() {
       if (typeof this.project.partner === 'number' && this.guidePartnersStore.data) {
-        for (const object of this.guidePartnersStore.data) {
+        for (const object of this.guidePartnersStore.data.results) {
           if (object.id === this.project.partner) return object.discount
         }
       }

@@ -26,11 +26,11 @@ export const useGuideProductsStore = defineStore('guideProducts', {
         })
     },
 
-    async getProducts(query = null) {
+    async getProducts(page, field, search) {
       this.data = null
       this.errors = null
       this.loading = true
-      await guideProductsApi.getProducts(query)
+      await guideProductsApi.getProducts(page, field, search)
         .then((response) => {
           this.data = response.data
           this.loading = false

@@ -11,7 +11,6 @@ from .models import ProductGuide, PartnerGuide, ProviderGuide
 from .serializers import ProductGuideSerializer, PartnerGuideSerializer, ProviderGuideSerializer, \
     ProductGuideImportSerializer, PartnerGuideImportSerializer, ProviderGuideImportSerializer
 from .resources import ProductGuideResource, PartnerGuideResource, ProviderGuideResource
-from .pagination import MaxPageNumberPagination
 
 
 class ProductSearchAPIView(generics.ListAPIView):
@@ -27,8 +26,10 @@ class ProductViewSet(viewsets.ModelViewSet):
     queryset = ProductGuide.objects.all()
     serializer_class = ProductGuideSerializer
     pagination_class = PageNumberPagination
-    filter_backends = [filters.SearchFilter]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['article', 'name']
+    ordering_fields = '__all__'
+    ordering = ['id']
     my_tags = ['ProductsGuide']
 
 
@@ -72,7 +73,7 @@ class ProductImportView(generics.CreateAPIView):
 class PartnerViewSet(viewsets.ModelViewSet):
     queryset = PartnerGuide.objects.all()
     serializer_class = PartnerGuideSerializer
-    pagination_class = MaxPageNumberPagination
+    pagination_class = PageNumberPagination
     filter_backends = [filters.OrderingFilter, filters.SearchFilter]
     search_fields = ['name']
     ordering_fields = '__all__'
@@ -121,6 +122,10 @@ class ProviderViewSet(viewsets.ModelViewSet):
     queryset = ProviderGuide.objects.all()
     serializer_class = ProviderGuideSerializer
     pagination_class = PageNumberPagination
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['name']
+    ordering_fields = '__all__'
+    ordering = ['id']
     my_tags = ['ProvidersGuide']
 
 

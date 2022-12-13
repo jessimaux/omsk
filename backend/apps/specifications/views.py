@@ -1,7 +1,7 @@
 import datetime
 
 from django.http import HttpResponse
-from rest_framework import viewsets, views, mixins, status
+from rest_framework import viewsets, views, mixins, status, filters
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 
@@ -22,6 +22,10 @@ class GuideSpecificationsViewSet(viewsets.ModelViewSet):
     queryset = Specification.objects.filter(guide=True)
     serializer_class = SpecificationSerializer
     pagination_class = PageNumberPagination
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['name']
+    ordering_fields = '__all__'
+    ordering = ['id']
     my_tags = ['SpecificationGuide']
     
     

@@ -4,8 +4,8 @@ const searchProducts = (query) => {
   return axios.get('guide/products-search/', {params: {search: query}})
 }
 
-const getProducts = (query) => {
-  return axios.get('guide/products/', {params: {search: query}})
+const getProducts = (page, field, search) => {
+  return axios.get('guide/products/', {params: {page: page, ordering: field, search: search}})
 }
 
 const exportProducts = () => {

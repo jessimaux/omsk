@@ -12,11 +12,11 @@ export const useGuideSpecificationsStore = defineStore('guideSpecifications', {
   },
 
   actions: {
-    async getSpecifications() {
+    async getSpecifications(page, field, search) {
       this.data = null
       this.errors = null
       this.loading = true
-      await guideSpecificationsApi.getSpecifications()
+      await guideSpecificationsApi.getSpecifications(page, field, search)
         .then((response) => {
           this.data = response.data
           this.loading = false

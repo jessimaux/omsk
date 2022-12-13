@@ -11,11 +11,11 @@ export const useGuideProvidersStore = defineStore('guideProviders', {
   },
 
   actions: {
-    async getProviders() {
+    async getProviders(page, field, search) {
       this.data = null
       this.errors = null
       this.loading = true
-      await guideProvidersApi.getProviders()
+      await guideProvidersApi.getProviders(page, field, search)
         .then((response) => {
           this.data = response.data
           this.loading = false

@@ -11,15 +11,14 @@
             <div class="card-body">
               <div class="row justify-content-between">
 
-                  <div class="col-auto">
-                    <form method="GET" name='search' @submit.prevent="onSearch">
-
-                      <input type="text" class="form-control" v-model="search" placeholder="Поиск...">
-                      <i class="bi bi-x-lg"></i>
+                <div class="col-auto search-bar">
+                    <form class="search-form d-flex align-items-center" method="GET" @submit.prevent="onSearch">
+                      <input type="text" class="form-control" name="search" v-model="search" placeholder="Поиск...">
+                      <button v-if="search" type="button" class="btn" @click="resetSearch"><i class="bi bi-x-lg"></i></button>
                     </form>
-                  </div>
+                </div>
 
-                <div class="col-auto support">
+                <div class="col-auto">
                   <div class="row">
                     <div class="col-auto">
                       <router-link class="btn btn-primary me-2" :to="{ name: 'guide-partners-create' }">
@@ -47,12 +46,12 @@
                 <table class="table">
                   <thead>
                     <tr>
-                      <th scope="col" @click.prevent="onOrderingChanged('id')">
+                      <th scope="col" @click="onOrderingChanged('id')">
                         #
                         <i v-if="ordering == 'id'" class="bi bi-sort-up-alt"></i>
                         <i v-if="ordering == '-id'" class="bi bi-sort-down"></i>
                       </th>
-                      <th scope="col" @click.prevent="onOrderingChanged('name')">
+                      <th scope="col" @click="onOrderingChanged('name')">
                         Наименование
                         <i v-if="ordering == 'name'" class="bi bi-sort-up-alt"></i>
                         <i v-if="ordering == '-name'" class="bi bi-sort-down"></i>
@@ -113,6 +112,7 @@ export default {
   },
   data() {
     return {
+      file: null,
       search: this.$route.query.search ? this.$route.query.search : '',
       ordering: this.$route.query.ordering ? this.$route.query.ordering : 'id',
       currentPage: Number(this.$route.query.page) ? Number(this.$route.query.page) : 1,
@@ -121,6 +121,12 @@ export default {
   },
   methods: {
     onSearch() {
+      this.$router.push({ path: this.$route.fullPath, query: { page: 1, ordering: this.ordering, search: this.search } })
+      this.guidePartnersStore.getPartners(1, this.ordering, this.search)
+    },
+
+    resetSearch(){
+      this.search = ''
       this.$router.push({ path: this.$route.fullPath, query: { page: 1, ordering: this.ordering, search: this.search } })
       this.guidePartnersStore.getPartners(1, this.ordering, this.search)
     },
