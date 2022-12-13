@@ -1,29 +1,47 @@
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 from apps.projects.models import Project
 from apps.specifications.models import Offer
 
 
 class Purchase(models.Model):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    company_from = models.CharField(max_length=255)
-    inner_registration_no = models.CharField(max_length=255)
-    bill = models.CharField(max_length=255)
-
-    # total section
-    total_purchase = models.FloatField(default=0)
-    total_rent_percentage = models.FloatField(default=0)
-    total_rent_currency = models.FloatField(default=0)
-
+    project = models.OneToOneField(Project, on_delete=models.CASCADE)
+    company_from = models.CharField(max_length=255, blank=True, null=True)
+    project_inner_no = models.CharField(max_length=255, blank=True, null=True)
+    project_registration_no = models.CharField(max_length=255, blank=True, null=True)
+    bill = models.CharField(max_length=255, blank=True, null=True)
 
 class PurchaseOffer(models.Model):
-    purchase = models.ForeignKey(Purchase, on_delete=models.CASCADE)
+    purchase = models.ForeignKey(Purchase, related_name='purchases', on_delete=models.CASCADE)
     offer = models.ForeignKey(Offer, on_delete=models.CASCADE)
-    nds = models.PositiveIntegerField(default=0)
-    rent_percentage = models.FloatField(default=0)
-    rent_currency = models.FloatField(default=0)
-    delivery_period = models.DateField(default="2000-01-01")
-    prepayment = models.BooleanField(default=False)
-    bill_income = models.CharField(max_length=255)
-    bill_income_complete = models.BooleanField(default=False)
-    warehouse_income_date = models.DateField(default="2000-01-01")
+    status = models.CharField(max_length=255, blank=True, null=True)
+    isbn = models.CharField(max_length=255, blank=True, null=True)
+    country = models.CharField(max_length=255, blank=True, null=True)
+    price_buy = models.FloatField(default=0)
+    nds_base = models.PositiveIntegerField(default=0)
+    nds_sell = models.PositiveIntegerField(default=0)
+    delivery_period = models.CharField(max_length=255, blank=True, null=True)
+    prepayment = models.CharField(max_length=255, blank=True, null=True)
+    bill_income = models.CharField(max_length=255, blank=True, null=True)
+    bill_income_complete = models.CharField(max_length=255, blank=True, null=True)
+    warehouse_delivery_date = models.CharField(max_length=255, blank=True, null=True)
+    
+    
+# on project create send signal to create purchase on project
+@receiver(post_save, sender=Project)
+def create_purchase(sender, instance, created, **kwargs):
+    if created:
+        Purchase.objects.create(project_id=instance.id)
+
+# on offer create send signal to create new purchase item for purchase
+@receiver(post_save, sender=Offer)
+def save_purchases(sender, instance, created, **kwargs):
+    if created and not instance.request.specification.guide:
+        purchase_id = instance.request.specification.project.purchase.id
+        price_buy =  instance.product.price_buy if instance.product else 0
+        PurchaseOffer.objects.create(purchase_id=purchase_id, 
+                                     offer_id=instance.id,
+                                     price_buy=price_buy)
+        

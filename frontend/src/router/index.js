@@ -7,6 +7,8 @@ import Projects from '@/views/projects/Projects.vue'
 import ProjectsCreate from '@/views/projects/ProjectCreate.vue'
 import ProjectsEdit from '@/views/projects/ProjectEdit.vue'
 
+import Purchase from '@/views/projects/Purchase.vue'
+
 import GuideProducts from '@/views/guide/products/Products.vue'
 import CreateGuideProduct from '@/views/guide/products/ProductCreate.vue'
 import EditGuideProduct from '@/views/guide/products/ProductEdit.vue'
@@ -63,6 +65,16 @@ const router = createRouter({
       path: '/projects/:id/edit',
       name: 'project-edit',
       component: ProjectsEdit,
+      meta: {
+        requiresAuth: true,
+      }
+    },
+
+    // PURCHASE
+    {
+      path: '/projects/:id/purchase',
+      name: 'project-purchase',
+      component: Purchase,
       meta: {
         requiresAuth: true,
       }

@@ -42,13 +42,21 @@
                       <td>?</td>
                       <td>
                         <div class="d-flex flex-row">
-                          <button type="button" class="btn btn-primary me-2" @click="onClickExportRegistrationForm(item.id)"><i class="bi bi-layout-text-window-reverse"></i></button>
+                          <router-link class="btn btn-primary me-2"
+                            :to="{ name: 'project-purchase', params: { id: item.id } }">
+                            <i class="bi bi-bag"></i>
+                          </router-link>
 
-                          <button type="button" class="btn btn-primary me-2"><i class="bi bi-x-square"
+                          <button type="button" class="btn btn-primary me-2"
+                            @click="onClickExportRegistrationForm(item.id)"><i
+                              class="bi bi-layout-text-window-reverse"></i></button>
+
+                          <router-link class="btn btn-primary me-2" :to="{ name: 'project-edit', params: { id: item.id } }">
+                            <i class="bi bi-pencil-square"></i>
+                          </router-link>
+
+                          <button type="button" class="btn btn-primary"><i class="bi bi-x-square"
                               @click="onClickProjectDelete(item.id)"></i></button>
-
-                          <router-link class="btn btn-primary" :to="{ name: 'project-edit', params: { id: item.id } }">
-                            <i class="bi bi-pencil-square"></i></router-link>
                         </div>
                       </td>
                     </tr>

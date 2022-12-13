@@ -1,12 +1,14 @@
-from rest_framework import serializers
+from rest_framework import serializers, fields
 
 from .models import Project
 from apps.specifications.serializers import SpecificationSerializer, RequestSerializer
 from apps.specifications.models import Specification
+from apps.purchases.models import Purchase
 
 
 class ProjectSerializer(serializers.ModelSerializer):
     specification = SpecificationSerializer()
+    purchase_id = fields.IntegerField(source='purchase.id', read_only=True)
     
     created_by = serializers.HiddenField(default=serializers.CreateOnlyDefault(default=serializers.CurrentUserDefault()))
     updated_by = serializers.HiddenField(default=serializers.CurrentUserDefault())
@@ -24,12 +26,14 @@ class ProjectSerializer(serializers.ModelSerializer):
         return project_obj
     
     def update(self, instance, validated_data):
-        specifcation = validated_data.pop('specification')
+        if not self.partial:
+            specifcation = validated_data.pop('specification')
         super().update(instance, validated_data)
-        try:
-            specification_obj = Specification.objects.get(project_id=instance.id)
-        except Specification.DoesNotExist:
-            serializers.ValidationError("Project doesnt have specification. Contact the system administrator.")
-        SpecificationSerializer().update(instance=specification_obj, validated_data=specifcation)
+        if not self.partial:
+            try:
+                specification_obj = Specification.objects.get(project_id=instance.id)
+            except Specification.DoesNotExist:
+                serializers.ValidationError("Project doesnt have specification. Contact the system administrator.")
+            SpecificationSerializer().update(instance=specification_obj, validated_data=specifcation)
         return instance
         

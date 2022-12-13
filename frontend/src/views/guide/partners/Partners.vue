@@ -9,26 +9,36 @@
         <div class="col-lg-12">
           <div v-if="!guidePartnersStore.loading" class="card">
             <div class="card-body">
-              <div class="support-bar d-flex flex-row justify-content-between py-2">
+              <div class="row justify-content-between">
 
-                <form method="GET" name='search' @submit.prevent="onSearch">
-                  <div class="search">
-                    <input type="text" class="form-control" v-model="search" placeholder="Поиск...">
+                  <div class="col-auto">
+                    <form method="GET" name='search' @submit.prevent="onSearch">
+
+                      <input type="text" class="form-control" v-model="search" placeholder="Поиск...">
+                      <i class="bi bi-x-lg"></i>
+                    </form>
                   </div>
-                </form>
 
-                <div class="control-section d-flex flex-row">
-                  <router-link class="btn btn-primary me-2" :to="{ name: 'guide-partners-create' }">
-                    <i class="bi bi-plus-square"></i>&nbspДобавить
-                  </router-link>
+                <div class="col-auto support">
+                  <div class="row">
+                    <div class="col-auto">
+                      <router-link class="btn btn-primary me-2" :to="{ name: 'guide-partners-create' }">
+                        <i class="bi bi-plus-square"></i>&nbspДобавить
+                      </router-link>
+                    </div>
 
-                  <button class="btn btn-primary me-2" @click="exportPartners">
-                    <i class="bi bi-download"></i>&nbspЭкспорт
-                  </button>
+                    <div class="col-auto">
+                      <button class="btn btn-primary me-2" @click="exportPartners">
+                        <i class="bi bi-download"></i>&nbspЭкспорт
+                      </button>
+                    </div>
 
-                  <div class="btn-import">
-                    <label for="btn-import" class="btn btn-primary"><i class="bi bi-upload"></i>&nbspИмпорт</label>
-                    <input type="file" id="btn-import" @change="importPartners" ref="file" hidden>
+                    <div class="col-auto">
+                      <div class="btn-import">
+                        <label for="btn-import" class="btn btn-primary"><i class="bi bi-upload"></i>&nbspИмпорт</label>
+                        <input type="file" id="btn-import" @change="importPartners" ref="file" hidden>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -37,8 +47,16 @@
                 <table class="table">
                   <thead>
                     <tr>
-                      <th scope="col" @click.prevent="onOrderingChanged('id')">#</th>
-                      <th scope="col" @click.prevent="onOrderingChanged('name')">Наименование</th>
+                      <th scope="col" @click.prevent="onOrderingChanged('id')">
+                        #
+                        <i v-if="ordering == 'id'" class="bi bi-sort-up-alt"></i>
+                        <i v-if="ordering == '-id'" class="bi bi-sort-down"></i>
+                      </th>
+                      <th scope="col" @click.prevent="onOrderingChanged('name')">
+                        Наименование
+                        <i v-if="ordering == 'name'" class="bi bi-sort-up-alt"></i>
+                        <i v-if="ordering == '-name'" class="bi bi-sort-down"></i>
+                      </th>
                       <th scope="col">ИНН</th>
                       <th scope="col">Регион</th>
                       <th scope="col">Базовая скидка</th>
@@ -69,8 +87,8 @@
                 </table>
               </div>
 
-              <pagination :currentPage="currentPage" :perPage="perPage" :total="guidePartnersStore.data.count"
-                @pageChanged="onPageChanged"></pagination>
+              <pagination v-if="guidePartnersStore.data.count > perPage" :currentPage="currentPage" :perPage="perPage"
+                :total="guidePartnersStore.data.count" @pageChanged="onPageChanged"></pagination>
 
             </div>
           </div>
@@ -96,9 +114,9 @@ export default {
   data() {
     return {
       search: this.$route.query.search ? this.$route.query.search : '',
-      ordering: this.$route.query.ordering ? this.$route.query.ordering : '',
+      ordering: this.$route.query.ordering ? this.$route.query.ordering : 'id',
       currentPage: Number(this.$route.query.page) ? Number(this.$route.query.page) : 1,
-      perPage: 2
+      perPage: 25
     }
   },
   methods: {

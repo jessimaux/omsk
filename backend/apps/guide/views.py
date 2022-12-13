@@ -1,24 +1,26 @@
 import datetime
 
 from django.http import HttpResponse
-from rest_framework import viewsets, views, generics, status
+from rest_framework import viewsets, views, generics, status, mixins
 from rest_framework.response import Response
 from rest_framework import filters
-from rest_framework.pagination import PageNumberPagination
+from rest_framework.pagination import PageNumberPagination, LimitOffsetPagination
 from tablib import Dataset
 
 from .models import ProductGuide, PartnerGuide, ProviderGuide
 from .serializers import ProductGuideSerializer, PartnerGuideSerializer, ProviderGuideSerializer, \
     ProductGuideImportSerializer, PartnerGuideImportSerializer, ProviderGuideImportSerializer
 from .resources import ProductGuideResource, PartnerGuideResource, ProviderGuideResource
+from .pagination import MaxPageNumberPagination
 
 
-class ProductSearchViewSet(viewsets.ModelViewSet):
+class ProductSearchAPIView(generics.ListAPIView):
     queryset = ProductGuide.objects.all()
     serializer_class = ProductGuideSerializer
+    pagination_class = LimitOffsetPagination
     filter_backends = [filters.SearchFilter]
     search_fields = ['article', 'name']
-    my_tags = ['ProductsSearchGuide']
+    my_tags = ['ProductsGuide']
 
 
 class ProductViewSet(viewsets.ModelViewSet):
@@ -70,7 +72,7 @@ class ProductImportView(generics.CreateAPIView):
 class PartnerViewSet(viewsets.ModelViewSet):
     queryset = PartnerGuide.objects.all()
     serializer_class = PartnerGuideSerializer
-    pagination_class = PageNumberPagination
+    pagination_class = MaxPageNumberPagination
     filter_backends = [filters.OrderingFilter, filters.SearchFilter]
     search_fields = ['name']
     ordering_fields = '__all__'

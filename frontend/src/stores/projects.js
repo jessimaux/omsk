@@ -1,12 +1,11 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import projectsApi from '@/api/projects'
-import projects from '../api/projects'
 
 export const useProjectsStore = defineStore('projects', {
   state: () => {
     return {
-      data: null,
+      data: {},
       loading: false,
       errors: null
     }
@@ -29,7 +28,7 @@ export const useProjectsStore = defineStore('projects', {
     },
 
     async getProject(id) {
-      this.data = null
+      this.data = {}
       this.errors = null
       this.loading = true
       await projectsApi
@@ -76,6 +75,21 @@ export const useProjectsStore = defineStore('projects', {
         })
     },
 
+    async patchProject(id, credentials) {
+      this.data = null
+      this.errors = null
+      this.loading = true
+      await projectsApi.patchProject(id, credentials)
+        .then((response) => {
+          this.data = response.data
+          this.loading = false
+        })
+        .catch((result) => {
+          this.errors = result.response.data
+          this.loading = false
+          throw result.response.data
+        })
+    },
 
     async deleteProject(id) {
       this.errors = null

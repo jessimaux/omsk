@@ -6,7 +6,7 @@ export const useGuidePartnersStore = defineStore('guidePartners', {
     return {
       data: null,
       errors: null,
-      loading: false,
+      loading: true,
     }
   },
 
