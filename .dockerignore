@@ -1,16 +1,9 @@
 # frontend
 frontend/node_modules/
-.prettierrc
 
 # backend
-backend/venv/
-**__pycache__
 **/migrations/**
 !**/migrations
 !**/migrations/__init__.py
-
-# general
-**.idea
-**.vscode
-**.data
-.env
+backend/venv/
+**__pycache__
