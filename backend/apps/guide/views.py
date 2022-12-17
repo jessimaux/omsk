@@ -11,7 +11,7 @@ from .models import ProductGuide, PartnerGuide, ProviderGuide
 from .serializers import ProductGuideSerializer, PartnerGuideSerializer, ProviderGuideSerializer, \
     ProductGuideImportSerializer, PartnerGuideImportSerializer, ProviderGuideImportSerializer
 from .resources import ProductGuideResource, PartnerGuideResource, ProviderGuideResource
-from .utils import import_partners, export_partners
+from .utils import import_partners, export_partners, export_providers, import_providers
 
 
 class ProductSearchAPIView(generics.ListAPIView):
@@ -94,7 +94,7 @@ class PartnerExportView(views.APIView):
     def get(self, request):
         response = HttpResponse(export_partners(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
         response['Access-Control-Expose-Headers'] = "Content-Disposition"
-        response['Content-Disposition'] = 'attachment; filename="myexport.xlsx"'
+        response['Content-Disposition'] = f'attachment; filename="{datetime.date.today()}.xls"'
         return response
 
 
@@ -109,8 +109,7 @@ class PartnerImportView(generics.CreateAPIView):
         else:
             file_uploaded = request.FILES.get('file')
             import_partners(file_uploaded.file)
-            
-        return Response(status=status.HTTP_201_CREATED)
+            return Response(status=status.HTTP_201_CREATED)
     
 
 class ProviderSelectAPIView(generics.ListAPIView):
@@ -134,9 +133,7 @@ class ProviderExportView(views.APIView):
     my_tags = ['ProvidersGuide']
 
     def get(self, request):
-        provider_resource = ProviderGuideResource()
-        dataset = provider_resource.export()
-        response = HttpResponse(dataset.xls, content_type='application/vnd.ms-excel')
+        response = HttpResponse(export_providers(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
         response['Access-Control-Expose-Headers'] = "Content-Disposition"
         response['Content-Disposition'] = f'attachment; filename="{datetime.date.today()}.xls"'
         return response
@@ -152,16 +149,5 @@ class ProviderImportView(generics.CreateAPIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         else:
             file_uploaded = request.FILES.get('file')
-            person_resource = ProviderGuideResource()
-            dataset = Dataset()
-            dataset.load(file_uploaded.read())
-
-            # Test the data import
-            result = person_resource.import_data(dataset, dry_run=True, raise_errors=True)
-            if not result.has_errors():
-                # Actually import now
-                person_resource.import_data(dataset, dry_run=False)
-            else:
-                return Response(status=status.HTTP_400_BAD_REQUEST)
-            
-        return Response(status=status.HTTP_201_CREATED)
+            import_providers(file_uploaded.file)
+            return Response(status=status.HTTP_201_CREATED)
