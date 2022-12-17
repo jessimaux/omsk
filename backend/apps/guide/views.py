@@ -11,6 +11,7 @@ from .models import ProductGuide, PartnerGuide, ProviderGuide
 from .serializers import ProductGuideSerializer, PartnerGuideSerializer, ProviderGuideSerializer, \
     ProductGuideImportSerializer, PartnerGuideImportSerializer, ProviderGuideImportSerializer
 from .resources import ProductGuideResource, PartnerGuideResource, ProviderGuideResource
+from .utils import import_partners, export_partners
 
 
 class ProductSearchAPIView(generics.ListAPIView):
@@ -70,6 +71,12 @@ class ProductImportView(generics.CreateAPIView):
         return Response(status=status.HTTP_201_CREATED)
 
 
+class PartnerSelectAPIView(generics.ListAPIView):
+    queryset = PartnerGuide.objects.all()
+    serializer_class = PartnerGuideSerializer
+    my_tags = ['PartnersGuide']
+    
+    
 class PartnerViewSet(viewsets.ModelViewSet):
     queryset = PartnerGuide.objects.all()
     serializer_class = PartnerGuideSerializer
@@ -85,11 +92,9 @@ class PartnerExportView(views.APIView):
     my_tags = ['PartnersGuide']
 
     def get(self, request):
-        partner_resource = PartnerGuideResource()
-        dataset = partner_resource.export()
-        response = HttpResponse(dataset.xls, content_type='application/vnd.ms-excel')
+        response = HttpResponse(export_partners(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
         response['Access-Control-Expose-Headers'] = "Content-Disposition"
-        response['Content-Disposition'] = f'attachment; filename="{datetime.date.today()}.xls"'
+        response['Content-Disposition'] = 'attachment; filename="myexport.xlsx"'
         return response
 
 
@@ -103,21 +108,17 @@ class PartnerImportView(generics.CreateAPIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         else:
             file_uploaded = request.FILES.get('file')
-            person_resource = PartnerGuideResource()
-            dataset = Dataset()
-            dataset.load(file_uploaded.read())
-
-            # Test the data import
-            result = person_resource.import_data(dataset, dry_run=True, raise_errors=True)
-            if not result.has_errors():
-                # Actually import now
-                person_resource.import_data(dataset, dry_run=False)
-            else:
-                return Response(status=status.HTTP_400_BAD_REQUEST)
+            import_partners(file_uploaded.file)
             
         return Response(status=status.HTTP_201_CREATED)
     
 
+class ProviderSelectAPIView(generics.ListAPIView):
+    queryset = ProviderGuide.objects.all()
+    serializer_class = ProviderGuideSerializer
+    my_tags = ['ProvidersGuide']
+    
+    
 class ProviderViewSet(viewsets.ModelViewSet):
     queryset = ProviderGuide.objects.all()
     serializer_class = ProviderGuideSerializer

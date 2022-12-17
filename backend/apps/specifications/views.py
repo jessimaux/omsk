@@ -1,7 +1,7 @@
 import datetime
 
 from django.http import HttpResponse
-from rest_framework import viewsets, views, mixins, status, filters
+from rest_framework import viewsets, views, mixins, status, filters, generics
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 
@@ -10,6 +10,7 @@ from .serializers import SpecificationSerializer, RequestSerializer, OfferSerial
 from .utils import render_to_pdf, excel_report
 
 
+# TODO: delete
 class SpecificationsViewSet(mixins.RetrieveModelMixin,
                             mixins.CreateModelMixin,
                             viewsets.GenericViewSet):
@@ -18,6 +19,12 @@ class SpecificationsViewSet(mixins.RetrieveModelMixin,
     my_tags = ['Specification']
     
 
+class GuideSpecificationsSelectAPIView(generics.ListAPIView):
+    queryset = Specification.objects.filter(guide=True)
+    serializer_class = SpecificationSerializer
+    my_tags = ['SpecificationGuide']
+    
+    
 class GuideSpecificationsViewSet(viewsets.ModelViewSet):
     queryset = Specification.objects.filter(guide=True)
     serializer_class = SpecificationSerializer

@@ -4,6 +4,10 @@ const getPartners = (page, field, search) => {
   return axios.get('guide/partners/', {params: {page: page, ordering: field, search: search}})
 }
 
+const getFullPartners = () => {
+  return axios.get('guide/partners/select/')
+}
+
 const exportPartners = () => {
   return axios.get('guide/partners/export/', { responseType: 'arraybuffer' })
 }
@@ -30,6 +34,7 @@ const deletePartner = (id) => {
 
 export default {
   getPartners,
+  getFullPartners,
   exportPartners,
   importPartners,
   getPartner,

@@ -21,7 +21,7 @@
 
           <div class="col-12">
             <label class="form-label">Базовая скидка</label>
-            <input type="text" class="form-control" v-model="partner.discount" required>
+            <input type="number" class="form-control" v-model="partner.discount" required>
           </div>
 
         </div>
@@ -39,22 +39,22 @@
           </h5>
           <div class="col-12">
             <label class="form-label">ФИО</label>
-            <input type="text" class="form-control" v-model="contact.fio">
+            <input type="text" class="form-control" v-model="contact.fio" required>
           </div>
 
           <div class="col-12">
             <label class="form-label">Роль</label>
-            <input type="text" class="form-control" v-model="contact.role">
+            <input type="text" class="form-control" v-model="contact.role" required>
           </div>
 
           <div class="col-12">
             <label class="form-label">Контактный телефон</label>
-            <input type="text" class="form-control" v-model="contact.phone">
+            <input type="text" class="form-control" v-model="contact.phone" required>
           </div>
 
           <div class="col-12">
             <label class="form-label">E-mail</label>
-            <input type="text" class="form-control" v-model="contact.email">
+            <input type="text" class="form-control" v-model="contact.email" required>
           </div>
 
         </div>

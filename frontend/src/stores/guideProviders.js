@@ -26,6 +26,21 @@ export const useGuideProvidersStore = defineStore('guideProviders', {
         })
     },
 
+    async getFullProviders() {
+      this.data = null
+      this.errors = null
+      this.loading = true
+      await guideProvidersApi.getFullProviders()
+        .then((response) => {
+          this.data = response.data
+          this.loading = false
+        })
+        .catch((result) => {
+          this.errors = result.response.data
+          this.loading = false
+        })
+    },
+
     async getProvider(id) {
       this.data = null
       this.errors = null

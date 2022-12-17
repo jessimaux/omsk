@@ -26,6 +26,21 @@ export const useGuidePartnersStore = defineStore('guidePartners', {
         })
     },
 
+    async getFullPartners() {
+      this.data = null
+      this.errors = null
+      this.loading = true
+      await guidePartnersApi.getFullPartners()
+        .then((response) => {
+          this.data = response.data
+          this.loading = false
+        })
+        .catch((result) => {
+          this.errors = result.response.data
+          this.loading = false
+        })
+    },
+
     async getPartner(id) {
       this.data = null
       this.errors = null

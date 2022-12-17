@@ -21,18 +21,18 @@
 
           <div class="col-12">
             <label class="form-label">РРЦ</label>
-            <input type="text" class="form-control" v-model="product.price_rrc" required>
+            <input type="number" class="form-control" v-model="product.price_rrc" required>
           </div>
 
           <div class="col-12">
             <label class="form-label">Закупочная стоимость</label>
-            <input type="text" class="form-control" v-model="product.price_buy" required>
+            <input type="number" class="form-control" v-model="product.price_buy" required>
           </div>
 
           <div class="col-12">
             <label class="form-label">Поставщик</label>
-            <select class="form-select" v-model="product.provider">
-              <option v-for="provider in guideProvidersStore.data" :key="provider.id" :value="provider.id">
+            <select class="form-select" v-model="product.provider" required>
+              <option v-if="!guideProvidersStore.loading" v-for="provider in guideProvidersStore.data" :key="provider.id" :value="provider.id">
                 {{ provider.name }}
               </option>
             </select>
@@ -40,12 +40,12 @@
 
           <div class="col-12">
             <label class="form-label">НДС</label>
-            <input type="number" min="0" class="form-control" v-model="product.nds">
+            <input type="number" min="0" class="form-control" v-model="product.nds" required>
           </div>
 
           <div class="col-12">
             <label class="form-label">Наличие</label>
-            <input type="number" min="0" class="form-control" v-model="product.available">
+            <input type="number" min="0" class="form-control" v-model="product.available" required>
           </div>
         </div>
       </div>
@@ -57,32 +57,32 @@
           <h5 class="card-title">Описание</h5>
           <div class="col-12">
             <label class="form-label">Ссылка</label>
-            <input type="text" class="form-control" v-model="product.link">
+            <input type="text" class="form-control" v-model="product.link" required>
           </div>
 
           <div class="col-12">
             <label class="form-label">Страна происхождения</label>
-            <input type="text" class="form-control" v-model="product.country">
+            <input type="text" class="form-control" v-model="product.country" required>
           </div>
 
           <div class="col-12">
             <label class="form-label">Описание</label>
-            <textarea class="form-control" style="resize:none" rows="5" v-model="product.description"></textarea>
+            <textarea class="form-control" style="resize:none" rows="5" v-model="product.description" required></textarea>
           </div>
 
           <div class="col-12">
             <label class="form-label">ТЗ</label>
-            <textarea class="form-control" style="resize:none" rows="5" v-model="product.description_tech"></textarea>
+            <textarea class="form-control" style="resize:none" rows="5" v-model="product.description_tech" required></textarea>
           </div>
 
           <div class="col-12">
             <label class="form-label">Заявка</label>
-            <textarea class="form-control" style="resize:none" rows="5" v-model="product.description_add"></textarea>
+            <textarea class="form-control" style="resize:none" rows="5" v-model="product.description_add" required></textarea>
           </div>
 
           <div class="col-12">
             <label class="form-label">Рекомендации</label>
-            <textarea class="form-control" style="resize:none" rows="5" v-model="product.recommendation"></textarea>
+            <textarea class="form-control" style="resize:none" rows="5" v-model="product.recommendation" required></textarea>
           </div>
         </div>
       </div>
@@ -106,7 +106,7 @@ export default {
     return { guideProvidersStore }
   },
   created() {
-    this.guideProvidersStore.getProviders()
+    this.guideProvidersStore.getFullProviders()
   }
 }
 </script>

@@ -4,6 +4,10 @@ const getProviders = (page, field, search) => {
   return axios.get('guide/providers/', {params: {page: page, ordering: field, search: search}})
 }
 
+const getFullProviders = () => {
+  return axios.get('guide/providers/select/')
+}
+
 const exportProviders = () => {
   return axios.get('guide/providers/export/', { responseType: 'arraybuffer' })
 }
@@ -32,6 +36,7 @@ const deleteProvider = (id) => {
 
 export default {
   getProviders,
+  getFullProviders,
   getProvider,
   exportProviders,
   importProviders,

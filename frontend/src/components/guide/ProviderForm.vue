@@ -26,7 +26,7 @@
 
           <div class="col-12">
             <label class="form-label">Базовая скидка</label>
-            <input type="text" class="form-control" v-model="provider.discount" required>
+            <input type="number" class="form-control" v-model="provider.discount" required>
           </div>
 
         </div>
