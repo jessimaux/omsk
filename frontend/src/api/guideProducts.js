@@ -1,7 +1,7 @@
 import axios from '@/api/axios'
 
 const searchProducts = (query) => {
-  return axios.get('guide/products-search/', {params: {search: query}})
+  return axios.get('guide/products/search/', {params: {search: query}})
 }
 
 const getProducts = (page, field, search) => {

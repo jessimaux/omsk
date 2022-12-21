@@ -2,8 +2,8 @@ import axios from '@/api/axios'
 
 // PROJECTS
 
-const getProjects = () => {
-  return axios.get('projects/')
+const getProjects = (page, field, search) => {
+  return axios.get('projects/', {params: {page: page, ordering: field, search: search}})
 }
 
 const getProject = (id) => {
@@ -26,6 +26,10 @@ const deleteProject = (id) => {
   return axios.delete(`projects/${id}/`)
 }
 
+const fileUploadProject = (files) => {
+  return axios.post('projects/file/upload/', files)
+}
+
 // SPECIFICATIONS
 
 const exportSpecification = (id, params) => {
@@ -45,6 +49,7 @@ export default {
   patchProject,
   addProject,
   deleteProject,
+  fileUploadProject,
   exportSpecification,
   exportRegistrationForm,
 }

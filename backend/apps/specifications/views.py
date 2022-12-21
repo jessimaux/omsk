@@ -51,23 +51,23 @@ class SpecificationExportView(views.APIView):
 
         
     
-class SpecificationsPDFExportView(views.APIView):
-    my_tag = ['Specification']
+# class SpecificationsPDFExportView(views.APIView):
+#     my_tag = ['Specification']
     
-    def get(self, request, *args, **kwargs):
-        try:
-            data = {
-                'specification': Specification.objects.get(id=kwargs['pk'])
-            }
-        except Specification.DoesNotExist:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-        pdf = render_to_pdf('specifications/pdf.html', data)
+#     def get(self, request, *args, **kwargs):
+#         try:
+#             data = {
+#                 'specification': Specification.objects.get(id=kwargs['pk'])
+#             }
+#         except Specification.DoesNotExist:
+#             return Response(status=status.HTTP_400_BAD_REQUEST)
+#         pdf = render_to_pdf('specifications/pdf.html', data)
         
-        if pdf:
-            response = HttpResponse(pdf, content_type = 'application/pdf')
-            # response['Access-Control-Expose-Headers'] = "Content-Disposition"
-            # response['Content-Disposition'] = f'attachment; filename="{datetime.date.today()}.pdf"'
-            return response
+#         if pdf:
+#             response = HttpResponse(pdf, content_type = 'application/pdf')
+#             # response['Access-Control-Expose-Headers'] = "Content-Disposition"
+#             # response['Content-Disposition'] = f'attachment; filename="{datetime.date.today()}.pdf"'
+#             return response
 
 
 class RequestViewSet(viewsets.ModelViewSet):

@@ -1,11 +1,11 @@
 from django.http import HttpResponse
 from django.shortcuts import render
-from rest_framework import viewsets, views, status
+from rest_framework import viewsets, views, status, filters, generics
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 
-from .models import Project
-from .serializers import ProjectSerializer
+from .models import Project, File
+from .serializers import ProjectSerializer, FileSerializer
 from .utils import excel_report
 
 
@@ -13,6 +13,10 @@ class ProjectsViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
     pagination_class = PageNumberPagination
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['name']
+    ordering_fields = '__all__'
+    ordering = ['id']
     my_tags = ['Project']
     
     
@@ -28,3 +32,27 @@ class ProjectRegistrationExportView(views.APIView):
             return response
         except Project.DoesNotExist:
             return Response(status=status.HTTP_400_BAD_REQUEST) 
+    
+    
+class ProjectFileUploadAPIView(views.APIView):
+    my_tags = ['ProjectFiles']
+    
+    def post(self, request, *args, **kwargs):
+        files = request.FILES.getlist("files")
+        project = request.data['project']
+        if 'files' not in request.FILES:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        else:
+            for file in files:
+                file_obj = File.objects.create(file=file, 
+                                               name=file.name,
+                                               project_id=project)
+                
+            return Response(status=status.HTTP_201_CREATED)
+        
+
+class ProjectFileDeleteAPIView(generics.DestroyAPIView):
+    queryset = File.objects.all()
+    serializer_class = FileSerializer
+    my_tags = ['ProjectFiles']
+    

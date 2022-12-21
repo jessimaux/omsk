@@ -71,14 +71,14 @@
                       <td>{{ item.discount }}</td>
                       <td>
                         <div class="d-flex flex-row">
-                          <button type="button" class="btn btn-primary me-2" @click="onClickPartnerDelete(item.id)">
-                            <i class="bi bi-x-square"></i>
-                          </button>
-
-                          <router-link class="btn btn-primary"
+                          <router-link class="btn btn-primary me-2"
                             :to="{ name: 'guide-partners-edit', params: { id: item.id } }">
                             <i class="bi bi-pencil-square"></i>
                           </router-link>
+
+                          <button type="button" class="btn btn-primary" @click="onClickPartnerDelete(item.id)">
+                            <i class="bi bi-x-square"></i>
+                          </button>
                         </div>
                       </td>
                     </tr>

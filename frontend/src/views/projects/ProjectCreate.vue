@@ -6,7 +6,7 @@
 
     <section class="section">
       <form @submit.prevent="onSubmit">
-        <project-form :project="project" @projectFormSubmit="onStageSubmit"></project-form>
+        <project-form :project="project"></project-form>
 
         <div class="row">
           <div class="col-lg-6">
@@ -28,7 +28,8 @@
           </div>
         </div>
 
-        <specification :specification="project.specification" @submit.prevent="onSubmit"></specification>
+        <specification :specification="project.specification"></specification>
+        <project-file-upload :files="files"></project-file-upload>
         <div class="text-end mb-3">
           <button type="submit" class="btn btn-primary">Сохранить</button>
         </div>
@@ -42,12 +43,14 @@ import { useProjectsStore } from '@/stores/projects'
 import { useGuideSpecificationsStore } from '@/stores/guideSpecifications'
 import ProjectForm from '@/components/projects/ProjectForm.vue'
 import Specification from '@/components/specifications/Specification.vue'
+import ProjectFileUpload from '@/components/projects/ProjectFileUpload.vue'
 
 export default {
   name: 'ProjectCreate',
   components: {
     ProjectForm,
     Specification,
+    ProjectFileUpload
   },
   setup() {
     const projectsStore = useProjectsStore()
@@ -66,7 +69,7 @@ export default {
         company_children: '',
         reg_no: '',
         nds: true,
-        partner: '',
+        partner_id: '',
         commentary: '',
         specification: {
           guide: false,
@@ -88,6 +91,7 @@ export default {
           ],
         }
       },
+      files: [],
     }
   },
 
@@ -99,13 +103,20 @@ export default {
     onSubmit() {
       this.projectsStore.addProject(this.project)
         .then(() => {
-          this.$router.push({ name: 'projects' })
+          const formData = new FormData()
+          for (let file of this.files)
+            formData.append('files', file)
+          formData.append('project', this.projectsStore.project)
+          this.projectsStore.fileUploadProject(formData)
+            .then(() => {
+              this.$router.push({ name: 'projects' })
+            })
         })
     },
   },
 
   created() {
-    this.guideSpecificationsStore.getSpecifications()
+    this.guideSpecificationsStore.getFullSpecifications()
   }
 }
 </script>

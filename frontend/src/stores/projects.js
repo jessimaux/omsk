@@ -5,6 +5,7 @@ import projectsApi from '@/api/projects'
 export const useProjectsStore = defineStore('projects', {
   state: () => {
     return {
+      project: null,
       data: {},
       loading: false,
       errors: null
@@ -12,11 +13,11 @@ export const useProjectsStore = defineStore('projects', {
   },
 
   actions: {
-    async getProjects() {
+    async getProjects(page, field, search) {
       this.errors = null
       this.data = null
       this.loading = true
-      await projectsApi.getProjects()
+      await projectsApi.getProjects(page, field, search)
         .then((response) => {
           this.data = response.data
           this.loading = false
@@ -43,6 +44,15 @@ export const useProjectsStore = defineStore('projects', {
         })
     },
 
+    async fileUploadProject(files) {
+      this.errors = null
+      await projectsApi.fileUploadProject(files)
+        .catch((result) => {
+          this.errors = result.response.data
+          throw result.response.data
+        })
+    },
+
     async addProject(credentials) {
       this.errors = null
       this.data = null
@@ -51,6 +61,7 @@ export const useProjectsStore = defineStore('projects', {
         .then((response) => {
           this.data = response.data
           this.loading = false
+          this.project = response.data.id
         })
         .catch((result) => {
           this.errors = result.response.data
@@ -76,12 +87,12 @@ export const useProjectsStore = defineStore('projects', {
     },
 
     async patchProject(id, credentials) {
-      this.data = null
+      // this.data = null
       this.errors = null
       this.loading = true
       await projectsApi.patchProject(id, credentials)
         .then((response) => {
-          this.data = response.data
+          // this.data = response.data
           this.loading = false
         })
         .catch((result) => {

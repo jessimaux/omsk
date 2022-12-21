@@ -30,7 +30,7 @@
 
           <div class="col-12">
             <label class="form-label">Номер регистрации проекта</label>
-            <input type="text" class="form-control" v-model="purchase.project_registration_no" />
+            <input type="text" class="form-control" v-model="project.reg_no" disabled />
           </div>
 
           <div class="col-12">
@@ -54,7 +54,7 @@
           <h5 class="card-title">О партнере</h5>
           <div class="col-12">
             <label class="form-label">Партнер</label>
-            <select class="form-select" v-model="project.partner" disabled>
+            <select class="form-select" v-model="project.partner.id" disabled>
               <option v-if="!guidePartnersStore.loading" v-for="partner in guidePartnersStore.data.results"
                 :key="partner.id" :value="partner.id">
                 {{ partner.name }}
@@ -125,7 +125,7 @@
                 <tr v-for="(item, index) in purchase.purchases" :key="item.id">
                   <td>{{ index }}</td>
                   <td>
-                    <select class="form-select purchase-status" v-model="item.status">
+                    <select class="form-select purchase-status" v-model="item.status" required>
                       <option v-for="attribute in statusPurchase" :value="attribute">
                         {{ attribute }}
                       </option>
@@ -134,10 +134,10 @@
                   <td><input type="text" v-model="item.isbn"></td>
                   <td>{{ item.offer.name }}</td>
                   <td><input type="text" v-model="item.country"></td>
-                  <td>{{ item.offer.product.country }}</td>
+                  <td>{{ item.offer.product ? item.offer.product.country : "" }}</td>
                   <td>{{ item.offer.request.amount }}</td>
                   <td>{{ item.offer.article }}</td>
-                  <td>{{ item.offer.product.name }}</td>
+                  <td>{{ item.offer.product ? item.offer.product.name : "" }}</td>
                   <td>{{ item.offer.count }}</td>
                   <td>?</td>
                   <td><input type="text" v-model="item.price_buy"></td>
@@ -147,7 +147,7 @@
                   <td><input type="text" v-model="item.nds_base"></td>
                   <td><input type="text" v-model="item.nds_sell"></td>
                   <td>{{ 1 - item.price_buy / item.offer.price }}</td>
-                  <td>{{ item.offer.request.amount * item.offer.count * (item.price_buy - item.offer.price) }}</td>
+                  <td>{{ item.offer.request.amount * item.offer.count * (item.offer.price - item.price_buy) }}</td>
                   <td><input type="text" v-model="item.delivery_period"></td>
                   <td><input type="text" v-model="item.prepayment"></td>
                   <td><input type="text" v-model="item.bill_income"></td>
@@ -192,9 +192,9 @@ export default {
   },
   computed: {
     getDiscount() {
-      if (typeof this.project.partner === 'number' && this.guidePartnersStore.data) {
+      if (typeof this.project.partner.id === 'number' && this.guidePartnersStore.data) {
         for (const object of this.guidePartnersStore.data.results) {
-          if (object.id === this.project.partner) return object.discount
+          if (object.id === this.project.partner.id) return object.discount
         }
       }
     },
@@ -202,10 +202,19 @@ export default {
   methods:{
     onClickExportPurchases(){
       this.purchasesStore.exportPurchases(this.purchase.id)
+    },
+
+    ndsHandle(){
+      if(this.project.nds){
+        this.purchase.purchases.forEach(item => {
+          item.nds_sell = item.nds_base
+        })
+      }
     }
   },
   created() {
     this.guidePartnersStore.getPartners()
+    this.ndsHandle()
   },
 }
 </script>

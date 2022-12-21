@@ -151,3 +151,4 @@ class ProviderImportView(generics.CreateAPIView):
             file_uploaded = request.FILES.get('file')
             import_providers(file_uploaded.file)
             return Response(status=status.HTTP_201_CREATED)
+

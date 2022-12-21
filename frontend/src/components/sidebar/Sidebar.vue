@@ -6,15 +6,16 @@
 
         <ul class="sidebar-nav" id="sidebar-nav">
 
-            <li class="nav-item">
-                <router-link class="nav-link " :to="{ name: 'home' }" active-class="active">
+            <!-- <li class="nav-item">
+                <router-link class="nav-link " :to="{ name: 'projects' }" active-class="active">
                     <i class="bi bi-grid"></i>
                     <span>Главная</span>
                 </router-link>
-            </li>
+            </li> -->
 
             <li class="nav-item">
-                <router-link class="nav-link" :to="{ name: 'projects' }" active-class="active">
+                <router-link class="nav-link" :to="{ name: 'projects' }" active-class="active"
+                    :class="{ 'active': isActiveProjects }">
                     <i class="bi bi-grid"></i>
                     <span>Проекты</span>
                 </router-link>
@@ -78,6 +79,9 @@ export default defineComponent({
         },
         isActiveSpecifications() {
             return this.$route.name === 'guide-specifications-create' || this.$route.name === 'guide-specifications-edit'
+        },
+        isActiveProjects() {
+            return this.$route.name === 'project-create' || this.$route.name === 'project-edit' || this.$route.name === 'project-purchase'
         },
     }
 })

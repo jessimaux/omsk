@@ -1,10 +1,10 @@
 <template>
   <div class="autocomplete">
     <input type="text" :value="modelValue" @input="$emit('update:modelValue', $event.target.value)"
-      @keyup="searchProducts" @blur="fieldUnfocus" />
+      @keyup="searchProducts" @blur="fieldUnfocus" required />
     <div v-if="state" class="autocomplete__result">
       <div class="list-group">
-        <button v-for="(product, index) in guideProductsStore.data" :key="product.id" type="button"
+        <button v-for="(product, index) in guideProductsStore.data.results" :key="product.id" type="button"
           class="list-group-item list-group-item-action" @click="setProduct(index)">
           {{ product.article }} {{ product.name }}
         </button>
@@ -45,11 +45,11 @@ export default {
     },
 
     setProduct(index) {
-      this.row.product_id = this.guideProductsStore.data[index].id
-      this.row.article = this.guideProductsStore.data[index].article
-      this.row.name = this.guideProductsStore.data[index].name
-      this.row.price = this.guideProductsStore.data[index].price_buy
-      this.row.product = this.guideProductsStore.data[index]
+      this.row.product_id = this.guideProductsStore.data.results[index].id
+      this.row.article = this.guideProductsStore.data.results[index].article
+      this.row.name = this.guideProductsStore.data.results[index].name
+      this.row.price = this.guideProductsStore.data.results[index].price_buy
+      this.row.product = this.guideProductsStore.data.results[index]
     }
   }
 };

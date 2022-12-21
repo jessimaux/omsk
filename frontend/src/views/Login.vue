@@ -78,7 +78,7 @@ export default defineComponent({
     onSubmit() {
       this.authStore.login(this.user)
         .then(() => {
-          this.$router.push({ name: 'home' })
+          this.$router.push({ name: 'projects' })
         })
     }
   },

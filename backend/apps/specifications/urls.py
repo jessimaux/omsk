@@ -1,7 +1,7 @@
 from django.urls import path, re_path, include
 from rest_framework import routers
 
-from .views import SpecificationsViewSet, RequestViewSet, OfferViewSet, SpecificationsPDFExportView, SpecificationExportView, GuideSpecificationsSelectAPIView
+from .views import SpecificationsViewSet, RequestViewSet, OfferViewSet, SpecificationExportView
 
 router = routers.SimpleRouter()
 router.register(r'specifications', SpecificationsViewSet)
@@ -11,7 +11,6 @@ router.register(r'offers', OfferViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('select/', GuideSpecificationsSelectAPIView.as_view(), name='specification-select'),
-    path('<int:pk>/export_pdf/', SpecificationsPDFExportView.as_view(), name='specification-export-pdf'),
+    # path('<int:pk>/export_pdf/', SpecificationsPDFExportView.as_view(), name='specification-export-pdf'),
     path('<int:pk>/export/', SpecificationExportView.as_view(), name='specification-export')
 ]

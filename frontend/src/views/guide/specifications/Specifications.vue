@@ -50,12 +50,12 @@
                       <td>{{ item.description }}</td>
                       <td>
                         <div class="d-flex flex-row">
-                          <button type="button" class="btn btn-primary me-2"><i class="bi bi-x-square"
-                              @click="onClickSpecificationDelete(item.id)"></i></button>
-
-                          <router-link class="btn btn-primary"
+                          <router-link class="btn btn-primary me-2"
                             :to="{ name: 'guide-specifications-edit', params: { id: item.id } }"><i
                               class="bi bi-pencil-square"></i></router-link>
+
+                          <button type="button" class="btn btn-primary"><i class="bi bi-x-square"
+                              @click="onClickSpecificationDelete(item.id)"></i></button>
                         </div>
                       </td>
                     </tr>
@@ -94,7 +94,7 @@ export default {
       this.guideSpecificationsStore.getSpecifications(1, this.ordering, this.search)
     },
 
-    resetSearch(){
+    resetSearch() {
       this.search = ''
       this.$router.push({ path: this.$route.fullPath, query: { page: 1, ordering: this.ordering, search: this.search } })
       this.guideSpecificationsStore.getSpecifications(1, this.ordering, this.search)

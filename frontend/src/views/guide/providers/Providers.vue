@@ -74,12 +74,12 @@
                       <td>{{ item.discount }}</td>
                       <td>
                         <div class="d-flex flex-row">
-                          <button type="button" class="btn btn-primary me-2"><i class="bi bi-x-square"
-                              @click="onClickProviderDelete(item.id)"></i></button>
-
-                          <router-link class="btn btn-primary"
+                          <router-link class="btn btn-primary me-2"
                             :to="{ name: 'guide-providers-edit', params: { id: item.id } }"><i
                               class="bi bi-pencil-square"></i></router-link>
+
+                          <button type="button" class="btn btn-primary"><i class="bi bi-x-square"
+                              @click="onClickProviderDelete(item.id)"></i></button>
                         </div>
                       </td>
                     </tr>

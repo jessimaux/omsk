@@ -6,12 +6,12 @@
           <h5 class="card-title">Общее</h5>
           <div class="col-12">
             <label class="form-label">Название проекта</label>
-            <input type="text" class="form-control" v-model="project.name" />
+            <input type="text" class="form-control" v-model="project.name" required />
           </div>
 
           <div class="col-12">
             <label class="form-label">Статус проекта</label>
-            <select class="form-select" v-model="project.status">
+            <select class="form-select" v-model="project.status" required>
               <option v-for="attribute in statusSelect" :value="attribute">
                 {{ attribute }}
               </option>
@@ -20,8 +20,9 @@
 
           <div class="col-12">
             <label class="form-label">Партнер</label>
-            <select class="form-select" v-model="project.partner">
-              <option v-if="!guidePartnersStore.loading" v-for="partner in guidePartnersStore.data.results" :key="partner.id" :value="partner.id">
+            <select class="form-select" v-model="project.partner_id" required>
+              <option v-if="!guidePartnersStore.loading" v-for="partner in guidePartnersStore.data.results"
+                :key="partner.id" :value="partner.id">
                 {{ partner.name }}
               </option>
             </select>
@@ -29,7 +30,7 @@
 
           <div class="col-12">
             <label class="form-label">Номер регистрации проекта</label>
-            <input type="text" class="form-control" v-model="project.reg_no" />
+            <input type="text" class="form-control" v-model="project.reg_no" required />
           </div>
 
           <div class="col-12">
@@ -40,7 +41,7 @@
           <div class="col-12">
             <label class="col-form-label">НДС</label>
             <div class="form-check">
-              <input type="checkbox" class="form-check-input" v-model="project.nds" />
+              <input type="checkbox" class="form-check-input" v-model="project.nds" required />
             </div>
           </div>
 
@@ -55,27 +56,27 @@
           <h5 class="card-title">О заказчике</h5>
           <div class="col-12">
             <label class="form-label">Наименование</label>
-            <input type="text" class="form-control" v-model="project.company_name" />
+            <input type="text" class="form-control" v-model="project.company_name" required />
           </div>
 
           <div class="col-12">
             <label class="form-label">ИНН</label>
-            <input type="text" class="form-control" v-model="project.company_inn" />
+            <input type="text" class="form-control" v-model="project.company_inn" required />
           </div>
 
           <div class="col-12">
             <label class="form-label">Город</label>
-            <input type="text" class="form-control" v-model="project.company_city" />
+            <input type="text" class="form-control" v-model="project.company_city" required />
           </div>
 
           <div class="col-12">
             <label class="form-label">Область</label>
-            <input type="text" class="form-control" v-model="project.company_region" />
+            <input type="text" class="form-control" v-model="project.company_region" required />
           </div>
 
           <div class="col-12">
             <label class="form-label">Количество детей в классе</label>
-            <input type="text" class="form-control" v-model="project.company_children" />
+            <input type="number" min="0" class="form-control" v-model="project.company_children" required />
           </div>
         </div>
       </div>
@@ -120,9 +121,9 @@ export default {
 
   computed: {
     getDiscount() {
-      if (typeof this.project.partner === 'number' && this.guidePartnersStore.data) {
+      if (typeof this.project.partner_id === 'number' && this.guidePartnersStore.data) {
         for (const object of this.guidePartnersStore.data.results) {
-          if (object.id === this.project.partner) return object.discount
+          if (object.id === this.project.partner_id) return object.discount
         }
       }
     },

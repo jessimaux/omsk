@@ -4,7 +4,7 @@ from rest_framework import routers
 from .views import ProductViewSet, PartnerViewSet, ProviderViewSet, ProductExportView, ProductImportView, \
   ProviderExportView, ProviderImportView, PartnerExportView, PartnerImportView, ProductSearchAPIView, \
     PartnerSelectAPIView, ProviderSelectAPIView
-from apps.specifications.views import GuideSpecificationsViewSet
+from apps.specifications.views import GuideSpecificationsViewSet, GuideSpecificationsSelectAPIView
 
 router = routers.SimpleRouter()
 router.register(r'products', ProductViewSet)
@@ -22,6 +22,7 @@ urlpatterns = [
     path('providers/export/', ProviderExportView.as_view(), name='providers-export'),
     path('providers/import/', ProviderImportView.as_view(), name='providers-import'),
     path('providers/select/', ProviderSelectAPIView.as_view(), name='providers-select'),
+    path('specifications/select/', GuideSpecificationsSelectAPIView.as_view(), name='specification-select'),
     path('', include(router.urls)),
   ]
     

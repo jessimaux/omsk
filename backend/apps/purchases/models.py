@@ -41,7 +41,10 @@ def save_purchases(sender, instance, created, **kwargs):
     if created and not instance.request.specification.guide:
         purchase_id = instance.request.specification.project.purchase.id
         price_buy =  instance.product.price_buy if instance.product else 0
+        nds_base = instance.product.nds if instance.product else 0
         PurchaseOffer.objects.create(purchase_id=purchase_id, 
                                      offer_id=instance.id,
-                                     price_buy=price_buy)
+                                     status='Заказан',
+                                     price_buy=price_buy,
+                                     nds_base=nds_base)
         

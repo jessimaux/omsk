@@ -13,12 +13,12 @@
                 <h5 class="card-title">Общее</h5>
                 <div class="col-12">
                   <label class="form-label">Название спецификации</label>
-                  <input type="text" class="form-control" v-model="specification.name" />
+                  <input type="text" class="form-control" v-model="specification.name" required />
                 </div>
 
                 <div class="col-12">
                   <label class="form-label">Описание спецификации</label>
-                  <textarea class="form-control" style="resize:none" rows="5" v-model="specification.description" />
+                  <textarea class="form-control" style="resize:none" rows="5" v-model="specification.description" required />
                 </div>
               </div>
             </div>

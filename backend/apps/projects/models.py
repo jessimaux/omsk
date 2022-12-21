@@ -20,6 +20,10 @@ class Project(models.Model):
     # general section
     commentary = models.TextField(blank=True, null=True)
 
+    # in table editional
+    delivery_date = models.DateField(default='2000-01-01')
+    contract = models.BooleanField(default=False)
+
     # log section
     created_by = models.ForeignKey(User, related_name="project_created_by", on_delete=models.SET_NULL, null=True)
     updated_by = models.ForeignKey(User, related_name="project_updated_by", on_delete=models.SET_NULL, null=True)
@@ -27,3 +31,7 @@ class Project(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
+class File(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='files')
+    name = models.CharField(max_length=1023)
+    file = models.FileField(upload_to='media/')
