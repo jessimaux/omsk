@@ -17,11 +17,12 @@ services:
 
     
     backend:
+        container_name: backend
         build:
             context: ./backend
         working_dir: /app
         command:
-            python manage.py runserver 0.0.0.0:8000
+            python manage.py runserver
         volumes:
             - ./backend/:/app
         ports:
@@ -35,9 +36,12 @@ services:
 
 
     frontend:
+        container_name: frontend
         build:
             context: ./frontend
         working_dir: /app
+        environment:
+            - VUE_BASEURL=http://127.0.0.1:8000/api
         command:
             npm run dev
         ports:

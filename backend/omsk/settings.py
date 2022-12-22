@@ -14,9 +14,9 @@ SECRET_KEY = environ.get('SECRET_KEY', 'foo')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(environ.get('DEBUG', default=1))
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = environ.get('ALLOWED_HOSTS', 'localhost 127.0.0.1').split(' ')
 
-CORS_ALLOWED_ORIGINS = environ.get('ALLOWED_HOSTS', 'http://localhost:5173 http://127.0.0.1:5173').split(' ')
+CORS_ALLOWED_ORIGINS = environ.get('CORS_ALLOWED_ORIGINS', 'http://localhost:5173 http://127.0.0.1:5173').split(' ')
 
 # Application definition
 
