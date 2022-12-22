@@ -1,8 +1,5 @@
 version: '1'
 
-networks:
-    localdev:
-
 services:
     db:
         container_name: db
@@ -53,3 +50,7 @@ services:
             - backend
         networks:
             - localdev
+
+networks:
+    localdev:
+        driver: bridge
