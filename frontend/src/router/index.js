@@ -25,6 +25,9 @@ import GuideSpecifications from '@/views/guide/specifications/Specifications.vue
 import CreateGuideSpecification from '@/views/guide/specifications/SpecificationCreate.vue'
 import EditGuideSpecification from '@/views/guide/specifications/SpecificationEdit.vue'
 
+import Users from '@/views/users/Users.vue'
+import UserCreate from '@/views/users/UserCreate.vue'
+
 import { getItem } from '@/tools/persistanceStorage.js'
 
 const router = createRouter({
@@ -183,6 +186,24 @@ const router = createRouter({
         requiresAuth: true,
       }
     },
+
+    // USERS
+    {
+      path: '/users/',
+      name: 'users',
+      component: Users,
+      meta: {
+        requiresAuth: true,
+      }
+    },
+    {
+      path: '/users/create',
+      name: 'user-create',
+      component: UserCreate,
+      meta: {
+        requiresAuth: true,
+      }
+    }
   ]
 })
 

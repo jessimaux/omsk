@@ -139,7 +139,7 @@
                   <td>{{ item.offer.article }}</td>
                   <td>{{ item.offer.product ? item.offer.product.name : "" }}</td>
                   <td>{{ item.offer.count }}</td>
-                  <td>?</td>
+                  <td>{{ item.offer.product ? item.offer.product.provider.name : "" }}</td>
                   <td><input type="text" v-model="item.price_buy"></td>
                   <td>{{ item.offer.request.amount * item.offer.count * item.price_buy }}</td>
                   <td>{{ item.offer.price }}</td>

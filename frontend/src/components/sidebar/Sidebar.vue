@@ -57,6 +57,11 @@
                 </ul>
             </li>
 
+            <li class="nav-item">
+                <router-link class="nav-link" :to="{ name: 'users' }" active-class="active">
+                    <i class="bi bi-person"></i><span>Пользователи</span>
+                </router-link>
+            </li>
         </ul>
 
     </aside>
