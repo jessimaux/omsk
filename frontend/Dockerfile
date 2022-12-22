@@ -1,5 +1,4 @@
 FROM node:18-alpine
-WORKDIR /app
 
 COPY package*.json ./
 
@@ -8,7 +7,3 @@ RUN npm install
 
 # copy project files and folders to the current working directory (i.e. 'app' folder)
 COPY . .
-
-RUN npm run build
-
-CMD ["npm", "run", "dev"]
