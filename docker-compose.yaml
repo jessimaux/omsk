@@ -37,15 +37,11 @@ services:
         container_name: frontend
         build:
             context: ./frontend
-        working_dir: /app
-        env_file:
-            - ./frontend/.env
-        command:
-            npm run dev
         ports:
-            - 5173:5173
+            - 80:80
         volumes:
-            - ./frontend/:/app
+            - ./backend/static:/app/static
+            - ./backend/media:/app/media
         depends_on:
             - backend
         networks:
