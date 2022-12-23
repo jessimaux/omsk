@@ -62,7 +62,7 @@
                       <td>{{ item.name }}</td>
                       <td>{{ item.purchase.bill }}</td>
                       <td>{{ item.status }}</td>
-                      <td>{{ item.partner.name }}</td>
+                      <td>{{ item.partner ? item.partner.name : "" }}</td>
                       <td>{{ item.company_name }}</td>
                       <td>{{ totalBill(item.purchase.purchases) }}</td>
                       <td>{{ deliveryBill(item.purchase.purchases) }}</td>

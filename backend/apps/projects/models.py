@@ -13,7 +13,7 @@ class Project(models.Model):
     company_city = models.CharField(max_length=255)
     company_region = models.CharField(max_length=255)
     company_children = models.PositiveIntegerField(default=0)
-    partner = models.ForeignKey(PartnerGuide, on_delete=models.CASCADE)
+    partner = models.ForeignKey(PartnerGuide, on_delete=models.SET_NULL, null=True)
     reg_no = models.CharField(max_length=255)
     nds = models.BooleanField(default=False)
 

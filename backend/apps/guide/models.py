@@ -57,7 +57,7 @@ class ProductGuide(models.Model):
     description_tech = models.TextField(blank=True, null=True)
     description_add = models.TextField(blank=True, null=True)
     recommendation = models.TextField(blank=True, null=True)
-    provider = models.ForeignKey(ProviderGuide, on_delete=models.CASCADE)
+    provider = models.ForeignKey(ProviderGuide, on_delete=models.SET_NULL, null=True)
     nds = models.PositiveIntegerField()
     available = models.PositiveIntegerField()
 
