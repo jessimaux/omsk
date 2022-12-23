@@ -68,6 +68,9 @@ export default {
   created() {
     const id = this.$route.params.id
     this.projectsStore.getProject(id)
+    .then(()=>{
+      if(this.projectsStore.errors.detail === "Not found.") this.$router.push({ name: '404'})
+    })
   }
 }
 </script>

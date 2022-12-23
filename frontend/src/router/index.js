@@ -28,6 +28,8 @@ import EditGuideSpecification from '@/views/guide/specifications/SpecificationEd
 import Users from '@/views/users/Users.vue'
 import UserCreate from '@/views/users/UserCreate.vue'
 
+import NotFound from '@/views/NotFound.vue'
+
 import { getItem } from '@/tools/persistanceStorage.js'
 
 const router = createRouter({
@@ -49,7 +51,7 @@ const router = createRouter({
 
     // PROJECTS
     {
-      path: '/projects',
+      path: '/',
       name: 'projects',
       component: Projects,
       meta: {
@@ -203,6 +205,13 @@ const router = createRouter({
       meta: {
         requiresAuth: true,
       }
+    },
+
+    // 404
+    { 
+      path: '/:pathMatch(.*)*', 
+      name: '404', 
+      component: NotFound 
     }
   ]
 })
@@ -213,11 +222,11 @@ router.beforeEach((to, from, next) => {
     if (userIsAuthenticated) {
       next()
     } else next('login')
-  } else if (
-    userIsAuthenticated && (to.name == 'login' || to.name == 'register')
-  ) {
+  } 
+  else if (userIsAuthenticated && (to.name == 'login' || to.name == 'register')) {
     next('/projects')
-  } else next()
+  } 
+  else next()
 })
 
 export default router
