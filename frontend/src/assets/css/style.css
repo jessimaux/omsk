@@ -976,6 +976,13 @@ h6 {
 	vertical-align: middle;
 }
 
+td {
+	max-width: 250px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
 .dashboard .top-selling img {
 	border-radius: 5px;
 	max-width: 60px;
@@ -1272,16 +1279,19 @@ h6 {
 
 .autocomplete {
 	position: relative;
-
 }
 
-.autocomplete__result {
-	position: absolute;
+.autocomplete_result {
 	z-index: 999;
 	width: 100%;
 	background-color: hsl(0, 0%, 100%);
 }
 
+.autocomplete_button {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
 
 .purchase-status {
 	width: 125px;

@@ -2,10 +2,10 @@
   <div class="autocomplete">
     <input type="text" :value="modelValue" @input="$emit('update:modelValue', $event.target.value)"
       @keyup="searchProducts" @blur="fieldUnfocus" required />
-    <div v-if="state" class="autocomplete__result">
+    <div v-if="state && !guideProductsStore.loading" class="autocomplete_result">
       <div class="list-group">
-        <button v-for="(product, index) in guideProductsStore.data.results" :key="product.id" type="button"
-          class="list-group-item list-group-item-action" @click="setProduct(index)">
+        <button v-for="(product, index) in guideProductsStore.data.results" type="button"
+          class="list-group-item list-group-item-action autocomplete_button" @click="setProduct(index)">
           {{ product.article }} {{ product.name }}
         </button>
       </div>
@@ -41,7 +41,7 @@ export default {
     },
 
     fieldUnfocus() {
-      setTimeout(() => this.state = false, 500)
+      setTimeout(() => this.state = false, 250)
     },
 
     setProduct(index) {

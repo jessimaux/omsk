@@ -89,3 +89,9 @@ class SpecificationSerializer(serializers.ModelSerializer):
                 Request.objects.filter(id=request_id).delete()
         
         return instance
+    
+    
+class SpecificationsListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Specification
+        fields = '__all__'

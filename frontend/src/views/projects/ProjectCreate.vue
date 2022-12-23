@@ -103,14 +103,17 @@ export default {
     onSubmit() {
       this.projectsStore.addProject(this.project)
         .then(() => {
-          const formData = new FormData()
-          for (let file of this.files)
-            formData.append('files', file)
-          formData.append('project', this.projectsStore.project)
-          this.projectsStore.fileUploadProject(formData)
-            .then(() => {
-              this.$router.push({ name: 'projects' })
-            })
+          if (this.files.length > 0) {
+            const formData = new FormData()
+            for (let file of this.files) {
+              formData.append('files', file)
+            }
+            formData.append('project', this.projectsStore.project)
+
+            this.projectsStore.fileUploadProject(formData)
+          }
+          
+          this.$router.push({ name: 'projects' })
         })
     },
   },

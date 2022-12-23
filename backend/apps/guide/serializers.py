@@ -18,6 +18,9 @@ class ContactProviderSerializer(serializers.ModelSerializer):
         
 
 class ProductGuideSerializer(serializers.ModelSerializer):
+    provider = serializers.StringRelatedField()
+    
+    # logs
     created_by = serializers.HiddenField(default=serializers.CreateOnlyDefault(serializers.CurrentUserDefault()))
     updated_by = serializers.HiddenField(default=serializers.CurrentUserDefault())
     created_at = serializers.SkipField()

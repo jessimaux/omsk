@@ -4,9 +4,10 @@ from django.http import HttpResponse
 from rest_framework import viewsets, views, mixins, status, filters, generics
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.decorators import action
 
 from .models import Specification, Request, Offer
-from .serializers import SpecificationSerializer, RequestSerializer, OfferSerializer
+from .serializers import SpecificationSerializer, RequestSerializer, OfferSerializer, SpecificationsListSerializer
 from .utils import render_to_pdf, excel_report
 
 
@@ -34,6 +35,17 @@ class GuideSpecificationsViewSet(viewsets.ModelViewSet):
     ordering_fields = '__all__'
     ordering = ['id']
     my_tags = ['SpecificationGuide']
+    
+    def list(self, request):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = SpecificationsListSerializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
     
     
 class SpecificationExportView(views.APIView):
