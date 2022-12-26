@@ -23,8 +23,7 @@
 
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
-                    <i class="bi bi-menu-button-wide"></i><span>Справочник</span><i
-                        class="bi bi-chevron-down ms-auto"></i>
+                    <i class="bi bi-menu-button-wide"></i><span>Справочник</span>
                 </a>
                 <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                     <li>
@@ -58,8 +57,9 @@
             </li>
 
             <li class="nav-item">
-                <router-link class="nav-link" :to="{ name: 'users' }" active-class="active">
-                    <i class="bi bi-person"></i><span>Пользователи</span>
+                <router-link class="nav-link" :to="{ name: 'users' }" active-class="active"
+                    :class="{ 'active': isActiveUsers }">
+                    <i class=" bi bi-person"></i><span>Пользователи</span>
                 </router-link>
             </li>
         </ul>
@@ -87,6 +87,9 @@ export default defineComponent({
         },
         isActiveProjects() {
             return this.$route.name === 'project-create' || this.$route.name === 'project-edit' || this.$route.name === 'project-purchase'
+        },
+        isActiveUsers() {
+            return this.$route.name === 'user-create'
         },
     }
 })

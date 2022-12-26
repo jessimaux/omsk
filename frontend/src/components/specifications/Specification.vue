@@ -38,9 +38,9 @@
               <td :rowspan="row.offers.length">{{ index }}</td>
               <td :rowspan="row.offers.length"><input type="text" v-model="row.str_by_order" required /></td>
               <td :rowspan="row.offers.length"><input type="text" v-model="row.name" required /></td>
-              <td :rowspan="row.offers.length"><input type="text" v-model="row.tx" required /></td>
-              <td :rowspan="row.offers.length"><input type="text" v-model="row.amount" required /></td>
-              <td :rowspan="row.offers.length"><input type="text" v-model="row.price" required /></td>
+              <td :rowspan="row.offers.length"><input type="text" v-model="row.tx" /></td>
+              <td :rowspan="row.offers.length"><input type="number" min="0" v-model="row.amount" required /></td>
+              <td :rowspan="row.offers.length"><input type="number" min="0" step="any" v-model="row.price" required /></td>
               <td :rowspan="row.offers.length">{{ row.price * row.amount }}</td>
               <td>
                 <product-search-field :row="row.offers[0]" v-model="row.offers[0].article"></product-search-field>
@@ -48,8 +48,8 @@
               <td>
                 <product-search-field :row="row.offers[0]" v-model="row.offers[0].name"></product-search-field>
               </td>
-              <td><input type="text" v-model="row.offers[0].count" required /></td>
-              <td><input type="text" v-model="row.offers[0].price" required /></td>
+              <td><input type="number" min="0" v-model="row.offers[0].count" required /></td>
+              <td><input type="number" min="0" step="any" v-model="row.offers[0].price" required /></td>
               <td>{{ row.offers[0].count ? row.offers[0].count * row.offers[0].price : '' }}</td>
               <td>{{ row.offers[0].product ? row.offers[0].product.available : '' }}</td>
               <td>
@@ -66,8 +66,8 @@
               <td>
                 <product-search-field :row="subrow" v-model="subrow.name"></product-search-field>
               </td>
-              <td><input type="text" v-model="subrow.count" /></td>
-              <td><input type="text" v-model="subrow.price" /></td>
+              <td><input type="number" min="0" v-model="subrow.count" /></td>
+              <td><input type="number" min="0" step="any" v-model="subrow.price" /></td>
               <td>{{ subrow.count ? subrow.count * subrow.price : '' }}</td>
               <td>{{ subrow.product ? subrow.product.available : '' }}</td>
               <td>

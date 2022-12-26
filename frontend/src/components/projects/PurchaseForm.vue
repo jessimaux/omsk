@@ -5,7 +5,7 @@
         <div class="card-body">
           <h5 class="card-title">Общее</h5>
           <div class="col-12">
-            <label class="form-label">От кого продаем</label>
+            <label class="form-label" name="company_from">От кого продаем</label>
             <input type="text" class="form-control" v-model="purchase.company_from" />
           </div>
 
@@ -15,7 +15,7 @@
           </div>
 
           <div class="col-12">
-            <label class="form-label">Статус проекта</label>
+            <label class="form-label" name="status">Статус проекта</label>
             <select class="form-select" v-model="project.status">
               <option v-for="attribute in statusSelect" :value="attribute">
                 {{ attribute }}
@@ -24,17 +24,17 @@
           </div>
 
           <div class="col-12">
-            <label class="form-label">Внутренний номер проекта</label>
+            <label class="form-label" name="project_inner_no">Внутренний номер проекта</label>
             <input type="text" class="form-control" v-model="purchase.project_inner_no" />
           </div>
 
           <div class="col-12">
-            <label class="form-label">Номер регистрации проекта</label>
+            <label class="form-label" name="project_registration_no">Номер регистрации проекта</label>
             <input type="text" class="form-control" v-model="project.reg_no" disabled />
           </div>
 
           <div class="col-12">
-            <label class="form-label">Номер счета от нашей комании</label>
+            <label class="form-label" name="bill">Номер счета от нашей комании</label>
             <input type="text" class="form-control" v-model="purchase.bill" />
           </div>
 
@@ -76,7 +76,7 @@
     <div class="col-lg-12">
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title">Комментарий</h5>
+          <h5 class="card-title" name="commentary">Комментарий</h5>
           <textarea class="form-control" style="resize:none" rows="5" v-model="project.commentary"></textarea>
         </div>
       </div>
@@ -140,12 +140,12 @@
                   <td>{{ item.offer.product ? item.offer.product.name : "" }}</td>
                   <td>{{ item.offer.count }}</td>
                   <td>{{ item.offer.product ? item.offer.product.provider.name : "" }}</td>
-                  <td><input type="text" v-model="item.price_buy"></td>
+                  <td><input type="number" min="0" step="any" v-model="item.price_buy"></td>
                   <td>{{ item.offer.request.amount * item.offer.count * item.price_buy }}</td>
                   <td>{{ item.offer.price }}</td>
                   <td>{{ item.offer.request.amount * item.offer.count * item.offer.price }}</td>
-                  <td><input type="text" v-model="item.nds_base"></td>
-                  <td><input type="text" v-model="item.nds_sell"></td>
+                  <td><input type="number" min="0" v-model="item.nds_base"></td>
+                  <td><input type="number" min="0" v-model="item.nds_sell"></td>
                   <td>{{ 1 - item.price_buy / item.offer.price }}</td>
                   <td>{{ item.offer.request.amount * item.offer.count * (item.offer.price - item.price_buy) }}</td>
                   <td><input type="text" v-model="item.delivery_period"></td>

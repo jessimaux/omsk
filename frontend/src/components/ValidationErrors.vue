@@ -20,6 +20,9 @@ export default {
       return Object.keys(this.validationErrors).map(name => {
         const messages = this.validationErrors[name].join(', ')
         if(name==='non_field_errors') name = ''
+        else {
+          name = document.getElementsByName(name)[0].textContent + ':'
+        }
 
         return `${name} ${messages}`
       })

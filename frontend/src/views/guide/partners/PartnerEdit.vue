@@ -6,6 +6,7 @@
 
     <section class="section">
       <form v-if="!guidePartnersStore.loading" @submit.prevent="onSubmit">
+        <validation-errors v-if="guidePartnersStore.errors" :validationErrors="guidePartnersStore.errors"></validation-errors>
         <partner-form :partner="partner"></partner-form>
         <div class="text-end mb-3">
           <button type="submit" class="btn btn-primary">Сохранить</button>
@@ -18,6 +19,7 @@
 <script>
 import { useGuidePartnersStore } from '@/stores/guidePartners'
 import PartnerForm from '@/components/guide/PartnerForm.vue'
+import ValidationErrors from '@/components/ValidationErrors.vue'
 
 export default {
   name: 'PartnerEdit',

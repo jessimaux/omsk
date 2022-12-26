@@ -54,23 +54,24 @@ export default {
     onSubmit() {
       this.projectsStore.editProject(this.project.id, this.project)
         .then(() => {
-          const formData = new FormData()
-          for (let file of this.files)
-            formData.append('files', file)
-          formData.append('project', this.project.id)
-          this.projectsStore.fileUploadProject(formData)
-            .then(() => {
-              this.$router.push({ name: 'projects' })
-            })
+          if (this.files.length > 0) {
+            const formData = new FormData()
+            for (let file of this.files) {
+              formData.append('files', file)
+            }
+            formData.append('project', this.project.id)
+            this.projectsStore.fileUploadProject(formData)
+          }
+          this.$router.push({ name: 'projects' })
         })
     }
   },
   created() {
     const id = this.$route.params.id
     this.projectsStore.getProject(id)
-    .then(()=>{
-      if(this.projectsStore.errors.detail === "Not found.") this.$router.push({ name: '404'})
-    })
+      .then(() => {
+        if (this.projectsStore.errors.detail === "Not found.") this.$router.push({ name: '404' })
+      })
   }
 }
 </script>

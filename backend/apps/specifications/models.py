@@ -14,7 +14,7 @@ class Request(models.Model):
     name = models.CharField(max_length=255)
     tx = models.CharField(max_length=255, blank=True, null=True)
     amount = models.PositiveIntegerField(default=0)
-    price = models.PositiveIntegerField(default=0)
+    price = models.FloatField(default=0)
     
 
 class Offer(models.Model):
@@ -23,4 +23,4 @@ class Offer(models.Model):
     article = models.CharField(max_length=255, null=True, blank=True)
     name = models.CharField(max_length=255, null=True, blank=True)
     count = models.PositiveIntegerField(default=0)
-    price = models.FloatField(null=True)
+    price = models.FloatField(default=0)

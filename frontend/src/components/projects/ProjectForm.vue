@@ -5,12 +5,12 @@
         <div class="card-body">
           <h5 class="card-title">Общее</h5>
           <div class="col-12">
-            <label class="form-label">Название проекта</label>
+            <label class="form-label" name="name">Название проекта</label>
             <input type="text" class="form-control" v-model="project.name" required />
           </div>
 
           <div class="col-12">
-            <label class="form-label">Статус проекта</label>
+            <label class="form-label" name="status">Статус проекта</label>
             <select class="form-select" v-model="project.status" required>
               <option v-for="attribute in statusSelect" :value="attribute">
                 {{ attribute }}
@@ -19,7 +19,7 @@
           </div>
 
           <div class="col-12">
-            <label class="form-label">Партнер</label>
+            <label class="form-label" name="partner">Партнер</label>
             <select class="form-select" v-model="project.partner_id" required>
               <option v-if="!guidePartnersStore.loading" v-for="partner in guidePartnersStore.data.results"
                 :key="partner.id" :value="partner.id">
@@ -29,7 +29,7 @@
           </div>
 
           <div class="col-12">
-            <label class="form-label">Номер регистрации проекта</label>
+            <label class="form-label" nam="reg_no">Номер регистрации проекта</label>
             <input type="text" class="form-control" v-model="project.reg_no" required />
           </div>
 
@@ -39,7 +39,7 @@
           </div>
 
           <div class="col-12">
-            <label class="col-form-label">НДС</label>
+            <label class="col-form-label" name="nds">НДС</label>
             <div class="form-check">
               <input type="checkbox" class="form-check-input" v-model="project.nds" required />
             </div>
@@ -55,27 +55,27 @@
         <div class="card-body">
           <h5 class="card-title">О заказчике</h5>
           <div class="col-12">
-            <label class="form-label">Наименование</label>
+            <label class="form-label" name="company_name">Наименование организации</label>
             <input type="text" class="form-control" v-model="project.company_name" required />
           </div>
 
           <div class="col-12">
-            <label class="form-label">ИНН</label>
+            <label class="form-label" name="company_inn">ИНН организации</label>
             <input type="text" class="form-control" v-model="project.company_inn" required />
           </div>
 
           <div class="col-12">
-            <label class="form-label">Город</label>
+            <label class="form-label" name="company_city">Город (организации)</label>
             <input type="text" class="form-control" v-model="project.company_city" required />
           </div>
 
           <div class="col-12">
-            <label class="form-label">Область</label>
+            <label class="form-label" name="company_region">Область (организации)</label>
             <input type="text" class="form-control" v-model="project.company_region" required />
           </div>
 
           <div class="col-12">
-            <label class="form-label">Количество детей в классе</label>
+            <label class="form-label" name="company_children">Количество детей в классе</label>
             <input type="number" min="0" class="form-control" v-model="project.company_children" required />
           </div>
         </div>
@@ -87,7 +87,7 @@
     <div class="col-lg-12">
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title">Комментарий</h5>
+          <h5 class="card-title" name="commentary">Комментарий</h5>
           <textarea class="form-control" style="resize:none" rows="5" v-model="project.commentary"></textarea>
         </div>
       </div>

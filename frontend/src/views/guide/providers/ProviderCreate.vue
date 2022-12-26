@@ -6,6 +6,7 @@
 
     <section class="section">
       <form @submit.prevent="onSubmit">
+        <validation-errors v-if="guideProvidersStore.errors" :validationErrors="guideProvidersStore.errors"></validation-errors>
         <provider-form :provider="provider"></provider-form>
         <div class="text-end mb-3">
           <button type="submit" class="btn btn-primary">Сохранить</button>
@@ -18,6 +19,7 @@
 <script>
 import { useGuideProvidersStore } from '@/stores/guideProviders'
 import ProviderForm from '@/components/guide/ProviderForm.vue'
+import ValidationErrors from '@/components/ValidationErrors.vue'
 
 export default {
   name: 'ProviderCreate',
