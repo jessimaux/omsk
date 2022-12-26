@@ -5,6 +5,8 @@
     </div>
 
     <section class="section">
+      <validation-errors v-if="guidePartnersStore.errorsImport" :validationErrors="guidePartnersStore.errorsImport"></validation-errors>
+      <success-messages v-if="guidePartnersStore.successMessages" :successMessages="guidePartnersStore.successMessages"></success-messages>
       <div class="row">
         <div class="col-lg-12">
           <div v-if="!guidePartnersStore.loading" class="card">
@@ -100,11 +102,15 @@
 <script>
 import { useGuidePartnersStore } from '@/stores/guidePartners.js'
 import Pagination from '@/components/Pagination.vue'
+import ValidationErrors from '@/components/ValidationErrors.vue'
+import SuccessMessages from '@/components/SuccessMessages.vue'
 
 export default {
   name: 'Partners',
   components: {
-    Pagination
+    Pagination,
+    ValidationErrors,
+    SuccessMessages
   },
   setup() {
     const guidePartnersStore = useGuidePartnersStore()
@@ -167,6 +173,8 @@ export default {
   },
   created() {
     this.guidePartnersStore.getPartners()
+    this.guidePartnersStore.successMessages = null
+    this.guidePartnersStore.errorsImport = null
   }
 }
 </script>

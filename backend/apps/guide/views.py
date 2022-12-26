@@ -53,22 +53,27 @@ class ProductImportView(generics.CreateAPIView):
     def create(self, request):
         serializer_class = self.get_serializer(data=request.data)
         if 'file' not in request.FILES or not serializer_class.is_valid():
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response({'non_field_errors': 'Файл не выбран.'}, status=status.HTTP_400_BAD_REQUEST)
+        elif request.FILES['file'].content_type not in ('application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'):
+            return Response({'non_field_errors': 'Выбран некорректный формат файла.'}, status=status.HTTP_400_BAD_REQUEST)
         else:
-            file_uploaded = request.FILES.get('file')
-            person_resource = ProductGuideResource()
-            dataset = Dataset()
-            dataset.load(file_uploaded.read())
+            try:
+                file_uploaded = request.FILES.get('file')
+                product_resource = ProductGuideResource()
+                dataset = Dataset()
+                dataset.load(file_uploaded.read())
 
-            # Test the data import
-            result = person_resource.import_data(dataset, dry_run=True, raise_errors=True)
-            if not result.has_errors():
-                # Actually import now
-                person_resource.import_data(dataset, dry_run=False)
-            else:
-                return Response(status=status.HTTP_400_BAD_REQUEST)
-            
-        return Response(status=status.HTTP_201_CREATED)
+                # Test the data import
+                result = product_resource.import_data(dataset, dry_run=True)
+                if not result.has_errors():
+                    # Actually import now
+                    product_resource.import_data(dataset, dry_run=False)
+                else:
+                    return Response({'non_field_errors': result}, status=status.HTTP_400_BAD_REQUEST)
+            except IOError:                
+                return Response({'non_field_errors': 'Файл содержит некорректные данные.'}, status=status.HTTP_400_BAD_REQUEST)
+           
+        return Response({"success": "Файл успешно загружен."}, status=status.HTTP_201_CREATED)
 
 
 class PartnerSelectAPIView(generics.ListAPIView):
@@ -105,11 +110,16 @@ class PartnerImportView(generics.CreateAPIView):
     def create(self, request):
         serializer_class = self.get_serializer(data=request.data)
         if 'file' not in request.FILES or not serializer_class.is_valid():
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response({'non_field_errors': 'Файл не выбран.'}, status=status.HTTP_400_BAD_REQUEST)
+        elif request.FILES['file'].content_type not in ('application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'):
+            return Response({'non_field_errors': 'Выбран некорректный формат файла.'}, status=status.HTTP_400_BAD_REQUEST)
         else:
             file_uploaded = request.FILES.get('file')
-            import_partners(file_uploaded.file)
-            return Response(status=status.HTTP_201_CREATED)
+            try:
+                import_partners(file_uploaded.file)
+            except Exception:
+                return Response({'non_field_errors': 'Файл содержит некорректные данные.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'success': 'Файл успешно загружен.'}, status=status.HTTP_201_CREATED)
     
 
 class ProviderSelectAPIView(generics.ListAPIView):
@@ -146,9 +156,14 @@ class ProviderImportView(generics.CreateAPIView):
     def create(self, request):
         serializer_class = self.get_serializer(data=request.data)
         if 'file' not in request.FILES or not serializer_class.is_valid():
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response({'non_field_errors': 'Файл не выбран.'}, status=status.HTTP_400_BAD_REQUEST)
+        elif request.FILES['file'].content_type not in ('application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'):
+            return Response({'non_field_errors': 'Выбран некорректный формат файла.'}, status=status.HTTP_400_BAD_REQUEST)
         else:
             file_uploaded = request.FILES.get('file')
-            import_providers(file_uploaded.file)
-            return Response(status=status.HTTP_201_CREATED)
+            try:
+                import_providers(file_uploaded.file)
+            except Exception:
+                return Response({'non_field_errors': 'Файл содержит некорректные данные.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'success': 'Файл успешно загружен.'}, status=status.HTTP_201_CREATED)
 

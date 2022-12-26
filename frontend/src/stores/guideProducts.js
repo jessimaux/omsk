@@ -6,6 +6,8 @@ export const useGuideProductsStore = defineStore('guideProducts', {
     return {
       data: null,
       errors: null,
+      errorsImport: null,
+      successMessages: null,
       loading: false
     }
   },
@@ -117,9 +119,16 @@ export const useGuideProductsStore = defineStore('guideProducts', {
       })
     },
 
-    // TODO: add than / catch
     async importProducts(file) {
+      this.errorsImport = null
+      this.successMessages = null
       await guideProductsApi.importProducts(file)
+      .then((response) => {
+        this.successMessages = response.data
+      })
+      .catch((result) => {
+        this.errorsImport = result.response.data
+      })
     },
   }
 })

@@ -5,6 +5,8 @@
     </div>
 
     <section class="section">
+      <validation-errors v-if="guideProductsStore.errorsImport" :validationErrors="guideProductsStore.errorsImport"></validation-errors>
+      <success-messages v-if="guideProductsStore.successMessages" :successMessages="guideProductsStore.successMessages"></success-messages>
       <div class="row">
         <div class="col-lg-12">
           <div class="card">
@@ -36,7 +38,7 @@
                     <div class="col-auto">
                       <div class="btn-import">
                         <label for="btn-import" class="btn btn-primary"><i class="bi bi-upload"></i>&nbspИмпорт</label>
-                        <input type="file" id="btn-import" @change="importProducts" ref="file" hidden>
+                        <input type="file" id="btn-import" accept=".xls, .xlsx" @change="importProducts" ref="file" hidden>
                       </div>
                     </div>
                   </div>
@@ -115,9 +117,15 @@
 
 <script>
 import { useGuideProductsStore } from '@/stores/guideProducts.js'
+import ValidationErrors from '@/components/ValidationErrors.vue'
+import SuccessMessages from '@/components/SuccessMessages.vue'
 
 export default {
   name: 'Products',
+  components:{
+    ValidationErrors,
+    SuccessMessages
+  },
   setup() {
     const guideProductsStore = useGuideProductsStore()
     return { guideProductsStore }
@@ -179,6 +187,8 @@ export default {
   },
   created() {
     this.guideProductsStore.getProducts()
+    this.guideProductsStore.errorsImport = null
+    this.guideProductsStore.successMessages = null
   }
 }
 </script>

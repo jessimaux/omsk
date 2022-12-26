@@ -5,9 +5,13 @@
     </div>
 
     <section class="section">
+      <validation-errors v-if="guideProvidersStore.errorsImport"
+        :validationErrors="guideProvidersStore.errorsImport"></validation-errors>
+      <success-messages v-if="guideProvidersStore.successMessages"
+        :successMessages="guideProvidersStore.successMessages"></success-messages>
       <div class="row">
         <div class="col-lg-12">
-          <div class="card">
+          <div v-if="!guideProvidersStore.loading" class="card">
             <div class="card-body">
               <div class="row justify-content-between">
 
@@ -43,7 +47,7 @@
                 </div>
               </div>
 
-              <div v-if="!guideProvidersStore.loading" class="table-responsive">
+              <div class="table-responsive">
                 <table class="table">
                   <thead>
                     <tr>
@@ -87,6 +91,9 @@
                 </table>
               </div>
 
+              <pagination v-if="guideProvidersStore.data.count > perPage" :currentPage="currentPage" :perPage="perPage"
+                :total="guideProvidersStore.data.count" @pageChanged="onPageChanged"></pagination>
+
             </div>
           </div>
         </div>
@@ -97,9 +104,17 @@
 
 <script>
 import { useGuideProvidersStore } from '@/stores/guideProviders.js'
+import Pagination from '@/components/Pagination.vue'
+import ValidationErrors from '@/components/ValidationErrors.vue'
+import SuccessMessages from '@/components/SuccessMessages.vue'
 
 export default {
   name: 'Providers',
+  components: {
+    Pagination,
+    ValidationErrors,
+    SuccessMessages
+  },
   setup() {
     const guideProvidersStore = useGuideProvidersStore()
     return { guideProvidersStore }
@@ -119,7 +134,7 @@ export default {
       this.guideProvidersStore.getProviders(1, this.ordering, this.search)
     },
 
-    resetSearch(){
+    resetSearch() {
       this.search = ''
       this.$router.push({ path: this.$route.fullPath, query: { page: 1, ordering: this.ordering, search: this.search } })
       this.guideProvidersStore.getProviders(1, this.ordering, this.search)
@@ -161,6 +176,8 @@ export default {
   },
   created() {
     this.guideProvidersStore.getProviders()
+    this.guideProvidersStore.successMessages = null
+    this.guideProvidersStore.errorsImport = null
   }
 }
 </script>

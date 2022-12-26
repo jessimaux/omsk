@@ -13,12 +13,12 @@ export default {
     validationErrors: {
       type: Object,
       required: true
-    }
+    },
   },
   computed: {
     errorMessages() {
       return Object.keys(this.validationErrors).map(name => {
-        const messages = this.validationErrors[name].join(', ')
+        const messages = this.validationErrors[name]
         if(name==='non_field_errors') name = ''
         else {
           name = document.getElementsByName(name)[0].textContent + ':'

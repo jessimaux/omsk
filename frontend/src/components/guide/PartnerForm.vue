@@ -6,7 +6,7 @@
           <h5 class="card-title">Общее</h5>
           <div class="col-12">
             <label class="form-label" name="name">Наименование</label>
-            <input type="text" class="form-control" v-model="partner.name" required>
+            <input type="text" class="form-control" v-model="partner.name">
           </div>
 
           <div class="col-12">
