@@ -5,7 +5,8 @@
       <router-link class="logo d-flex align-items-center" :to="{ name: 'projects' }">
         <span class="d-none d-lg-block">Project</span>
       </router-link>
-    </div><!-- End Logo -->
+      <i class="bi bi-list toggle-sidebar-btn" @click="toggleSidebar"></i>
+    </div>
 
     <nav class="header-nav ms-auto">
       <ul class="d-flex align-items-center">
@@ -56,6 +57,10 @@ export default {
     }
   },
   methods: {
+    toggleSidebar(){
+      document.getElementById('app').classList.toggle('toggle-sidebar')
+    },
+
     onClickLogout() {
       this.authStore
         .logout()
