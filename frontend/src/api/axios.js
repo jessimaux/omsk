@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { getItem } from '@/tools/persistanceStorage'
 
-axios.defaults.baseURL = import.meta.env.VITE_BASEURL
+axios.defaults.baseURL = 'http://localhost/api'
 
 // middleware: add auth header
 axios.interceptors.request.use((config) => {
