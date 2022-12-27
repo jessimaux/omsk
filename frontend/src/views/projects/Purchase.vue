@@ -38,8 +38,8 @@ export default {
       return newProject
     }
   },
-  methods:{
-    onSubmit(){
+  methods: {
+    onSubmit() {
       this.projectsStore.patchProject(this.project.id, this.project)
       this.purchasesStore.editPurchase(this.purchase.id, this.purchase)
     }
@@ -48,7 +48,8 @@ export default {
     const id = this.$route.params.id
     this.projectsStore.getProject(id)
       .then(() => {
-        this.purchasesStore.getPurchase(this.projectsStore.data.purchase_id)
+        if (this.projectsStore.status === 404) this.$router.push({ name: '404' })
+        else this.purchasesStore.getPurchase(this.projectsStore.data.purchase_id)
       })
   }
 }

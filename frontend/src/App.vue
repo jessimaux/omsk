@@ -22,11 +22,7 @@ export default {
     Navbar,
   },
   mounted() {
-    this.authStore.getCurrentUser()
+    if(this.$route.name !== 'login' || this.$route.name !== 'register') this.authStore.getCurrentUser()
   }
 }
 </script>
-
-<style>
-
-</style>

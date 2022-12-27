@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia'
-import projectsApi from '@/api/projects'
 import guideSpecificationsApi from '@/api/guideSpecifications'
 
 export const useGuideSpecificationsStore = defineStore('guideSpecifications', {
   state: () => {
     return {
       data: null,
+      status: null,
       errors: null,
       loading: false,
     }
@@ -44,15 +44,18 @@ export const useGuideSpecificationsStore = defineStore('guideSpecifications', {
 
     async getSpecification(id) {
       this.data = null
+      this.status = null
       this.errors = null
       this.loading = true
       await guideSpecificationsApi.getSpecification(id)
         .then((response) => {
           this.data = response.data
+          this.status = response.status
           this.loading = false
         })
         .catch((result) => {
           this.errors = result.response.data
+          this.status = result.response.status
           this.loading = false
         })
     },

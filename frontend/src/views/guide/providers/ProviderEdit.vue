@@ -49,6 +49,9 @@ export default {
   created() {
     const id = this.$route.params.id
     this.guideProvidersStore.getProvider(id)
+    .then(() => {
+        if (this.guideProvidersStore.status === 404) this.$router.push({ name: '404' })
+      })
   },
 
 }

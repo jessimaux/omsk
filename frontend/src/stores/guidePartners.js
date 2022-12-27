@@ -5,6 +5,7 @@ export const useGuidePartnersStore = defineStore('guidePartners', {
   state: () => {
     return {
       data: null,
+      status: null,
       errors: null,
       errorsImport: null,
       successMessages: null,
@@ -45,15 +46,18 @@ export const useGuidePartnersStore = defineStore('guidePartners', {
 
     async getPartner(id) {
       this.data = null
+      this.status = null
       this.errors = null
       this.loading = true
       await guidePartnersApi.getPartner(id)
         .then((response) => {
           this.data = response.data
+          this.status = response.status
           this.loading = false
         })
         .catch((result) => {
           this.errors = result.response.data
+          this.status = result.response.status
           this.loading = false
         })
     },

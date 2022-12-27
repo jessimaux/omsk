@@ -6,7 +6,8 @@ export const useProjectsStore = defineStore('projects', {
   state: () => {
     return {
       project: null,
-      data: {},
+      data: null,
+      status: null,
       loading: false,
       errors: null
     }
@@ -29,17 +30,20 @@ export const useProjectsStore = defineStore('projects', {
     },
 
     async getProject(id) {
-      this.data = {}
+      this.data = null
       this.errors = null
+      this.status = null
       this.loading = true
       await projectsApi
         .getProject(id)
         .then((response) => {
           this.data = response.data
+          this.status = response.status
           this.loading = false
         })
         .catch((result) => {
           this.errors = result.response.data
+          this.status = result.response.status
           this.loading = false
         })
     },

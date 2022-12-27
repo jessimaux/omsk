@@ -6,7 +6,8 @@
 
     <section class="section">
       <form v-if="!guideSpecificationsStore.loading" @submit.prevent="onSubmit">
-        <validation-errors v-if="guideSpecificationsStore.errors" :validationErrors="guideSpecificationsStore.errors"></validation-errors>
+        <validation-errors v-if="guideSpecificationsStore.errors"
+          :validationErrors="guideSpecificationsStore.errors"></validation-errors>
         <div class="row">
           <div class="col-lg-6">
             <div class="card">
@@ -19,7 +20,8 @@
 
                 <div class="col-12">
                   <label class="form-label" name="description">Описание спецификации</label>
-                  <textarea class="form-control" style="resize:none" rows="5" v-model="specification.description" required />
+                  <textarea class="form-control" style="resize:none" rows="5" v-model="specification.description"
+                    required />
                 </div>
               </div>
             </div>
@@ -71,6 +73,9 @@ export default {
   created() {
     const id = this.$route.params.id
     this.guideSpecificationsStore.getSpecification(id)
+      .then(() => {
+        if (this.guideSpecificationsStore.status === 404) this.$router.push({ name: '404' })
+      })
   },
 
 }

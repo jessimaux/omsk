@@ -224,7 +224,7 @@ router.beforeEach((to, from, next) => {
     } else next('login')
   } 
   else if (userIsAuthenticated && (to.name == 'login' || to.name == 'register')) {
-    next('/projects')
+    next('/')
   } 
   else next()
 })
