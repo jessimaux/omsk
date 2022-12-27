@@ -3,6 +3,7 @@ from django.shortcuts import render
 from rest_framework import viewsets, views, status, filters, generics
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.permissions import IsAuthenticated
 
 from .models import Project, File
 from .serializers import ProjectSerializer, FileSerializer
@@ -13,6 +14,7 @@ class ProjectsViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
     pagination_class = PageNumberPagination
+    permission_classes = [IsAuthenticated]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['name']
     ordering_fields = '__all__'
@@ -21,6 +23,7 @@ class ProjectsViewSet(viewsets.ModelViewSet):
     
     
 class ProjectRegistrationExportView(views.APIView):
+    permission_classes = [IsAuthenticated]
     my_tags = ['Project']
 
     def get(self, request, *args, **kwargs):
@@ -35,6 +38,7 @@ class ProjectRegistrationExportView(views.APIView):
     
     
 class ProjectFileUploadAPIView(views.APIView):
+    permission_classes = [IsAuthenticated]
     my_tags = ['ProjectFiles']
     
     def post(self, request, *args, **kwargs):
@@ -54,5 +58,6 @@ class ProjectFileUploadAPIView(views.APIView):
 class ProjectFileDeleteAPIView(generics.DestroyAPIView):
     queryset = File.objects.all()
     serializer_class = FileSerializer
+    permission_classes = [IsAuthenticated]
     my_tags = ['ProjectFiles']
     

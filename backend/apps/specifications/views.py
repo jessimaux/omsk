@@ -5,6 +5,7 @@ from rest_framework import viewsets, views, mixins, status, filters, generics
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
 
 from .models import Specification, Request, Offer
 from .serializers import SpecificationSerializer, RequestSerializer, OfferSerializer, SpecificationsListSerializer
@@ -17,12 +18,14 @@ class SpecificationsViewSet(mixins.RetrieveModelMixin,
                             viewsets.GenericViewSet):
     queryset = Specification.objects.all()
     serializer_class = SpecificationSerializer
+    permission_classes = [IsAuthenticated]
     my_tags = ['Specification']
     
 
 class GuideSpecificationsSelectAPIView(generics.ListAPIView):
     queryset = Specification.objects.filter(guide=True)
     serializer_class = SpecificationSerializer
+    permission_classes = [IsAuthenticated]
     my_tags = ['SpecificationGuide']
     
     
@@ -30,6 +33,7 @@ class GuideSpecificationsViewSet(viewsets.ModelViewSet):
     queryset = Specification.objects.filter(guide=True)
     serializer_class = SpecificationSerializer
     pagination_class = PageNumberPagination
+    permission_classes = [IsAuthenticated]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['name']
     ordering_fields = '__all__'
@@ -85,10 +89,12 @@ class SpecificationExportView(views.APIView):
 class RequestViewSet(viewsets.ModelViewSet):
     queryset = Request.objects.all()
     serializer_class = RequestSerializer
+    permission_classes = [IsAuthenticated]
     my_tags = ['Request']
 
 
 class OfferViewSet(viewsets.ModelViewSet):
     queryset = Offer.objects.all()
     serializer_class = OfferSerializer
+    permission_classes = [IsAuthenticated]
     my_tags = ['Offer']

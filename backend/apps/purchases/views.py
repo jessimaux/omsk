@@ -1,5 +1,6 @@
 from rest_framework import viewsets, views, mixins, status
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from django.http import HttpResponse
 
 from .models import Purchase
@@ -12,10 +13,12 @@ class PurchaseViewSet(mixins.RetrieveModelMixin,
                       viewsets.GenericViewSet):
   queryset = Purchase.objects.all()
   serializer_class = PurchaseSerializer
+  permission_classes = [IsAuthenticated]
   my_tags = ['Purchase']
   
   
 class PurchaseExportView(views.APIView):
+    permission_classes = [IsAuthenticated]
     my_tags = ['Purchase']
 
     def get(self, request, *args, **kwargs):

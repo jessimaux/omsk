@@ -5,6 +5,7 @@ from rest_framework import viewsets, views, generics, status, mixins
 from rest_framework.response import Response
 from rest_framework import filters
 from rest_framework.pagination import PageNumberPagination, LimitOffsetPagination
+from rest_framework.permissions import IsAuthenticated
 from tablib import Dataset
 
 from .models import ProductGuide, PartnerGuide, ProviderGuide
@@ -18,6 +19,7 @@ class ProductSearchAPIView(generics.ListAPIView):
     queryset = ProductGuide.objects.all()
     serializer_class = ProductGuideSerializer
     pagination_class = LimitOffsetPagination
+    permission_classes = [IsAuthenticated]
     filter_backends = [filters.SearchFilter]
     search_fields = ['article', 'name']
     my_tags = ['ProductsGuide']
@@ -27,6 +29,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     queryset = ProductGuide.objects.all()
     serializer_class = ProductGuideSerializer
     pagination_class = PageNumberPagination
+    permission_classes = [IsAuthenticated]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['article', 'name']
     ordering_fields = '__all__'
@@ -35,6 +38,7 @@ class ProductViewSet(viewsets.ModelViewSet):
 
 
 class ProductExportView(views.APIView):
+    permission_classes = [IsAuthenticated]
     my_tags = ['ProductsGuide']
 
     def get(self, request):
@@ -47,9 +51,10 @@ class ProductExportView(views.APIView):
 
 
 class ProductImportView(generics.CreateAPIView):
-    my_tags = ['ProductsGuide']
+    permission_classes = [IsAuthenticated]
     serializer_class = ProductGuideImportSerializer
-
+    my_tags = ['ProductsGuide']
+    
     def create(self, request):
         serializer_class = self.get_serializer(data=request.data)
         if 'file' not in request.FILES or not serializer_class.is_valid():
@@ -79,6 +84,7 @@ class ProductImportView(generics.CreateAPIView):
 class PartnerSelectAPIView(generics.ListAPIView):
     queryset = PartnerGuide.objects.all()
     serializer_class = PartnerGuideSerializer
+    permission_classes = [IsAuthenticated]
     my_tags = ['PartnersGuide']
     
     
@@ -86,6 +92,7 @@ class PartnerViewSet(viewsets.ModelViewSet):
     queryset = PartnerGuide.objects.all()
     serializer_class = PartnerGuideSerializer
     pagination_class = PageNumberPagination
+    permission_classes = [IsAuthenticated]
     filter_backends = [filters.OrderingFilter, filters.SearchFilter]
     search_fields = ['name']
     ordering_fields = '__all__'
@@ -94,6 +101,7 @@ class PartnerViewSet(viewsets.ModelViewSet):
 
 
 class PartnerExportView(views.APIView):
+    permission_classes = [IsAuthenticated]
     my_tags = ['PartnersGuide']
 
     def get(self, request):
@@ -104,8 +112,9 @@ class PartnerExportView(views.APIView):
 
 
 class PartnerImportView(generics.CreateAPIView):
-    my_tags = ['PartnersGuide']
     serializer_class = PartnerGuideImportSerializer
+    permission_classes = [IsAuthenticated]
+    my_tags = ['PartnersGuide']
 
     def create(self, request):
         serializer_class = self.get_serializer(data=request.data)
@@ -125,6 +134,7 @@ class PartnerImportView(generics.CreateAPIView):
 class ProviderSelectAPIView(generics.ListAPIView):
     queryset = ProviderGuide.objects.all()
     serializer_class = ProviderGuideSerializer
+    permission_classes = [IsAuthenticated]
     my_tags = ['ProvidersGuide']
     
     
@@ -132,6 +142,7 @@ class ProviderViewSet(viewsets.ModelViewSet):
     queryset = ProviderGuide.objects.all()
     serializer_class = ProviderGuideSerializer
     pagination_class = PageNumberPagination
+    permission_classes = [IsAuthenticated]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['name']
     ordering_fields = '__all__'
@@ -140,6 +151,7 @@ class ProviderViewSet(viewsets.ModelViewSet):
 
 
 class ProviderExportView(views.APIView):
+    permission_classes = [IsAuthenticated]
     my_tags = ['ProvidersGuide']
 
     def get(self, request):
@@ -150,8 +162,10 @@ class ProviderExportView(views.APIView):
 
 
 class ProviderImportView(generics.CreateAPIView):
-    my_tags = ['ProvidersGuide']
     serializer_class = ProviderGuideImportSerializer
+    permission_classes = [IsAuthenticated]
+    my_tags = ['ProvidersGuide']
+    
 
     def create(self, request):
         serializer_class = self.get_serializer(data=request.data)
