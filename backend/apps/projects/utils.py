@@ -1,6 +1,8 @@
 from tempfile import NamedTemporaryFile
+from copy import copy
 
-from openpyxl import Workbook
+import openpyxl
+from openpyxl.styles.borders import Border, Side
 
 def get_specification_items(specification):
   total = 0
@@ -16,11 +18,23 @@ def get_total_price(specification):
       items += offer.name + ' ' + str(offer.count) + '\n'
   return items
 
+def columns_best_fit(ws):
+        """
+        Make all columns best fit
+        """
+        column_letters = tuple(openpyxl.utils.get_column_letter(col_number + 1) for col_number in range(ws.max_column))
+        for column_letter in column_letters:
+            ws.column_dimensions[column_letter].auto_size = True
+
 def excel_report(instance):
-    wb = Workbook()
+    wb = openpyxl.Workbook()
     headers = ["#", "Дата", "Ответственный за проект", "Наименование субъекта РФ", "Населенный пункт", "Заказчик", "Дилер", "Субдилер",
                "Наименование продукта, количество", "Сумма поставки", "Сумма аукциона", "Планируемая дата проведения аукциона",
                "Ссылка на проект на сайте zakupki.gov.ru", "Комментарий", "Номер в базе аукционов"]
+    top=Side(border_style='thin')
+    bottom=Side(border_style='thin')
+    left=Side(border_style='thin')
+    right=Side(border_style='thin')
     
     with NamedTemporaryFile() as tmp:
         ws = wb.active
@@ -28,6 +42,10 @@ def excel_report(instance):
         # header
         for col, header in enumerate(headers):
             ws.cell(row=1, column=col+1, value=header)
+        
+        columns_best_fit(ws)
+        ws.row_dimensions[1].height = 100
+        ws.row_dimensions[2].height = 100
         
         # body
         ws.cell(row=2, column=1, value=instance.id)
@@ -46,6 +64,14 @@ def excel_report(instance):
         ws.cell(row=2, column=14, value="")
         ws.cell(row=2, column=15, value="")
         ws.cell(row=2, column=16, value="")
+        
+        for rows in ws.iter_rows(min_row=1, min_col=1):
+          for cell in rows:
+            alignment = copy(cell.alignment)
+            alignment.wrapText=True
+            cell.alignment = alignment
+            border = Border(top=top,bottom=bottom, left=left, right=right)
+            cell.border = border
            
         # save as stream
         wb.save(tmp.name)

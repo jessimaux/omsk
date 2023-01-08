@@ -6,7 +6,7 @@
           <h5 class="card-title">Общее</h5>
           <div class="col-12">
             <label class="form-label" name="str_by_order">№ по приказу</label>
-            <input type="text" class="form-control" v-model="product.str_by_order" required>
+            <input type="text" class="form-control" v-model="product.str_by_order">
           </div>
 
           <div class="col-12">
@@ -40,12 +40,12 @@
 
           <div class="col-12">
             <label class="form-label" name="nds">НДС</label>
-            <input type="number" min="0" class="form-control" v-model="product.nds" required>
+            <input type="number" min="0" class="form-control" v-model="product.nds">
           </div>
 
           <div class="col-12">
             <label class="form-label" name="available">Наличие</label>
-            <input type="number" min="0" class="form-control" v-model="product.available" required>
+            <input type="number" min="0" class="form-control" v-model="product.available">
           </div>
         </div>
       </div>
@@ -57,32 +57,32 @@
           <h5 class="card-title">Описание</h5>
           <div class="col-12">
             <label class="form-label" name="link">Ссылка</label>
-            <input type="text" class="form-control" v-model="product.link" required>
+            <input type="text" class="form-control" v-model="product.link">
           </div>
 
           <div class="col-12">
             <label class="form-label" name="country">Страна происхождения</label>
-            <input type="text" class="form-control" v-model="product.country" required>
+            <input type="text" class="form-control" v-model="product.country">
           </div>
 
           <div class="col-12">
             <label class="form-label" name="description">Описание</label>
-            <textarea class="form-control" style="resize:none" rows="5" v-model="product.description" required></textarea>
+            <textarea class="form-control" style="resize:none" rows="5" v-model="product.description"></textarea>
           </div>
 
           <div class="col-12">
             <label class="form-label" name="description_tech">ТЗ</label>
-            <textarea class="form-control" style="resize:none" rows="5" v-model="product.description_tech" required></textarea>
+            <textarea class="form-control" style="resize:none" rows="5" v-model="product.description_tech"></textarea>
           </div>
 
           <div class="col-12">
             <label class="form-label" name="description_add">Заявка</label>
-            <textarea class="form-control" style="resize:none" rows="5" v-model="product.description_add" required></textarea>
+            <textarea class="form-control" style="resize:none" rows="5" v-model="product.description_add"></textarea>
           </div>
 
           <div class="col-12">
             <label class="form-label" name="recommendation">Рекомендации</label>
-            <textarea class="form-control" style="resize:none" rows="5" v-model="product.recommendation" required></textarea>
+            <textarea class="form-control" style="resize:none" rows="5" v-model="product.recommendation"></textarea>
           </div>
         </div>
       </div>

@@ -38,19 +38,21 @@ def excel_report(instance, params):
         
         # body
         row = 3
+        row_request = 3
         for no, request in enumerate(instance.request_set.all()):
+            row_request = row
             ws.cell(row=row, column=1, value=no+1)
             ws.cell(row=row, column=2, value=request.name)
             ws.cell(row=row, column=3, value=request.amount)
             ws.cell(row=row, column=4, value=request.price)
-            ws.cell(row=row, column=5, value=request.amount*request.price)
+            ws.cell(row=row, column=5, value=f'=C{row}*D{row}')
             
             for offer in request.offer_set.all():
                 ws.cell(row=row, column=6, value=offer.article)
                 ws.cell(row=row, column=7, value=offer.name)
                 ws.cell(row=row, column=8, value=offer.count)
                 ws.cell(row=row, column=9, value=offer.price)
-                ws.cell(row=row, column=10, value=offer.price*offer.count)
+                ws.cell(row=row, column=10, value=f'=C{row_request}*H{row}*I{row}')
                 
                 col = 11
                 if offer.product:
@@ -72,6 +74,11 @@ def excel_report(instance, params):
                     if(params['description_add']=='true'): 
                         ws.cell(row=row, column=col, value=offer.product.description_add)
                 row += 1
+         
+        ws[f'D{row}'] = 'Итого:'
+        ws[f'E{row}'] = f'=SUM(E3:E{row-1})'
+        ws[f'I{row}'] = 'Итого:'
+        ws[f'J{row}'] = f'=SUM(J3:J{row-1})'
                     
         # save as stream
         wb.save(tmp.name)

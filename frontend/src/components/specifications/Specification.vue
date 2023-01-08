@@ -36,11 +36,11 @@
                   class="bi bi-dash-square"></i>
               </td>
               <td :rowspan="row.offers.length">{{ index }}</td>
-              <td :rowspan="row.offers.length"><input type="text" v-model="row.str_by_order" required /></td>
-              <td :rowspan="row.offers.length"><input type="text" v-model="row.name" required /></td>
+              <td :rowspan="row.offers.length"><input type="text" v-model="row.str_by_order" /></td>
+              <td :rowspan="row.offers.length"><input type="text" v-model="row.name" /></td>
               <td :rowspan="row.offers.length"><input type="text" v-model="row.tx" /></td>
-              <td :rowspan="row.offers.length"><input type="number" min="0" v-model="row.amount" required /></td>
-              <td :rowspan="row.offers.length"><input type="number" min="0" step="any" v-model="row.price" required /></td>
+              <td :rowspan="row.offers.length"><input type="number" min="0" v-model="row.amount" /></td>
+              <td :rowspan="row.offers.length"><input type="number" min="0" step="any" v-model="row.price" /></td>
               <td :rowspan="row.offers.length">{{ row.price * row.amount }}</td>
               <td>
                 <product-search-field :row="row.offers[0]" v-model="row.offers[0].article"></product-search-field>
@@ -68,7 +68,7 @@
               </td>
               <td><input type="number" min="0" v-model="subrow.count" /></td>
               <td><input type="number" min="0" step="any" v-model="subrow.price" /></td>
-              <td>{{ subrow.count ? subrow.count * subrow.price : '' }}</td>
+              <td>{{ subrow.count ? row.amount * subrow.count * subrow.price : '' }}</td>
               <td>{{ subrow.product ? subrow.product.available : '' }}</td>
               <td>
                 <i @click="addSubRow(row.offers)" class="bi bi-plus-square"></i>

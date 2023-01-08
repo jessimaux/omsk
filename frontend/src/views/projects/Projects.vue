@@ -72,21 +72,21 @@
                       <td><input type="checkbox" class="form-check-input" v-model="item.contract" @change="onChangeContractUpdate(item.id, item.contract)"></td>
                       <td>
                         <div class="d-flex flex-row">
-                          <router-link class="btn btn-primary me-2"
+                          <router-link class="btn btn-primary me-2" title="Форма закупок"
                             :to="{ name: 'project-purchase', params: { id: item.id } }">
                             <i class="bi bi-bag"></i>
                           </router-link>
 
-                          <button type="button" class="btn btn-primary me-2"
+                          <button type="button" class="btn btn-primary me-2" title="Скачать форму регистрации"
                             @click="onClickExportRegistrationForm(item.id)"><i
                               class="bi bi-layout-text-window-reverse"></i></button>
 
-                          <router-link class="btn btn-primary me-2"
+                          <router-link class="btn btn-primary me-2" title="Редактировать проект"
                             :to="{ name: 'project-edit', params: { id: item.id } }">
                             <i class="bi bi-pencil-square"></i>
                           </router-link>
 
-                          <button type="button" class="btn btn-primary"><i class="bi bi-x-square"
+                          <button type="button" class="btn btn-primary" title="Удалить"><i class="bi bi-x-square"
                               @click="onClickProjectDelete(item.id)"></i></button>
                         </div>
                       </td>

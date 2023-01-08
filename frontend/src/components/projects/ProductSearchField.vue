@@ -48,7 +48,7 @@ export default {
       this.row.product_id = this.guideProductsStore.data.results[index].id
       this.row.article = this.guideProductsStore.data.results[index].article
       this.row.name = this.guideProductsStore.data.results[index].name
-      this.row.price = this.guideProductsStore.data.results[index].price_buy
+      this.row.price = this.guideProductsStore.data.results[index].price_rrc
       this.row.product = this.guideProductsStore.data.results[index]
     }
   }

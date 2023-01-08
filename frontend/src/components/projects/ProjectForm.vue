@@ -30,7 +30,7 @@
 
           <div class="col-12">
             <label class="form-label" nam="reg_no">Номер регистрации проекта</label>
-            <input type="text" class="form-control" v-model="project.reg_no" required />
+            <input type="text" class="form-control" v-model="project.reg_no" />
           </div>
 
           <div class="col-12">
@@ -56,27 +56,27 @@
           <h5 class="card-title">О заказчике</h5>
           <div class="col-12">
             <label class="form-label" name="company_name">Наименование организации</label>
-            <input type="text" class="form-control" v-model="project.company_name" required />
+            <input type="text" class="form-control" v-model="project.company_name" />
           </div>
 
           <div class="col-12">
             <label class="form-label" name="company_inn">ИНН организации</label>
-            <input type="text" class="form-control" v-model="project.company_inn" required />
+            <input type="text" class="form-control" v-model="project.company_inn" />
           </div>
 
           <div class="col-12">
             <label class="form-label" name="company_city">Город (организации)</label>
-            <input type="text" class="form-control" v-model="project.company_city" required />
+            <input type="text" class="form-control" v-model="project.company_city" />
           </div>
 
           <div class="col-12">
             <label class="form-label" name="company_region">Область (организации)</label>
-            <input type="text" class="form-control" v-model="project.company_region" required />
+            <input type="text" class="form-control" v-model="project.company_region" />
           </div>
 
           <div class="col-12">
             <label class="form-label" name="company_children">Количество детей в классе</label>
-            <input type="number" min="0" class="form-control" v-model="project.company_children" required />
+            <input type="number" min="0" class="form-control" v-model="project.company_children" />
           </div>
         </div>
       </div>

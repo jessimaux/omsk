@@ -8,13 +8,13 @@ from apps.guide.models import PartnerGuide
 class Project(models.Model):
     name = models.CharField(max_length=255)
     status = models.CharField(max_length=255)
-    company_name = models.CharField(max_length=255)
-    company_inn = models.CharField(max_length=255)
-    company_city = models.CharField(max_length=255)
-    company_region = models.CharField(max_length=255)
+    company_name = models.CharField(max_length=255, null=True, blank=True)
+    company_inn = models.CharField(max_length=255, null=True, blank=True)
+    company_city = models.CharField(max_length=255, null=True, blank=True)
+    company_region = models.CharField(max_length=255, null=True, blank=True)
     company_children = models.PositiveIntegerField(default=0)
     partner = models.ForeignKey(PartnerGuide, on_delete=models.SET_NULL, null=True)
-    reg_no = models.CharField(max_length=255)
+    reg_no = models.CharField(max_length=255, null=True, blank=True)
     nds = models.BooleanField(default=False)
 
     # general section

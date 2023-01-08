@@ -10,8 +10,8 @@ class Specification(models.Model):
 
 class Request(models.Model):
     specification = models.ForeignKey(Specification, on_delete=models.CASCADE)
-    str_by_order = models.CharField(max_length=255)
-    name = models.CharField(max_length=255)
+    str_by_order = models.CharField(max_length=255, null=True, blank=True)
+    name = models.CharField(max_length=255, null=True, blank=True)
     tx = models.CharField(max_length=255, blank=True, null=True)
     amount = models.PositiveIntegerField(default=0)
     price = models.FloatField(default=0)

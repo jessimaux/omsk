@@ -20,7 +20,7 @@ class ContactPartner(models.Model):
     fio = models.CharField(max_length=255)
     role = models.CharField(max_length=255)
     phone = models.CharField(max_length=255)
-    email = models.EmailField(max_length=255)
+    email = models.CharField(max_length=255)
     
 
 class ProviderGuide(models.Model):
@@ -45,11 +45,11 @@ class ContactProvider(models.Model):
     fio = models.CharField(max_length=255)
     role = models.CharField(max_length=255)
     phone = models.CharField(max_length=255)
-    email = models.EmailField(max_length=255)
+    email = models.CharField(max_length=255)
     
 
 class ProductGuide(models.Model):
-    str_by_order = models.CharField(max_length=255)
+    str_by_order = models.CharField(max_length=255, null=True, blank=True)
     article = models.CharField(max_length=255)
     name = models.CharField(max_length=1023)
     price_rrc = models.FloatField()
@@ -61,8 +61,8 @@ class ProductGuide(models.Model):
     description_add = models.TextField(blank=True, null=True)
     recommendation = models.TextField(blank=True, null=True)
     provider = models.ForeignKey(ProviderGuide, on_delete=models.SET_NULL, null=True)
-    nds = models.PositiveIntegerField()
-    available = models.PositiveIntegerField()
+    nds = models.PositiveIntegerField(default=0)
+    available = models.PositiveIntegerField(default=0)
 
     # log section
     created_by = models.ForeignKey(User, related_name="product_created_by", on_delete=models.SET_NULL, null=True)
