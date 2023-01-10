@@ -41,7 +41,7 @@
           <div class="col-12">
             <label class="col-form-label" name="nds">НДС</label>
             <div class="form-check">
-              <input type="checkbox" class="form-check-input" v-model="project.nds" required />
+              <input type="checkbox" class="form-check-input" v-model="project.nds" />
             </div>
           </div>
 
