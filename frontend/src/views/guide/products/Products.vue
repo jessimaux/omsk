@@ -105,8 +105,9 @@
                     </tr>
                   </tbody>
                 </table>
+                <pagination v-if="guideProductsStore.data.count > perPage" :currentPage="currentPage" :perPage="perPage"
+                :total="guideProductsStore.data.count" @pageChanged="onPageChanged"></pagination>
               </div>
-
             </div>
           </div>
         </div>
@@ -119,12 +120,14 @@
 import { useGuideProductsStore } from '@/stores/guideProducts.js'
 import ValidationErrors from '@/components/ValidationErrors.vue'
 import SuccessMessages from '@/components/SuccessMessages.vue'
+import Pagination from '@/components/Pagination.vue'
 
 export default {
   name: 'Products',
   components:{
     ValidationErrors,
-    SuccessMessages
+    SuccessMessages,
+    Pagination
   },
   setup() {
     const guideProductsStore = useGuideProductsStore()
@@ -132,7 +135,6 @@ export default {
   },
   data() {
     return {
-      file: null,
       search: this.$route.query.search ? this.$route.query.search : '',
       ordering: this.$route.query.ordering ? this.$route.query.ordering : 'id',
       currentPage: Number(this.$route.query.page) ? Number(this.$route.query.page) : 1,

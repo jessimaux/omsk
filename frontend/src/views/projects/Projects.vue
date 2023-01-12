@@ -67,9 +67,11 @@
                       <td>{{ totalBill(item.purchase.purchases) }}</td>
                       <td>{{ deliveryBill(item.purchase.purchases) }}</td>
                       <td>{{ getProducts(item.purchase.purchases) }}</td>
-                      <td><input type="date" class="form-control" v-model="item.delivery_date" @change="onChangeDeliveryDateUpdate(item.id, item.delivery_date)"></td>
+                      <td><input type="date" class="form-control" v-model="item.delivery_date"
+                          @change="onChangeDeliveryDateUpdate(item.id, item.delivery_date)"></td>
                       <td>{{ item.commentary }}</td>
-                      <td><input type="checkbox" class="form-check-input" v-model="item.contract" @change="onChangeContractUpdate(item.id, item.contract)"></td>
+                      <td><input type="checkbox" class="form-check-input" v-model="item.contract"
+                          @change="onChangeContractUpdate(item.id, item.contract)"></td>
                       <td>
                         <div class="d-flex flex-row">
                           <router-link class="btn btn-primary me-2" title="Форма закупок"
@@ -93,8 +95,9 @@
                     </tr>
                   </tbody>
                 </table>
+                <pagination v-if="projectsStore.data.count > perPage" :currentPage="currentPage" :perPage="perPage"
+                  :total="projectsStore.data.count" @pageChanged="onPageChanged"></pagination>
               </div>
-
             </div>
           </div>
         </div>
@@ -105,8 +108,13 @@
 
 <script>
 import { useProjectsStore } from '@/stores/projects.js'
+import Pagination from '@/components/Pagination.vue'
+
 export default {
   name: 'Projects',
+  components: {
+    Pagination
+  },
   setup() {
     const projectsStore = useProjectsStore()
     return { projectsStore }
@@ -125,7 +133,7 @@ export default {
       this.projectsStore.getProjects(1, this.ordering, this.search)
     },
 
-    resetSearch(){
+    resetSearch() {
       this.search = ''
       this.$router.push({ path: this.$route.fullPath, query: { page: 1, ordering: this.ordering, search: this.search } })
       this.projectsStore.getProjects(1, this.ordering, this.search)
@@ -143,32 +151,32 @@ export default {
       this.projectsStore.getProjects(page, this.ordering, this.search)
     },
 
-    totalBill(purchases){
+    totalBill(purchases) {
       let total = 0
-      purchases.forEach(item => total+=item.offer.price)
+      purchases.forEach(item => total += item.offer.price)
       return total
     },
 
-    deliveryBill(purchases){
+    deliveryBill(purchases) {
       let total = 0
       purchases.forEach(item => {
-        if(item.status === 'Отгружен') total+=item.offer.price
+        if (item.status === 'Отгружен') total += item.offer.price
       })
       return total
     },
 
-    getProducts(purchases){
+    getProducts(purchases) {
       let products = ''
       let max_products = purchases.length > 3 ? 3 : purchases.length
-      for(let i = 0; i < max_products; i++) products += purchases[i].offer.request.name + ';'
+      for (let i = 0; i < max_products; i++) products += purchases[i].offer.request.name + ';'
       return products
     },
 
-    onChangeDeliveryDateUpdate(id, value){
+    onChangeDeliveryDateUpdate(id, value) {
       this.projectsStore.patchProject(id, { delivery_date: value })
     },
 
-    onChangeContractUpdate(id, value){
+    onChangeContractUpdate(id, value) {
       this.projectsStore.patchProject(id, { contract: value })
     },
 

@@ -46,6 +46,7 @@ export default {
         description_add: this.guideProductsStore.data.description_add,
         recommendation: this.guideProductsStore.data.recommendation,
         provider: this.guideProductsStore.data.provider,
+        provider_id: this.guideProductsStore.data.provider_id,
         nds: this.guideProductsStore.data.nds,
         available: this.guideProductsStore.data.available
       }

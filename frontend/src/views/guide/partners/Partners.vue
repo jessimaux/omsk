@@ -86,11 +86,9 @@
                     </tr>
                   </tbody>
                 </table>
-              </div>
-
-              <pagination v-if="guidePartnersStore.data.count > perPage" :currentPage="currentPage" :perPage="perPage"
+                <pagination v-if="guidePartnersStore.data.count > perPage" :currentPage="currentPage" :perPage="perPage"
                 :total="guidePartnersStore.data.count" @pageChanged="onPageChanged"></pagination>
-
+              </div>
             </div>
           </div>
         </div>
@@ -118,7 +116,6 @@ export default {
   },
   data() {
     return {
-      file: null,
       search: this.$route.query.search ? this.$route.query.search : '',
       ordering: this.$route.query.ordering ? this.$route.query.ordering : 'id',
       currentPage: Number(this.$route.query.page) ? Number(this.$route.query.page) : 1,

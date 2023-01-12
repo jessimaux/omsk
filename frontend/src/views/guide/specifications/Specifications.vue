@@ -61,8 +61,10 @@
                     </tr>
                   </tbody>
                 </table>
+                <pagination v-if="guideSpecificationsStore.data.count > perPage" :currentPage="currentPage"
+                  :perPage="perPage" :total="guideSpecificationsStore.data.count" @pageChanged="onPageChanged">
+                </pagination>
               </div>
-
             </div>
           </div>
         </div>
@@ -73,9 +75,13 @@
 
 <script>
 import { useGuideSpecificationsStore } from '@/stores/guideSpecifications.js'
+import Pagination from '@/components/Pagination.vue'
 
 export default {
   name: 'Specifications',
+  components: {
+    Pagination
+  },
   setup() {
     const guideSpecificationsStore = useGuideSpecificationsStore()
     return { guideSpecificationsStore }

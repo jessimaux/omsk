@@ -18,7 +18,8 @@ class ContactProviderSerializer(serializers.ModelSerializer):
         
 
 class ProductGuideSerializer(serializers.ModelSerializer):
-    provider = serializers.StringRelatedField()
+    provider = serializers.StringRelatedField(read_only=True)
+    provider_id = serializers.IntegerField()
     
     # logs
     created_by = serializers.HiddenField(default=serializers.CreateOnlyDefault(serializers.CurrentUserDefault()))
