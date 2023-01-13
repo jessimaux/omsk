@@ -153,7 +153,7 @@ export default {
 
     totalBill(purchases) {
       let total = 0
-      purchases.forEach(item => total += item.offer.price)
+      purchases.forEach(item => total += item.offer.price * item.offer.count * item.offer.request.amount)
       return total
     },
 
