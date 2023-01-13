@@ -129,7 +129,7 @@ export default {
       let total = 0
       this.specification.requests.forEach(request => {
         request.offers.forEach(offer => {
-          if (offer.price && offer.count) total += Number(offer.price*offer.count)
+          if (offer.price && offer.count) total += Number(request.amount*offer.price*offer.count)
         })
       })
       return total
