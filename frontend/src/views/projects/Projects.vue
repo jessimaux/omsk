@@ -66,7 +66,7 @@
                       <td>{{ item.company_name }}</td>
                       <td>{{ totalBill(item.purchase.purchases) }}</td>
                       <td>{{ deliveryBill(item.purchase.purchases) }}</td>
-                      <td>{{ getProducts(item.purchase.purchases) }}</td>
+                      <td :title="getProducts(item.purchase.purchases)">{{ getProducts(item.purchase.purchases) }}</td>
                       <td><input type="date" class="form-control" v-model="item.delivery_date"
                           @change="onChangeDeliveryDateUpdate(item.id, item.delivery_date)"></td>
                       <td>{{ item.commentary }}</td>
@@ -168,7 +168,7 @@ export default {
     getProducts(purchases) {
       let products = ''
       let max_products = purchases.length > 3 ? 3 : purchases.length
-      for (let i = 0; i < max_products; i++) products += purchases[i].offer.request.name + ';'
+      for (let i = 0; i < max_products; i++) products += purchases[i].offer.name + ';'
       return products
     },
 
