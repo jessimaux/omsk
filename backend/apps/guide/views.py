@@ -12,10 +12,13 @@ from .models import ProductGuide, PartnerGuide, ProviderGuide
 from .serializers import ProductGuideSerializer, PartnerGuideSerializer, ProviderGuideSerializer, \
     ProductGuideImportSerializer, PartnerGuideImportSerializer, ProviderGuideImportSerializer
 from .resources import ProductGuideResource, PartnerGuideResource, ProviderGuideResource
-from .utils import import_partners, export_partners, export_providers, import_providers
+from .utils import import_partners, export_partners, export_providers, import_providers, check_xlsx_file_import
 
 
 class ProductSearchAPIView(generics.ListAPIView):
+    """
+    View for get list of products for select product in specification
+    """
     queryset = ProductGuide.objects.all()
     serializer_class = ProductGuideSerializer
     pagination_class = LimitOffsetPagination
@@ -57,21 +60,16 @@ class ProductImportView(generics.CreateAPIView):
     
     def create(self, request):
         serializer_class = self.get_serializer(data=request.data)
-        if 'file' not in request.FILES or not serializer_class.is_valid():
-            return Response({'non_field_errors': 'Файл не выбран.'}, status=status.HTTP_400_BAD_REQUEST)
-        elif request.FILES['file'].content_type not in ('application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'):
-            return Response({'non_field_errors': 'Выбран некорректный формат файла.'}, status=status.HTTP_400_BAD_REQUEST)
-        else:
+        if check_xlsx_file_import(request, serializer_class):
             try:
                 file_uploaded = request.FILES.get('file')
                 product_resource = ProductGuideResource()
                 dataset = Dataset()
                 dataset.load(file_uploaded.read())
 
-                # Test the data import
+                # Test the data import, if it's ok - finally import it
                 result = product_resource.import_data(dataset, dry_run=True)
                 if not result.has_errors():
-                    # Actually import now
                     product_resource.import_data(dataset, dry_run=False)
                 else:
                     return Response({'non_field_errors': result}, status=status.HTTP_400_BAD_REQUEST)
@@ -82,6 +80,9 @@ class ProductImportView(generics.CreateAPIView):
 
 
 class PartnerSelectAPIView(generics.ListAPIView):
+    """ 
+    View for get list of partner for input-select 
+    """
     queryset = PartnerGuide.objects.all()
     serializer_class = PartnerGuideSerializer
     permission_classes = [IsAuthenticated]
@@ -118,11 +119,7 @@ class PartnerImportView(generics.CreateAPIView):
 
     def create(self, request):
         serializer_class = self.get_serializer(data=request.data)
-        if 'file' not in request.FILES or not serializer_class.is_valid():
-            return Response({'non_field_errors': 'Файл не выбран.'}, status=status.HTTP_400_BAD_REQUEST)
-        elif request.FILES['file'].content_type not in ('application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'):
-            return Response({'non_field_errors': 'Выбран некорректный формат файла.'}, status=status.HTTP_400_BAD_REQUEST)
-        else:
+        if check_xlsx_file_import(request, serializer_class):
             file_uploaded = request.FILES.get('file')
             try:
                 import_partners(file_uploaded.file)
@@ -132,6 +129,9 @@ class PartnerImportView(generics.CreateAPIView):
     
 
 class ProviderSelectAPIView(generics.ListAPIView):
+    """ 
+    View for get list of provider for input-select 
+    """
     queryset = ProviderGuide.objects.all()
     serializer_class = ProviderGuideSerializer
     permission_classes = [IsAuthenticated]
@@ -169,11 +169,7 @@ class ProviderImportView(generics.CreateAPIView):
 
     def create(self, request):
         serializer_class = self.get_serializer(data=request.data)
-        if 'file' not in request.FILES or not serializer_class.is_valid():
-            return Response({'non_field_errors': 'Файл не выбран.'}, status=status.HTTP_400_BAD_REQUEST)
-        elif request.FILES['file'].content_type not in ('application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'):
-            return Response({'non_field_errors': 'Выбран некорректный формат файла.'}, status=status.HTTP_400_BAD_REQUEST)
-        else:
+        if check_xlsx_file_import(request, serializer_class):
             file_uploaded = request.FILES.get('file')
             try:
                 import_providers(file_uploaded.file)

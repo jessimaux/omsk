@@ -2,7 +2,6 @@ from django.contrib.auth.models import User
 from django.db import models
 
 from apps.guide.models import PartnerGuide
-# TODO: add core app, add files and images
 
 
 class Project(models.Model):

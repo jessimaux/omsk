@@ -1,13 +1,28 @@
-from django.db import transaction
 from tempfile import NamedTemporaryFile
 
+from django.db import transaction
+from rest_framework import status
+from rest_framework.response import Response
 from openpyxl import Workbook, load_workbook
 
 from .models import PartnerGuide, ProviderGuide, ContactPartner, ContactProvider
 
-### PARTNER ###
+
+def check_xlsx_file_import(request, serializer_class):
+    """
+    Check file on exists and correct format
+    """
+    if 'file' not in request.FILES or not serializer_class.is_valid():
+        return Response({'non_field_errors': 'Файл не выбран.'}, status=status.HTTP_400_BAD_REQUEST)
+    elif request.FILES['file'].content_type not in ('application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'):
+        return Response({'non_field_errors': 'Выбран некорректный формат файла.'}, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return True
 
 def contact_partner_handle(row, partner_id):
+    """
+    Method to handle contact row from xlsx import
+    """
     contact_fields = ['partner_id', 'fio', 'role', 'phone', 'email']
     
     if row[0]:
@@ -24,18 +39,17 @@ def import_partners(upload_file):
     
     partners_fields = ['name', 'inn', 'region', 'discount']
     
-    # if something wrong transacation will rollback
+    # if something went wrong transacation will rollback
     with transaction.atomic():
         partner_id = None
         for row in ws.iter_rows(min_row=2, values_only=True):
-            # check for empty partner row
+            # check row for empty partner fields: if flag - handle partner with contact, else handle only contact
             flag_empty = False
             for attr in row[0:4]:
                 if attr:
                     flag_empty = True
                     break
            
-            # if flag not empty - handle partner, else handle only contact
             if flag_empty:
                 if row[0]:
                     partner_obj = PartnerGuide.objects.get(id=row[0])
@@ -84,9 +98,10 @@ def export_partners():
     return stream
 
 
-### PROVIDER ###
-
 def contact_provider_handle(row, provider_id):
+    """
+    Method to handle contact row from xlsx import
+    """
     contact_fields = ['provider_id', 'fio', 'role', 'phone', 'email']
     
     if row[0]:
@@ -103,7 +118,7 @@ def import_providers(upload_file):
     
     providers_fields = ['sphere', 'name', 'inn', 'region', 'discount']
     
-    # if something wrong transacation will rollback
+    # if something went wrong transacation will rollback
     with transaction.atomic():
         provider_id = None
         for row in ws.iter_rows(min_row=2, values_only=True):
@@ -114,7 +129,7 @@ def import_providers(upload_file):
                     flag_empty = True
                     break
            
-            # if flag not empty - handle provider, else handle only contact
+            # check row for empty partner fields: if flag - handle partner with contact, else handle only contact
             if flag_empty:
                 if row[0]:
                     provider_obj = ProviderGuide.objects.get(id=row[0])
