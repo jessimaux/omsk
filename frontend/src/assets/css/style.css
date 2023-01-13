@@ -270,7 +270,7 @@ h6 {
 }
 
 .card-body {
-	padding: 0 20px 20px 20px;
+	padding: 20px;
 }
 
 .card-img-overlay {
@@ -381,11 +381,11 @@ h6 {
 	line-height: 1;
 }
 
-@media (min-width: 1200px) {
+/* @media (min-width: 1200px) {
 	.logo {
 		width: 280px;
 	}
-}
+} */
 
 .logo img {
 	max-height: 26px;
@@ -976,6 +976,13 @@ h6 {
 	vertical-align: middle;
 }
 
+td {
+	max-width: 250px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
 .dashboard .top-selling img {
 	border-radius: 5px;
 	max-width: 60px;
@@ -1264,4 +1271,28 @@ h6 {
 	text-align: center;
 	font-size: 13px;
 	color: #012970;
+}
+
+/*--------------------------------------------------------------
+  # Autocomplete
+  --------------------------------------------------------------*/
+
+.autocomplete {
+	position: relative;
+}
+
+.autocomplete_result {
+	z-index: 999;
+	width: 100%;
+	background-color: hsl(0, 0%, 100%);
+}
+
+.autocomplete_button {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.purchase-status {
+	width: 125px;
 }

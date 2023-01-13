@@ -1,55 +1,128 @@
 <template>
   <main id="main" class="main">
+    <div class="pagetitle">
+      <h1>Проект</h1>
+    </div>
+
     <section class="section">
-      <div class="row">
-        <div class="col-lg-12">
-          <project-form :initialValues="initialValues" @projectSubmit="onSubmit">
-          </project-form>
+      <form @submit.prevent="onSubmit">
+        <validation-errors v-if="projectsStore.errors" :validationErrors="projectsStore.errors"></validation-errors>
+        <project-form :project="project"></project-form>
+
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Импорт спецификации</h5>
+                <div class="col-12">
+                  <label class="form-label">Шаблон типовой спецификации</label>
+                  <select class="form-select" @change="applySpecification($event)">
+                    <option value="">Не выбрано</option>
+                    <option v-for="(specification, index) in guideSpecificationsStore.data" :key="specification.id"
+                      :value="index">
+                      {{ specification.name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+
+        <specification :specification="project.specification"></specification>
+        <project-file-upload :files="files"></project-file-upload>
+        <div class="text-end mb-3">
+          <button type="submit" class="btn btn-primary">Сохранить</button>
+        </div>
+      </form>
     </section>
   </main>
 </template>
 
 <script>
 import { useProjectsStore } from '@/stores/projects'
-
-import ProjectForm from '@/components/Projects/ProjectForm.vue'
+import { useGuideSpecificationsStore } from '@/stores/guideSpecifications'
+import ProjectForm from '@/components/projects/ProjectForm.vue'
+import Specification from '@/components/specifications/Specification.vue'
+import ProjectFileUpload from '@/components/projects/ProjectFileUpload.vue'
+import ValidationErrors from '@/components/ValidationErrors.vue'
 
 export default {
   name: 'ProjectCreate',
   components: {
     ProjectForm,
+    Specification,
+    ProjectFileUpload,
+    ValidationErrors
   },
   setup() {
     const projectsStore = useProjectsStore()
-    return { projectsStore }
+    const guideSpecificationsStore = useGuideSpecificationsStore()
+    return { projectsStore, guideSpecificationsStore }
   },
   data() {
     return {
-      initialValues: {
-        name: '1',
-        status: '1',
-        company_name: '1',
-        company_inn: '1',
-        company_city: '1',
-        company_region: '1',
-        company_children: '1',
-        reg_no: '1',
-        nds: false,
-        partner: '1',
-        delivery_period: '2000-01-01',
-        contract: false,
+      project: {
+        name: '',
+        status: '',
+        company_name: '',
+        company_inn: '',
+        company_city: '',
+        company_region: '',
+        company_children: 0,
+        reg_no: '',
+        nds: true,
+        partner_id: '',
         commentary: '',
-      }
+        specification: {
+          guide: false,
+          requests: [
+            {
+              str_by_order: '',
+              name: '',
+              tx: '',
+              amount: 0,
+              price: 0,
+              offers: [{
+                product: '',
+                product_id: '',
+                article: '',
+                name: '',
+                count: ''
+              }],
+            },
+          ],
+        }
+      },
+      files: [],
     }
   },
 
   methods: {
-    onSubmit(projectFormInput) {
-      this.projectsStore.addFullProject(projectFormInput)
-    }
-  }
+    applySpecification(event) {
+      this.project.specification.requests = this.guideSpecificationsStore.data[event.target.value].requests
+    },
 
+    onSubmit() {
+      this.projectsStore.addProject(this.project)
+        .then(() => {
+          if (this.files.length > 0) {
+            const formData = new FormData()
+            for (let file of this.files) {
+              formData.append('files', file)
+            }
+            formData.append('project', this.projectsStore.project)
+
+            this.projectsStore.fileUploadProject(formData)
+          }
+          
+          this.$router.push({ name: 'projects' })
+        })
+    },
+  },
+
+  created() {
+    this.guideSpecificationsStore.getFullSpecifications()
+  }
 }
 </script>

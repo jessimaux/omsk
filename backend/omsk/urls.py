@@ -1,4 +1,5 @@
-from django.contrib import admin
+from django.conf import settings
+from django.conf.urls.static import static
 from django.urls import path, re_path, include
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
@@ -18,11 +19,10 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-   #path('admin/', admin.site.urls),
    path('api/auth/', include('djoser.urls')),
    path('api/auth/', include('djoser.urls.authtoken')),
 
-   path('api/', include('apps.projects.urls')),
+   path('api/projects/', include('apps.projects.urls')),
    path('api/guide/', include('apps.guide.urls')),
    path('api/purchases/', include('apps.purchases.urls')),
    path('api/specifications/', include('apps.specifications.urls')),

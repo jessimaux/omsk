@@ -1,0 +1,54 @@
+version: '1'
+
+services:
+    db:
+        container_name: db
+        image: postgres:14.6-alpine
+        environment:
+            POSTGRES_DB: omsk_db
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: password
+        ports:
+            - 5432:5432
+        volumes:
+            - ./.data:/var/lib/postgresql/data/
+        networks:
+            - localdev
+
+    
+    backend:
+        container_name: backend
+        build:
+            context: ./backend
+        working_dir: /app
+        command:
+            python manage.py runserver 0.0.0.0:8000
+        volumes:
+            - ./backend/:/app
+        ports:
+            - 8000:8000
+        depends_on:
+            - db
+        env_file:
+            - ./backend/.env
+        networks:
+            - localdev
+
+
+    frontend:
+        container_name: frontend
+        build:
+            context: ./frontend
+        ports:
+            - 80:80
+        volumes:
+            - ./backend/static:/app/static
+            - ./backend/media:/app/media
+        depends_on:
+            - backend
+        networks:
+            - localdev
+
+networks:
+    localdev:
+        driver: bridge

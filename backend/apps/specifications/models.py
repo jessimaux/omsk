@@ -1,23 +1,26 @@
 from django.db import models
 
-from apps.projects.models import Project
-from apps.guide.models import ProductGuide
-
 
 class Specification(models.Model):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    project = models.OneToOneField('projects.Project', on_delete=models.CASCADE, null=True)
+    name = models.CharField(max_length=255, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    guide = models.BooleanField(default=False)
 
 
 class Request(models.Model):
     specification = models.ForeignKey(Specification, on_delete=models.CASCADE)
-    str_by_order = models.CharField(max_length=255)
-    name = models.CharField(max_length=255)
+    str_by_order = models.CharField(max_length=255, null=True, blank=True)
+    name = models.CharField(max_length=255, null=True, blank=True)
     tx = models.CharField(max_length=255, blank=True, null=True)
     amount = models.PositiveIntegerField(default=0)
-    price = models.PositiveIntegerField(default=0)
-
+    price = models.FloatField(default=0)
+    
 
 class Offer(models.Model):
     request = models.ForeignKey(Request, on_delete=models.CASCADE)
-    product = models.ForeignKey(ProductGuide, on_delete=models.CASCADE)
+    product = models.ForeignKey('guide.ProductGuide', related_name='product', on_delete=models.SET_NULL, null=True)
+    article = models.CharField(max_length=255, null=True, blank=True)
+    name = models.CharField(max_length=255, null=True, blank=True)
     count = models.PositiveIntegerField(default=0)
+    price = models.FloatField(default=0)

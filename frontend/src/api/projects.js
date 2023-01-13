@@ -1,30 +1,55 @@
 import axios from '@/api/axios'
 
+// PROJECTS
 
-const getProjects = () => {
-  return axios.get('projects/')
+const getProjects = (page, field, search) => {
+  return axios.get('projects/', {params: {page: page, ordering: field, search: search}})
+}
+
+const getProject = (id) => {
+  return axios.get(`projects/${id}/`)
 }
 
 const addProject = (project) => {
   return axios.post('projects/', project)
 }
 
-const addSpecification = (specification) => {
-  return axios.post('specifications/specifications/', specification)
+const editProject = (id, project) => {
+  return axios.put(`projects/${id}/`, project)
 }
 
-const addRequest = (request) => {
-  return axios.post('specifications/requests/', request)
+const patchProject = (id, project) => {
+  return axios.patch(`projects/${id}/`, project)
 }
 
-const addOffer = (offer) => {
-  return axios.post('specifications/offers/', offer)
+const deleteProject = (id) => {
+  return axios.delete(`projects/${id}/`)
+}
+
+const fileUploadProject = (files) => {
+  return axios.post('projects/file/upload/', files)
+}
+
+// SPECIFICATIONS
+
+const exportSpecification = (id, params) => {
+  return axios.get(`specifications/${id}/export/`, {params: params, responseType: 'arraybuffer' })
+}
+
+// REGISTRATION FORM
+
+const exportRegistrationForm = (id) => {
+  return axios.get(`projects/${id}/registration-form/`, {responseType: 'arraybuffer' })
 }
 
 export default {
   getProjects,
+  getProject,
+  editProject,
+  patchProject,
   addProject,
-  addSpecification,
-  addOffer,
-  addRequest
+  deleteProject,
+  fileUploadProject,
+  exportSpecification,
+  exportRegistrationForm,
 }

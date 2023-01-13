@@ -8,7 +8,7 @@ export const useAuthStore = defineStore('auth', {
     return {
       isLoading: false,
       currentUser: {},
-      errors: null,
+      errors: {},
     }
   },
 
@@ -34,7 +34,7 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async login(credentials) {
-      this.errors = null
+      this.errors = {}
       await authApi
         .login(credentials)
         .then((response) => {

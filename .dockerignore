@@ -1,0 +1,9 @@
+# frontend
+frontend/node_modules/
+
+# backend
+**/migrations/**
+!**/migrations
+!**/migrations/__init__.py
+backend/venv/
+**__pycache__

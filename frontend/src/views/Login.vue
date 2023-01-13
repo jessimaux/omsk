@@ -11,6 +11,8 @@
                   <h5 class="card-title text-center pb-0 fs-4">Авторизация</h5>
                 </div>
 
+                <validation-errors :validationErrors="authStore.errors"></validation-errors>
+
                 <form class="row g-3 needs-validation" @submit.prevent="onSubmit">
 
                   <div class="col-12">
@@ -25,13 +27,6 @@
                     <label for="yourPassword" class="form-label">Пароль</label>
                     <input type="password" name="password" class="form-control" id="yourPassword"
                       v-model="user.password" required>
-                  </div>
-
-                  <div class="col-12">
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" name="remember" value="true" id="rememberMe">
-                      <label class="form-check-label" for="rememberMe">Запомнить меня</label>
-                    </div>
                   </div>
 
                   <div class="col-12">
@@ -52,16 +47,18 @@
 import { defineComponent } from "vue"
 import { useAuthStore } from '@/stores/auth'
 import { useGlobalStore } from "@/stores/global"
+import ValidationErrors from "@/components/ValidationErrors.vue"
 
 export default defineComponent({
   name: "AppLogin",
-
+  components: {
+    ValidationErrors
+  },
   setup() {
     const authStore = useAuthStore()
     const globalStore = useGlobalStore()
     return { authStore, globalStore }
   },
-
   data() {
     return {
       user: {
@@ -70,19 +67,14 @@ export default defineComponent({
       }
     }
   },
-
-  computed: {
-  },
-
   methods: {
     onSubmit() {
       this.authStore.login(this.user)
         .then(() => {
-          this.$router.push({ name: 'home' })
+          this.$router.push({ name: 'projects' })
         })
     }
   },
-
   created() {
     this.globalStore.showSidebar = false
     this.globalStore.showNavbar = false
@@ -93,7 +85,3 @@ export default defineComponent({
   }
 })
 </script>
-
-<style scoped>
-
-</style>
