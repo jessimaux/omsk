@@ -60,13 +60,13 @@
                     <tr v-for="item in projectsStore.data.results" :key="item.id">
                       <td>{{ item.id }}</td>
                       <td>{{ item.name }}</td>
-                      <td>{{ item.purchase.bill }}</td>
+                      <td>{{ item.bill }}</td>
                       <td>{{ item.status }}</td>
-                      <td>{{ item.partner ? item.partner.name : "" }}</td>
+                      <td>{{ item.partner }}</td>
                       <td>{{ item.company_name }}</td>
-                      <td>{{ totalBill(item.purchase.purchases) }}</td>
-                      <td>{{ deliveryBill(item.purchase.purchases) }}</td>
-                      <td :title="getProducts(item.purchase.purchases)">{{ getProducts(item.purchase.purchases) }}</td>
+                      <td>{{ item.total_bill }}</td>
+                      <td>{{ item.total_complete }}</td>
+                      <td :title="getProducts(item.first_products)">{{ getProducts(item.first_products) }}</td>
                       <td><input type="date" class="form-control" v-model="item.delivery_date"
                           @change="onChangeDeliveryDateUpdate(item.id, item.delivery_date)"></td>
                       <td>{{ item.commentary }}</td>
@@ -151,25 +151,12 @@ export default {
       this.projectsStore.getProjects(page, this.ordering, this.search)
     },
 
-    totalBill(purchases) {
-      let total = 0
-      purchases.forEach(item => total += item.offer.price * item.offer.count * item.offer.request.amount)
-      return total
-    },
-
-    deliveryBill(purchases) {
-      let total = 0
-      purchases.forEach(item => {
-        if (item.status === 'Отгружен') total += item.offer.price
-      })
-      return total
-    },
-
-    getProducts(purchases) {
-      let products = ''
-      let max_products = purchases.length > 3 ? 3 : purchases.length
-      for (let i = 0; i < max_products; i++) products += purchases[i].offer.name + ';'
-      return products
+    getProducts(products) {
+      let products_list = ''
+      products.forEach(element => {
+        products_list += element + '; '
+      }) 
+      return products_list
     },
 
     onChangeDeliveryDateUpdate(id, value) {

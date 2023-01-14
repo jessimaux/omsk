@@ -54,7 +54,7 @@
           <h5 class="card-title">О партнере</h5>
           <div class="col-12">
             <label class="form-label">Партнер</label>
-            <select class="form-select" v-model="project.partner.id" disabled>
+            <select class="form-select" v-model="project.partner_id" disabled>
               <option v-if="!guidePartnersStore.loading" v-for="partner in guidePartnersStore.data.results"
                 :key="partner.id" :value="partner.id">
                 {{ partner.name }}
@@ -192,9 +192,9 @@ export default {
   },
   computed: {
     getDiscount() {
-      if (typeof this.project.partner.id === 'number' && this.guidePartnersStore.data) {
+      if (typeof this.project.partner_id === 'number' && this.guidePartnersStore.data) {
         for (const object of this.guidePartnersStore.data.results) {
-          if (object.id === this.project.partner.id) return object.discount
+          if (object.id === this.project.partner_id) return object.discount
         }
       }
     },

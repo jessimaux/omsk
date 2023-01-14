@@ -1,11 +1,9 @@
 from django.urls import path, re_path, include
 from rest_framework import routers
 
-from .views import RequestViewSet, OfferViewSet, SpecificationExportView
+from .views import SpecificationExportView
 
 router = routers.SimpleRouter()
-router.register(r'requests', RequestViewSet)
-router.register(r'offers', OfferViewSet)
 
 
 urlpatterns = [

@@ -6,7 +6,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 
 from .models import Project, File
-from .serializers import ProjectSerializer, FileSerializer
+from .serializers import ProjectSerializer, FileSerializer, ProjectListSerializer
 from .utils import excel_report
 
 
@@ -20,6 +20,11 @@ class ProjectsViewSet(viewsets.ModelViewSet):
     ordering_fields = '__all__'
     ordering = ['id']
     my_tags = ['Project']
+    
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return ProjectListSerializer
+        return ProjectSerializer
     
     
 class ProjectRegistrationExportView(views.APIView):

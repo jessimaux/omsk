@@ -2,12 +2,12 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from apps.projects.models import Project
 from apps.specifications.models import Offer
+from omsk.utils import prevent_recursion
 
 
 class Purchase(models.Model):
-    project = models.OneToOneField(Project, on_delete=models.CASCADE)
+    project = models.OneToOneField('projects.Project', on_delete=models.CASCADE)
     company_from = models.CharField(max_length=255, blank=True, null=True)
     project_inner_no = models.CharField(max_length=255, blank=True, null=True)
     project_registration_no = models.CharField(max_length=255, blank=True, null=True)
@@ -28,12 +28,6 @@ class PurchaseOffer(models.Model):
     bill_income_complete = models.CharField(max_length=255, blank=True, null=True)
     warehouse_delivery_date = models.CharField(max_length=255, blank=True, null=True)
     
-    
-# on project create send signal to create purchase on project
-@receiver(post_save, sender=Project)
-def create_purchase(sender, instance, created, **kwargs):
-    if created:
-        Purchase.objects.create(project_id=instance.id)
 
 # on offer create send signal to create new purchase item for purchase
 @receiver(post_save, sender=Offer)
@@ -47,4 +41,4 @@ def save_purchases(sender, instance, created, **kwargs):
                                      status='Заказан',
                                      price_buy=price_buy,
                                      nds_base=nds_base)
-        
+ 
