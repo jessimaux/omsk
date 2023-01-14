@@ -1,7 +1,12 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 from apps.guide.models import PartnerGuide
+from apps.purchases.models import Purchase
+from apps.specifications.models import Specification
+from omsk.utils import prevent_recursion
 
 
 class Project(models.Model):
@@ -34,3 +39,9 @@ class File(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='files')
     name = models.CharField(max_length=1023)
     file = models.FileField(upload_to='media/')
+    
+# on project create send signal to create purchase on project
+@receiver(post_save, sender=Project)
+def create_purchase_and_specification(sender, instance, created, **kwargs):
+    if created:
+        Purchase.objects.create(project_id=instance.id)

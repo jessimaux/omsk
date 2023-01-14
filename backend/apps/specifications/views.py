@@ -7,7 +7,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 
 from .models import Specification, Request, Offer
-from .serializers import SpecificationSerializer, RequestSerializer, OfferSerializer, SpecificationsListSerializer
+from .serializers import SpecificationSerializer, RequestSerializer, OfferSerializer, SpecificationsListSerializer, GuideSpecificationSerializer
 from .utils import excel_report
     
 
@@ -16,7 +16,7 @@ class GuideSpecificationsSelectAPIView(generics.ListAPIView):
     View for input-select Specification
     """
     queryset = Specification.objects.filter(guide=True)
-    serializer_class = SpecificationSerializer
+    serializer_class = GuideSpecificationSerializer
     permission_classes = [IsAuthenticated]
     my_tags = ['SpecificationGuide']
     
@@ -50,18 +50,3 @@ class SpecificationExportView(views.APIView):
             return response
         except Specification.DoesNotExist:
             return Response(status=status.HTTP_400_BAD_REQUEST) 
-
-
-class RequestViewSet(viewsets.ModelViewSet):
-    queryset = Request.objects.all()
-    serializer_class = RequestSerializer
-    permission_classes = [IsAuthenticated]
-    my_tags = ['Request']
-
-
-class OfferViewSet(viewsets.ModelViewSet):
-    queryset = Offer.objects.all()
-    serializer_class = OfferSerializer
-    permission_classes = [IsAuthenticated]
-    my_tags = ['Offer']
-    

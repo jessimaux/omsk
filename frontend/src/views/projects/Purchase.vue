@@ -42,6 +42,9 @@ export default {
     onSubmit() {
       this.projectsStore.patchProject(this.project.id, this.project)
       this.purchasesStore.editPurchase(this.purchase.id, this.purchase)
+      .then(()=>{
+        this.$router.push({ name: 'projects' })
+      })
     }
   },
   created() {
