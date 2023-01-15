@@ -12,16 +12,16 @@
             <tr>
               <th scope="col"></th>
               <th scope="col">#</th>
-              <th scope="col">Приказ</th>
-              <th scope="col">Наименование</th>
-              <th scope="col">ТХ</th>
-              <th scope="col">Количество</th>
-              <th scope="col">Цена</th>
+              <th scope="col" name="str_by_order">Приказ</th>
+              <th scope="col" name="name">Наименование</th>
+              <th scope="col" name="tx">ТХ</th>
+              <th scope="col" name="amount">Количество</th>
+              <th scope="col" name="price">Цена</th>
               <th scope="col">Сумма</th>
-              <th scope="col">Артикул</th>
-              <th scope="col">Наименование</th>
-              <th scope="col">Количество</th>
-              <th scope="col">Цена</th>
+              <th scope="col" name="article">Артикул</th>
+              <th scope="col" name="name">Наименование</th>
+              <th scope="col" name="count">Количество</th>
+              <th scope="col" name="price">Цена</th>
               <th scope="col">Сумма</th>
               <th scope="col">Наличие</th>
               <th scope="col"></th>

@@ -18,13 +18,25 @@ export default {
   computed: {
     errorMessages() {
       return Object.keys(this.validationErrors).map(name => {
-        const messages = this.validationErrors[name]
-        if(name==='non_field_errors') name = ''
+        if(name==='non_field_errors') {
+          name = ''
+          const messages = this.validationErrors[name]
+          return `${name} ${messages}`
+        }
+        else if(Array.isArray(this.validationErrors[name])){
+          return this.validationErrors[name].map((item, i) =>{
+            return Object.keys(item).map(sub_name =>{
+              name = document.getElementsByName(sub_name)[0].textContent + ':'
+              const messages = item[sub_name]
+              return `Строка-${i} ${name} ${messages}`
+            })
+          }).toString()
+        }
         else {
           name = document.getElementsByName(name)[0].textContent + ':'
+          const messages = this.validationErrors[name]
+          return `${name} ${messages}`
         }
-
-        return `${name} ${messages}`
       })
     }
   }
