@@ -57,7 +57,7 @@ class ProductGuide(models.Model):
     name = models.CharField(max_length=1023)
     price_rrc = models.FloatField()
     price_buy = models.FloatField()
-    link = models.CharField(max_length=255, blank=True, null=True)
+    link = models.CharField(max_length=1023, blank=True, null=True)
     country = models.CharField(max_length=255, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     description_tech = models.TextField(blank=True, null=True)
