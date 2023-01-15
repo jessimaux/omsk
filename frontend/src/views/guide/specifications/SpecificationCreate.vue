@@ -62,8 +62,8 @@ export default {
           str_by_order: '',
           name: '',
           tx: '',
-          amount: '',
-          price: '',
+          amount: 0,
+          price: 0,
           offers: [{
             article: '',
             name: '',
