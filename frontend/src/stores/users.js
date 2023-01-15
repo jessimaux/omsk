@@ -39,6 +39,7 @@ export const useUsersStore = defineStore('users', {
         .catch((result) => {
           this.errors = result.response.data
           this.loading = false
+          throw result.response.data
         })
     },
   }
