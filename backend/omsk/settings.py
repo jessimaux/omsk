@@ -9,14 +9,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = environ.get('SECRET_KEY', 'foo')
+SECRET_KEY = environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = int(environ.get('DEBUG', default=1))
+DEBUG = int(environ.get('DEBUG'))
 
-ALLOWED_HOSTS = environ.get('ALLOWED_HOSTS', 'localhost 127.0.0.1').split(' ')
+ALLOWED_HOSTS = environ.get('ALLOWED_HOSTS').split(' ')
 
-CORS_ALLOWED_ORIGINS = environ.get('CORS_ALLOWED_ORIGINS', 'http://localhost:5173 http://127.0.0.1:5173').split(' ')
+CORS_ALLOWED_ORIGINS = environ.get('CORS_ALLOWED_ORIGINS').split(' ')
 
 # Application definition
 
@@ -77,12 +77,12 @@ WSGI_APPLICATION = 'omsk.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': environ.get('POSTGRES_ENGINE', 'django.db.backends.postgresql'),
-        'NAME': environ.get('POSTGRES_DB', 'omsk_db'),
-        'USER': environ.get('POSTGRES_USER', 'postgres'),
-        'PASSWORD': environ.get('POSTGRES_PASSWORD', 'password'),
-        'HOST': environ.get('POSTGRES_HOST', ''),
-        'PORT': environ.get('POSTGRES_PORT', ''),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': environ.get('POSTGRES_DB'),
+        'USER': environ.get('POSTGRES_USER'),
+        'PASSWORD': environ.get('POSTGRES_PASSWORD'),
+        'HOST': environ.get('POSTGRES_HOST'),
+        'PORT': environ.get('POSTGRES_PORT')
     }
 }
 
