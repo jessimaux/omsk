@@ -10,8 +10,8 @@ backend/venv/
 backend/media/
 
 # general
-**.idea
-**.vscode
-**.data
+.idea
+.vscode
+.data
 .prettierrc
 .env
