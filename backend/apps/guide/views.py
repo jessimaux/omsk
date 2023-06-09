@@ -1,31 +1,21 @@
 import datetime
 
 from django.http import HttpResponse
-from rest_framework import viewsets, views, generics, status, mixins
+from rest_framework import viewsets, views, generics, status, mixins, filters
 from rest_framework.response import Response
-from rest_framework import filters
+from rest_framework.request import Request
 from rest_framework.pagination import PageNumberPagination, LimitOffsetPagination
 from rest_framework.permissions import IsAuthenticated
-from tablib import Dataset
+from rest_framework.decorators import action
+from drf_yasg.utils import swagger_auto_schema
 
-from .models import ProductGuide, PartnerGuide, ProviderGuide
-from .serializers import ProductGuideSerializer, PartnerGuideSerializer, ProviderGuideSerializer, \
-    ProductGuideImportSerializer, PartnerGuideImportSerializer, ProviderGuideImportSerializer
-from .resources import ProductGuideResource, PartnerGuideResource, ProviderGuideResource
-from .utils import import_partners, export_partners, export_providers, import_providers, check_xlsx_file_import
+from .models import *
+from .serializers import *
+from .resources import *
+from .services import *
 
 
-class ProductSearchAPIView(generics.ListAPIView):
-    """
-    View for get list of products for select product in specification
-    """
-    queryset = ProductGuide.objects.all()
-    serializer_class = ProductGuideSerializer
-    pagination_class = LimitOffsetPagination
-    permission_classes = [IsAuthenticated]
-    filter_backends = [filters.SearchFilter]
-    search_fields = ['article', 'name']
-    my_tags = ['ProductsGuide']
+IMPORT_EXTENSIONS = ('application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 
 
 class ProductViewSet(viewsets.ModelViewSet):
@@ -39,12 +29,13 @@ class ProductViewSet(viewsets.ModelViewSet):
     ordering = ['id']
     my_tags = ['ProductsGuide']
 
+    @action(detail=False, pagination_class=LimitOffsetPagination)
+    def search(self, request: Request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
 
-class ProductExportView(views.APIView):
-    permission_classes = [IsAuthenticated]
-    my_tags = ['ProductsGuide']
-
-    def get(self, request):
+    @swagger_auto_schema(method='get', responses={200: ''})
+    @action(detail=False, pagination_class=None, filter_backends=None, serializer_class=None)
+    def export_xlsx(self, request: Request, *args, **kwargs):
         product_resource = ProductGuideResource()
         dataset = product_resource.export()
         response = HttpResponse(dataset.xls, content_type='application/vnd.ms-excel')
@@ -52,44 +43,24 @@ class ProductExportView(views.APIView):
         response['Content-Disposition'] = f'attachment; filename="{datetime.date.today()}.xls"'
         return response
 
-
-class ProductImportView(generics.CreateAPIView):
-    permission_classes = [IsAuthenticated]
-    serializer_class = ProductGuideImportSerializer
-    my_tags = ['ProductsGuide']
-    
-    def create(self, request):
+    @action(detail=False, methods=['post'], serializer_class=ProductGuideImportSerializer)
+    def import_xlsx(self, request: Request):
         serializer_class = self.get_serializer(data=request.data)
-        if check_xlsx_file_import(request, serializer_class):
-            try:
-                file_uploaded = request.FILES.get('file')
-                product_resource = ProductGuideResource()
-                dataset = Dataset()
-                dataset.load(file_uploaded.read())
+        if 'file' not in request.FILES or not serializer_class.is_valid():
+            return Response({'non_field_errors': 'Файл не выбран.'}, status=status.HTTP_400_BAD_REQUEST)
+        elif request.FILES['file'].content_type not in IMPORT_EXTENSIONS:
+            return Response({'non_field_errors': 'Выбран некорректный формат файла.'}, status=status.HTTP_400_BAD_REQUEST)
 
-                # Test the data import, if it's ok - finally import it
-                result = product_resource.import_data(dataset, dry_run=True)
-                if not result.has_errors():
-                    product_resource.import_data(dataset, dry_run=False)
-                else:
-                    return Response({'non_field_errors': result}, status=status.HTTP_400_BAD_REQUEST)
-            except IOError:                
-                return Response({'non_field_errors': 'Файл содержит некорректные данные.'}, status=status.HTTP_400_BAD_REQUEST)
-           
-        return Response({"success": "Файл успешно загружен."}, status=status.HTTP_201_CREATED)
+        result = ProductService().import_xlsx(request.FILES.get('file'), request.user.id)
+
+        return Response({"message": "Файл успешно импортирован.",
+                        "details": result},
+                        status=status.HTTP_201_CREATED)
 
 
-class PartnerSelectAPIView(generics.ListAPIView):
-    """ 
-    View for get list of partner for input-select 
-    """
-    queryset = PartnerGuide.objects.all()
-    serializer_class = PartnerGuideSerializer
-    permission_classes = [IsAuthenticated]
-    my_tags = ['PartnersGuide']
-    
-    
-class PartnerViewSet(viewsets.ModelViewSet):
+class PartnerViewSet(mixins.ListModelMixin,
+                     mixins.RetrieveModelMixin,
+                     viewsets.GenericViewSet):
     queryset = PartnerGuide.objects.all()
     serializer_class = PartnerGuideSerializer
     pagination_class = PageNumberPagination
@@ -99,46 +70,48 @@ class PartnerViewSet(viewsets.ModelViewSet):
     ordering_fields = '__all__'
     ordering = ['id']
     my_tags = ['PartnersGuide']
+    
+    def create(self, request: Request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        result = PartnerService().create(serializer.validated_data)
+        return Response(PartnerGuideSerializer(result).data,
+                        status=status.HTTP_201_CREATED)
 
+    def update(self, request: Request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        result = PartnerService().update(serializer.validated_data)
+        return Response(PartnerGuideSerializer(result).data,
+                        status=status.HTTP_201_CREATED)
 
-class PartnerExportView(views.APIView):
-    permission_classes = [IsAuthenticated]
-    my_tags = ['PartnersGuide']
+    @action(detail=False, pagination_class=None)
+    def select(self, request: Request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
 
-    def get(self, request):
-        response = HttpResponse(export_partners(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    @swagger_auto_schema(method='get', responses={200: ''})
+    @action(detail=False, pagination_class=None, filter_backends=None, serializer_class=None)
+    def export_xlsx(self, request: Request):
+        response = HttpResponse(PartnerService().export_xlsx(),
+                                content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
         response['Access-Control-Expose-Headers'] = "Content-Disposition"
         response['Content-Disposition'] = f'attachment; filename="{datetime.date.today()}.xls"'
         return response
-
-
-class PartnerImportView(generics.CreateAPIView):
-    serializer_class = PartnerGuideImportSerializer
-    permission_classes = [IsAuthenticated]
-    my_tags = ['PartnersGuide']
-
-    def create(self, request):
+    
+    @action(detail=False, methods=['post'], serializer_class=PartnerGuideImportSerializer)
+    def import_xlsx(self, request: Request):
         serializer_class = self.get_serializer(data=request.data)
-        if check_xlsx_file_import(request, serializer_class):
-            file_uploaded = request.FILES.get('file')
-            try:
-                import_partners(file_uploaded.file)
-            except Exception:
-                return Response({'non_field_errors': 'Файл содержит некорректные данные.'}, status=status.HTTP_400_BAD_REQUEST)
-            return Response({'success': 'Файл успешно загружен.'}, status=status.HTTP_201_CREATED)
-    
+        if 'file' not in request.FILES or not serializer_class.is_valid():
+            return Response({'non_field_errors': 'Файл не выбран.'}, status=status.HTTP_400_BAD_REQUEST)
+        elif request.FILES['file'].content_type not in IMPORT_EXTENSIONS:
+            return Response({'non_field_errors': 'Выбран некорректный формат файла.'}, status=status.HTTP_400_BAD_REQUEST)
+        PartnerService().import_xlsx(request.FILES.get('file'))
+        return Response({'success': 'Файл успешно загружен.'}, status=status.HTTP_201_CREATED)
 
-class ProviderSelectAPIView(generics.ListAPIView):
-    """ 
-    View for get list of provider for input-select 
-    """
-    queryset = ProviderGuide.objects.all()
-    serializer_class = ProviderGuideSerializer
-    permission_classes = [IsAuthenticated]
-    my_tags = ['ProvidersGuide']
-    
-    
-class ProviderViewSet(viewsets.ModelViewSet):
+
+class ProviderViewSet(mixins.ListModelMixin,
+                      mixins.RetrieveModelMixin,
+                      viewsets.GenericViewSet):
     queryset = ProviderGuide.objects.all()
     serializer_class = ProviderGuideSerializer
     pagination_class = PageNumberPagination
@@ -149,31 +122,39 @@ class ProviderViewSet(viewsets.ModelViewSet):
     ordering = ['id']
     my_tags = ['ProvidersGuide']
 
+    def create(self, request: Request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        result = ProviderService().create(serializer.validated_data)
+        return Response(ProviderGuideSerializer(result).data,
+                        status=status.HTTP_201_CREATED)
 
-class ProviderExportView(views.APIView):
-    permission_classes = [IsAuthenticated]
-    my_tags = ['ProvidersGuide']
-
-    def get(self, request):
-        response = HttpResponse(export_providers(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    def update(self, request: Request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        result = ProviderService().update(serializer.validated_data)
+        return Response(ProviderGuideSerializer(result).data,
+                        status=status.HTTP_201_CREATED)
+        
+    @action(detail=False, pagination_class=None)
+    def get_all(self, request: Request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+    
+    @swagger_auto_schema(method='get', responses={200: ''})
+    @action(detail=False, pagination_class=None, filter_backends=None, serializer_class=None)
+    def export_xlsx(self, request: Request, *args, **kwargs):
+        response = HttpResponse(ProviderService().export_xlsx(), 
+                                content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
         response['Access-Control-Expose-Headers'] = "Content-Disposition"
         response['Content-Disposition'] = f'attachment; filename="{datetime.date.today()}.xls"'
         return response
-
-
-class ProviderImportView(generics.CreateAPIView):
-    serializer_class = ProviderGuideImportSerializer
-    permission_classes = [IsAuthenticated]
-    my_tags = ['ProvidersGuide']
     
-
-    def create(self, request):
+    @action(detail=False, methods=['post'], pagination_class=None, filter_backends=None, serializer_class=ProviderGuideImportSerializer)
+    def import_xlsx(self, request: Request, *args, **kwargs):
         serializer_class = self.get_serializer(data=request.data)
-        if check_xlsx_file_import(request, serializer_class):
-            file_uploaded = request.FILES.get('file')
-            try:
-                import_providers(file_uploaded.file)
-            except Exception:
-                return Response({'non_field_errors': 'Файл содержит некорректные данные.'}, status=status.HTTP_400_BAD_REQUEST)
-            return Response({'success': 'Файл успешно загружен.'}, status=status.HTTP_201_CREATED)
-
+        if 'file' not in request.FILES or not serializer_class.is_valid():
+            return Response({'non_field_errors': 'Файл не выбран.'}, status=status.HTTP_400_BAD_REQUEST)
+        elif request.FILES['file'].content_type not in IMPORT_EXTENSIONS:
+            return Response({'non_field_errors': 'Выбран некорректный формат файла.'}, status=status.HTTP_400_BAD_REQUEST)
+        ProviderService().import_xlsx(request.FILES.get('file'))
+        return Response({'success': 'Файл успешно импортирован.'}, status=status.HTTP_201_CREATED)

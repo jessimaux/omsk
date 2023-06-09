@@ -17,10 +17,7 @@ class PartnerGuideResource(resources.ModelResource):
     partner_id = fields.Field(column_name='partner_id', 
                               attribute='partner_id', 
                               widget=ForeignKeyWidget(PartnerGuide, field='contact_partner.fio'))
-    # fio = fields.Field(widget=ForeignKeyWidget(ContactPartner, field='fio'))
-    # role = fields.Field(widget=ForeignKeyWidget(ContactPartner, field='role'))
-    # phone = fields.Field(widget=ForeignKeyWidget(ContactPartner, field='phone'))
-    # email = fields.Field(widget=ForeignKeyWidget(ContactPartner, field='email'))
+    
 
 class ProviderGuideResource(resources.ModelResource):
     class Meta:

@@ -9,8 +9,6 @@ class PartnerGuide(models.Model):
     discount = models.PositiveIntegerField(default=0)
 
     # log section
-    created_by = models.ForeignKey(User, related_name="partner_created_by", on_delete=models.SET_NULL, null=True)
-    updated_by = models.ForeignKey(User, related_name="partner_updated_by", on_delete=models.SET_NULL, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
@@ -34,8 +32,6 @@ class ProviderGuide(models.Model):
     discount = models.PositiveIntegerField(default=0)
 
     # log section
-    created_by = models.ForeignKey(User, related_name="provider_created_by", on_delete=models.SET_NULL, null=True)
-    updated_by = models.ForeignKey(User, related_name="provider_updated_by", on_delete=models.SET_NULL, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
@@ -68,8 +64,6 @@ class ProductGuide(models.Model):
     available = models.PositiveIntegerField(default=0)
 
     # log section
-    created_by = models.ForeignKey(User, related_name="product_created_by", on_delete=models.SET_NULL, null=True)
-    updated_by = models.ForeignKey(User, related_name="product_updated_by", on_delete=models.SET_NULL, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
