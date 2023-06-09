@@ -3,22 +3,15 @@ import datetime
 from django.http import HttpResponse
 from rest_framework import viewsets, views, mixins, status, filters, generics
 from rest_framework.response import Response
+from rest_framework.request import Request
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import action
+from drf_yasg.utils import swagger_auto_schema
 
-from .models import Specification, Request, Offer
-from .serializers import SpecificationSerializer, RequestSerializer, OfferSerializer, SpecificationsListSerializer, GuideSpecificationSerializer
-from .utils import excel_report
-    
-
-class GuideSpecificationsSelectAPIView(generics.ListAPIView):
-    """
-    View for input-select Specification
-    """
-    queryset = Specification.objects.filter(guide=True)
-    serializer_class = GuideSpecificationSerializer
-    permission_classes = [IsAuthenticated]
-    my_tags = ['SpecificationGuide']
+from .services import *
+from .models import *
+from .serializers import *
     
     
 class GuideSpecificationsViewSet(viewsets.ModelViewSet):
@@ -37,16 +30,14 @@ class GuideSpecificationsViewSet(viewsets.ModelViewSet):
             return SpecificationsListSerializer
         return SpecificationSerializer
     
+    @action(detail=False, pagination_class=None, filter_backends=None, serializer_class=GuideSpecificationSerializer)
+    def select(self, request: Request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
     
-class SpecificationExportView(views.APIView):
-    my_tags = ['Specification']
-
-    def get(self, request, *args, **kwargs):
-        try:
-            specification_obj = Specification.objects.get(id=kwargs['pk'])
-            response = HttpResponse(excel_report(specification_obj, params=request.query_params), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-            response['Access-Control-Expose-Headers'] = "Content-Disposition"
-            response['Content-Disposition'] = f'attachment; filename="{datetime.date.today()}.xlsx"'
-            return response
-        except Specification.DoesNotExist:
-            return Response(status=status.HTTP_400_BAD_REQUEST) 
+    @swagger_auto_schema(method='get', responses={200: ''})
+    @action(detail=False, pagination_class=None, filter_backends=None, serializer_class=None)
+    def report_xlsx(self, request: Request, *args, **kwargs):
+        response = HttpResponse(SpecificationService().report_xlsx(kwargs['pk'], request.query_params), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Access-Control-Expose-Headers'] = "Content-Disposition"
+        response['Content-Disposition'] = f'attachment; filename="{datetime.date.today()}.xlsx"'
+        return response
