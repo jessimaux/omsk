@@ -40,8 +40,3 @@ class File(models.Model):
     name = models.CharField(max_length=1023)
     file = models.FileField(upload_to='media/')
     
-# on project create send signal to create purchase on project
-@receiver(post_save, sender=Project)
-def create_purchase_and_specification(sender, instance, created, **kwargs):
-    if created:
-        Purchase.objects.create(project_id=instance.id)

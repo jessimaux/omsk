@@ -1,13 +1,16 @@
 from django.http import HttpResponse
 from django.shortcuts import render
-from rest_framework import viewsets, views, status, filters, generics
+from rest_framework import viewsets, views, status, filters, generics, mixins
 from rest_framework.response import Response
+from rest_framework.request import Request
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import action
+from drf_yasg.utils import swagger_auto_schema
 
 from .models import Project, File
 from .serializers import ProjectSerializer, FileSerializer, ProjectListSerializer
-from .utils import excel_report
+from .services import *
 
 
 class ProjectsViewSet(viewsets.ModelViewSet):
@@ -20,49 +23,54 @@ class ProjectsViewSet(viewsets.ModelViewSet):
     ordering_fields = '__all__'
     ordering = ['id']
     my_tags = ['Project']
-    
+
     def get_serializer_class(self):
         if self.action == 'list':
             return ProjectListSerializer
         return ProjectSerializer
     
-    
-class ProjectRegistrationExportView(views.APIView):
-    permission_classes = [IsAuthenticated]
-    my_tags = ['Project']
+    def create(self, request: Request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        result = ProjectService().create(serializer.validated_data)
+        return Response(ProjectSerializer(result).data,
+                        status=status.HTTP_201_CREATED)
+        
+    def update(self, request: Request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        result = ProjectService().update(serializer.validated_data)
+        return Response(ProjectSerializer(result).data,
+                        status=status.HTTP_200_OK)
+        
+    @swagger_auto_schema(method='get', responses={200: ''})
+    @action(detail=False, pagination_class=None, filter_backends=None, serializer_class=None)
+    def report_registration(self, request: Request, *args, **kwargs):
+        response = HttpResponse(ProjectService().export_registration_form(
+            kwargs['pk']), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Access-Control-Expose-Headers'] = "Content-Disposition"
+        response['Content-Disposition'] = 'attachment; filename="myexport.xlsx"'
+        return response
 
-    def get(self, request, *args, **kwargs):
-        try:
-            project_obj = Project.objects.get(id=kwargs['pk'])
-            response = HttpResponse(excel_report(project_obj), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-            response['Access-Control-Expose-Headers'] = "Content-Disposition"
-            response['Content-Disposition'] = 'attachment; filename="myexport.xlsx"'
-            return response
-        except Project.DoesNotExist:
-            return Response(status=status.HTTP_400_BAD_REQUEST) 
-    
-    
-class ProjectFileUploadAPIView(views.APIView):
+
+class ProjectFileViewSet(mixins.DestroyModelMixin,
+                         viewsets.GenericViewSet):
+    serializer_class = FileSerializer
+    queryset = File.objects.all()
     permission_classes = [IsAuthenticated]
     my_tags = ['ProjectFiles']
     
-    def post(self, request, *args, **kwargs):
+
+    @swagger_auto_schema(responses={200: ''})
+    def create(self, request: Request, *args, **kwargs):
         files = request.FILES.getlist("files")
-        project = request.data['project']
+        project_id = request.data['project']
         if 'files' not in request.FILES:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         else:
-            for file in files:
-                file_obj = File.objects.create(file=file, 
-                                               name=file.name,
-                                               project_id=project)
-                
+            ProjectFileService().create(project_id, files)
             return Response(status=status.HTTP_201_CREATED)
         
-
-class ProjectFileDeleteAPIView(generics.DestroyAPIView):
-    queryset = File.objects.all()
-    serializer_class = FileSerializer
-    permission_classes = [IsAuthenticated]
-    my_tags = ['ProjectFiles']
-    
+    @swagger_auto_schema(responses={200: ''})
+    def destroy(self, request: Request, *args, **kwargs):
+        return super().destroy(request, *args, **kwargs)
