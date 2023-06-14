@@ -75,7 +75,7 @@ class PartnerService:
         for contact in contacts:
             if "id" in contact.keys() and ContactPartner.objects.filter(id=contact['id']).exists():
                 contact_obj = ContactPartner.objects.get(id=contact['id'])
-                for attribute, value in contact:
+                for attribute, value in contact.items():
                     setattr(contact_obj, attribute, value)
                 contact_obj.save()
             else:
@@ -88,7 +88,7 @@ class PartnerService:
                 ContactPartner.objects.filter(id=contact_id).delete()
 
         partner_obj = PartnerGuide.objects.get(id=partner_id)
-        for attribute, value in validated_data:
+        for attribute, value in validated_data.items():
             setattr(partner_obj, attribute, value)
         partner_obj.save()
 

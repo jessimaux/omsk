@@ -22,8 +22,6 @@ class ProductGuideSerializer(serializers.ModelSerializer):
     provider_id = serializers.IntegerField()
     
     # logs
-    created_by = serializers.HiddenField(default=serializers.CreateOnlyDefault(serializers.CurrentUserDefault()))
-    updated_by = serializers.HiddenField(default=serializers.CurrentUserDefault())
     created_at = serializers.SkipField()
     updated_at = serializers.SkipField()
 
@@ -39,8 +37,6 @@ class ProductGuideImportSerializer(serializers.Serializer):
 class PartnerGuideSerializer(serializers.ModelSerializer):
     contacts = ContactPartnerSerializer(many=True, source='contact_partner')
     
-    created_by = serializers.HiddenField(default=serializers.CreateOnlyDefault(serializers.CurrentUserDefault()))
-    updated_by = serializers.HiddenField(default=serializers.CurrentUserDefault())
     created_at = serializers.SkipField()
     updated_at = serializers.SkipField()
 
@@ -56,8 +52,6 @@ class PartnerGuideImportSerializer(serializers.Serializer):
 class ProviderGuideSerializer(serializers.ModelSerializer):
     contacts = ContactProviderSerializer(many=True, source='contact_provider', required=False)
     
-    created_by = serializers.HiddenField(default=serializers.CreateOnlyDefault(serializers.CurrentUserDefault()))
-    updated_by = serializers.HiddenField(default=serializers.CurrentUserDefault())
     created_at = serializers.SkipField()
     updated_at = serializers.SkipField()
 

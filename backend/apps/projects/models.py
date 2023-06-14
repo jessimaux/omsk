@@ -29,8 +29,6 @@ class Project(models.Model):
     contract = models.BooleanField(default=False)
 
     # log section
-    created_by = models.ForeignKey(User, related_name="project_created_by", on_delete=models.SET_NULL, null=True)
-    updated_by = models.ForeignKey(User, related_name="project_updated_by", on_delete=models.SET_NULL, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

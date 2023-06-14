@@ -62,9 +62,6 @@ class ProjectSerializer(serializers.ModelSerializer):
     purchase_id = fields.IntegerField(source='purchase.id', read_only=True)
     files = FileSerializer(many=True, required=False, read_only=True)
 
-    created_by = serializers.CharField(default=serializers.CreateOnlyDefault(default=serializers.CurrentUserDefault()),
-                                       read_only=True)
-    updated_by = serializers.CharField(default=serializers.CurrentUserDefault(), read_only=True)
     created_at = serializers.SkipField()
     updated_at = serializers.SkipField()
 

@@ -58,9 +58,7 @@ class ProductViewSet(viewsets.ModelViewSet):
                         status=status.HTTP_201_CREATED)
 
 
-class PartnerViewSet(mixins.ListModelMixin,
-                     mixins.RetrieveModelMixin,
-                     viewsets.GenericViewSet):
+class PartnerViewSet(viewsets.ModelViewSet):
     queryset = PartnerGuide.objects.all()
     serializer_class = PartnerGuideSerializer
     pagination_class = PageNumberPagination
@@ -81,9 +79,9 @@ class PartnerViewSet(mixins.ListModelMixin,
     def update(self, request: Request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        result = PartnerService().update(serializer.validated_data)
+        result = PartnerService().update(kwargs['pk'], serializer.validated_data)
         return Response(PartnerGuideSerializer(result).data,
-                        status=status.HTTP_201_CREATED)
+                        status=status.HTTP_200_OK)
 
     @action(detail=False, pagination_class=None)
     def select(self, request: Request, *args, **kwargs):
@@ -109,9 +107,7 @@ class PartnerViewSet(mixins.ListModelMixin,
         return Response({'success': 'Файл успешно загружен.'}, status=status.HTTP_201_CREATED)
 
 
-class ProviderViewSet(mixins.ListModelMixin,
-                      mixins.RetrieveModelMixin,
-                      viewsets.GenericViewSet):
+class ProviderViewSet(viewsets.ModelViewSet):
     queryset = ProviderGuide.objects.all()
     serializer_class = ProviderGuideSerializer
     pagination_class = PageNumberPagination
