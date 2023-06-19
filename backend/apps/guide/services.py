@@ -15,13 +15,14 @@ from .models import *
 
 
 class ProductService:
+    @transaction.atomic
     def import_xlsx(self, uploaded_file: InMemoryUploadedFile) -> OrderedDict:
         product_resource = ProductGuideResource()
         dataset = Dataset()
         dataset.load(uploaded_file)
         result = product_resource.import_data(dataset)
         if result.has_errors():
-            raise ValidationError({'non_field_errors': result.base_errors}, code=status.HTTP_400_BAD_REQUEST)
+            raise ValidationError({'non_field_errors': 'Ошибка импорта.'}, code=status.HTTP_400_BAD_REQUEST)
         return result.totals
 
 
@@ -199,7 +200,7 @@ class ProviderService:
         for contact in contacts:
             if "id" in contact.keys() and ContactProvider.objects.filter(id=contact['id']).exists():
                 contact_obj = ContactProvider.objects.get(id=contact['id'])
-                for attribute, value in contact:
+                for attribute, value in contact.items():
                     setattr(contact_obj, attribute, value)
                 contact_obj.save()
             else:
@@ -212,8 +213,9 @@ class ProviderService:
                 ContactProvider.objects.filter(id=contact_id).delete()
 
         provider_obj = ProviderGuide.objects.get(id=provider_id)
-        for attribute, value in validated_data:
+        for attribute, value in validated_data.items():
             setattr(provider_obj, attribute, value)
+        provider_obj.save()
 
         return provider_obj
 

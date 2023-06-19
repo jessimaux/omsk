@@ -19,3 +19,7 @@ class PurchaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Purchase
         exclude = ['project']
+
+
+class PurchaseInputSerializer(serializers.Serializer):
+    project_id = serializers.IntegerField()

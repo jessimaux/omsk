@@ -9,7 +9,7 @@ class Specification(models.Model):
 
 
 class Request(models.Model):
-    specification = models.ForeignKey(Specification, on_delete=models.CASCADE)
+    specification = models.ForeignKey(Specification, related_name='requests', on_delete=models.CASCADE)
     str_by_order = models.CharField(max_length=255, null=True, blank=True)
     name = models.CharField(max_length=1023, null=True, blank=True)
     tx = models.TextField(blank=True, null=True)
@@ -18,7 +18,7 @@ class Request(models.Model):
     
 
 class Offer(models.Model):
-    request = models.ForeignKey(Request, on_delete=models.CASCADE)
+    request = models.ForeignKey(Request, related_name='offers', on_delete=models.CASCADE)
     product = models.ForeignKey('guide.ProductGuide', related_name='product', on_delete=models.SET_NULL, null=True)
     article = models.CharField(max_length=255, null=True, blank=True)
     name = models.CharField(max_length=1023, null=True, blank=True)

@@ -24,7 +24,7 @@ class GuideOfferSerializer(serializers.ModelSerializer):
         
 class RequestSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)
-    offers = OfferSerializer(many=True, source='offer_set')
+    offers = OfferSerializer(many=True)
     
     class Meta:
         model = Request
@@ -32,7 +32,7 @@ class RequestSerializer(serializers.ModelSerializer):
                 
 
 class GuideRequestSerializer(serializers.ModelSerializer):
-    offers = GuideOfferSerializer(many=True, source='offer_set')
+    offers = GuideOfferSerializer(many=True)
     
     class Meta:
         model = Request
@@ -40,7 +40,7 @@ class GuideRequestSerializer(serializers.ModelSerializer):
         
         
 class GuideSpecificationSerializer(serializers.ModelSerializer):
-    requests = GuideRequestSerializer(many=True, source='request_set')
+    requests = GuideRequestSerializer(many=True)
     
     class Meta:
         model = Specification
@@ -48,7 +48,7 @@ class GuideSpecificationSerializer(serializers.ModelSerializer):
         
                 
 class SpecificationSerializer(serializers.ModelSerializer):
-    requests = RequestSerializer(many=True, source='request_set')
+    requests = RequestSerializer(many=True)
     
     class Meta:
         model = Specification

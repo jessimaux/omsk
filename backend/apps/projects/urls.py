@@ -5,8 +5,8 @@ from omsk.utils import CustomRouter
 from .views import *
 
 router = CustomRouter()
-router.register(r'projects', ProjectsViewSet)
-router.register(r'projects-files', ProjectFileViewSet)
+router.register(r'', ProjectsViewSet)
+router.register(r'files', ProjectFileViewSet)
 
 urlpatterns = [
     path('', include(router.urls))

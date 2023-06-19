@@ -25,9 +25,9 @@ class ProjectListSerializer(serializers.ModelSerializer):
 
     def get_total_bill(self, obj):
         total = 0
-        requests = obj.specification.request_set.all()
+        requests = obj.specification.requests.all()
         for request in requests:
-            for offer in request.offer_set.all():
+            for offer in request.offers.all():
                 total += offer.price * offer.count * request.amount
         return total
 
@@ -44,10 +44,10 @@ class ProjectListSerializer(serializers.ModelSerializer):
 
     def get_first_products(self, obj):
         products = []
-        requests = Specification.objects.get(project_id=obj.id).request_set.all()
+        requests = Specification.objects.get(project_id=obj.id).requests.all()
         count = 0
         for request in requests:
-            for offer in request.offer_set.all():
+            for offer in request.offers.all():
                 products.append(offer.name)
                 count += 1
                 if count >= 3:

@@ -10,8 +10,8 @@ class PurchaseService:
     @transaction.atomic
     def create(self, project_id: int) -> Purchase:
         purchase_obj = Purchase.objects.create(project_id=project_id)
-        for request in purchase_obj.project.specification.requests:
-            for offer in request.offers:
+        for request in purchase_obj.project.specification.requests.all():
+            for offer in request.offers.all():
                 PurchaseOffer.objects.create(purchase_id=purchase_obj.id, 
                                             offer_id=offer.id,
                                             status='Заказан',
@@ -24,7 +24,7 @@ class PurchaseService:
         purchases = validated_data.pop('purchases')
         
         purchase_obj = Purchase.objects.get(id=purchase_id)
-        for attribute, value in validated_data:
+        for attribute, value in validated_data.items():
             setattr(purchase_obj, attribute, value)
         
         for purchase_item in purchases:

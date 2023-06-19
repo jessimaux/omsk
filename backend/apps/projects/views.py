@@ -1,3 +1,5 @@
+import datetime
+
 from django.http import HttpResponse
 from django.shortcuts import render
 from rest_framework import viewsets, views, status, filters, generics, mixins
@@ -39,17 +41,17 @@ class ProjectsViewSet(viewsets.ModelViewSet):
     def update(self, request: Request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        result = ProjectService().update(serializer.validated_data)
+        result = ProjectService().update(kwargs['pk'], serializer.validated_data)
         return Response(ProjectSerializer(result).data,
                         status=status.HTTP_200_OK)
         
     @swagger_auto_schema(method='get', responses={200: ''})
-    @action(detail=False, pagination_class=None, filter_backends=None, serializer_class=None)
+    @action(detail=False, url_path='(?P<pk>[^/.]+)/report_registration', pagination_class=None, filter_backends=None, serializer_class=None)
     def report_registration(self, request: Request, *args, **kwargs):
         response = HttpResponse(ProjectService().export_registration_form(
             kwargs['pk']), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
         response['Access-Control-Expose-Headers'] = "Content-Disposition"
-        response['Content-Disposition'] = 'attachment; filename="myexport.xlsx"'
+        response['Content-Disposition'] = f'attachment; filename="{datetime.date.today()}.xlsx"'
         return response
 
 

@@ -51,11 +51,11 @@ class ProductViewSet(viewsets.ModelViewSet):
         elif request.FILES['file'].content_type not in IMPORT_EXTENSIONS:
             return Response({'non_field_errors': 'Выбран некорректный формат файла.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        result = ProductService().import_xlsx(request.FILES.get('file'), request.user.id)
+        result = ProductService().import_xlsx(request.FILES.get('file'))
 
         return Response({"message": "Файл успешно импортирован.",
                         "details": result},
-                        status=status.HTTP_201_CREATED)
+                        status=status.HTTP_200_OK)
 
 
 class PartnerViewSet(viewsets.ModelViewSet):
@@ -104,7 +104,7 @@ class PartnerViewSet(viewsets.ModelViewSet):
         elif request.FILES['file'].content_type not in IMPORT_EXTENSIONS:
             return Response({'non_field_errors': 'Выбран некорректный формат файла.'}, status=status.HTTP_400_BAD_REQUEST)
         PartnerService().import_xlsx(request.FILES.get('file'))
-        return Response({'success': 'Файл успешно загружен.'}, status=status.HTTP_201_CREATED)
+        return Response({'success': 'Файл успешно загружен.'}, status=status.HTTP_200_OK)
 
 
 class ProviderViewSet(viewsets.ModelViewSet):
@@ -128,9 +128,9 @@ class ProviderViewSet(viewsets.ModelViewSet):
     def update(self, request: Request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        result = ProviderService().update(serializer.validated_data)
+        result = ProviderService().update(kwargs['pk'], serializer.validated_data)
         return Response(ProviderGuideSerializer(result).data,
-                        status=status.HTTP_201_CREATED)
+                        status=status.HTTP_200_OK)
         
     @action(detail=False, pagination_class=None)
     def get_all(self, request: Request, *args, **kwargs):
@@ -153,4 +153,4 @@ class ProviderViewSet(viewsets.ModelViewSet):
         elif request.FILES['file'].content_type not in IMPORT_EXTENSIONS:
             return Response({'non_field_errors': 'Выбран некорректный формат файла.'}, status=status.HTTP_400_BAD_REQUEST)
         ProviderService().import_xlsx(request.FILES.get('file'))
-        return Response({'success': 'Файл успешно импортирован.'}, status=status.HTTP_201_CREATED)
+        return Response({'success': 'Файл успешно импортирован.'}, status=status.HTTP_200_OK)

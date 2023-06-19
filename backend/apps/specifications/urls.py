@@ -4,7 +4,7 @@ from rest_framework import routers
 from .views import *
 
 router = routers.SimpleRouter()
-router.register(r'specification', GuideSpecificationsViewSet)
+router.register(r'', SpecificationsViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

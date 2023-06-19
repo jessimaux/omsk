@@ -18,16 +18,16 @@ class ProjectService:
         
     def _calculate_total_price(self, project: Project) -> int:
         total = 0
-        for request in project.specification.request_set.all():
-            for offer in request.offer_set.all():
+        for request in project.specification.requests.all():
+            for offer in request.offers.all():
                 total += offer.price * offer.count
         return total
 
     def _get_specification_items(self, project: Project) -> str:
         items = ''
-        for request in project.specification.request_set.all():
-            for offer in request.offer_set.all():
-                items += offer.name + ' ' + str(offer.count) + '\n'
+        for request in project.specification.requests.all():
+            for offer in request.offers.all():
+                items += str(offer.name) + ' ' + str(offer.count) + '\n'
         return items
 
     def _fit_columns(self, ws: Worksheet) -> None:
@@ -39,7 +39,7 @@ class ProjectService:
     def create(self, validated_data: dict) -> Project:
         specifcation = validated_data.pop('specification')
         project_obj = Project.objects.create(**validated_data)
-        self.specification_service.create(project_obj.id, specifcation)
+        self.specification_service.create(specifcation, project_obj.id)
         self.purchase_service.create(project_obj.id)
         return project_obj
     
@@ -47,9 +47,9 @@ class ProjectService:
     def update(self, project_id: int, validated_data: dict) -> Project:
         specifcation = validated_data.pop('specification')
         project_obj = Project.objects.get(id=project_id)
-        for attribute, value in validated_data:
+        for attribute, value in validated_data.items():
             setattr(project_obj, attribute, value)
-        self.specification_service.update(project_obj.specification_id, specifcation)
+        self.specification_service.update(project_obj.specification.id, specifcation)
         return project_obj
 
     def export_registration_form(self, project_id: int) -> bytes:
