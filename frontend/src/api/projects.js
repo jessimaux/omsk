@@ -27,7 +27,7 @@ const deleteProject = (id) => {
 }
 
 const fileUploadProject = (files) => {
-  return axios.post('projects/files/', files)
+  return axios.post('files/', files)
 }
 
 // SPECIFICATIONS
