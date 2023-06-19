@@ -22,10 +22,10 @@ urlpatterns = [
    path('api/auth/', include('djoser.urls')),
    path('api/auth/', include('djoser.urls.authtoken')),
 
-   path('api/projects/', include('apps.projects.urls')),
+   path('api/', include('apps.projects.urls')),
    path('api/guide/', include('apps.guide.urls')),
-   path('api/purchases/', include('apps.purchases.urls')),
-   path('api/specifications/', include('apps.specifications.urls')),
+   path('api/', include('apps.purchases.urls')),
+   path('api/', include('apps.specifications.urls')),
 
    re_path(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui')
 ]

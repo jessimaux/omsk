@@ -4,7 +4,7 @@ from rest_framework import routers
 from apps.purchases import views
 
 router = routers.SimpleRouter()
-router.register(r'', views.PurchaseViewSet)
+router.register(r'purchases', views.PurchaseViewSet)
 
 urlpatterns = [
   path('', include(router.urls))
