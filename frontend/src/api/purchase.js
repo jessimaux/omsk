@@ -9,7 +9,7 @@ const editPurchase = (id, purchase) => {
 }
 
 const exportPurchases = (id) => {
-  return axios.get(`purchases/${id}/export/`, {responseType: 'arraybuffer' })
+  return axios.get(`purchases/${id}/export_xlsx/`, {responseType: 'arraybuffer' })
 }
 
 export default {

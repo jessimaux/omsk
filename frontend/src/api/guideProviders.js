@@ -9,11 +9,11 @@ const getFullProviders = () => {
 }
 
 const exportProviders = () => {
-  return axios.get('guide/providers/export/', { responseType: 'arraybuffer' })
+  return axios.get('guide/providers/export_xlsx/', { responseType: 'arraybuffer' })
 }
 
 const importProviders = (file) => {
-  return axios.post('guide/providers/import/', file)
+  return axios.post('guide/providers/import_xlsx/', file)
 }
 
 const getProvider = (id) => {

@@ -1,27 +1,27 @@
 import axios from '@/api/axios'
 
 const getSpecifications = (page, field, search) => {
-  return axios.get('guide/specifications/', {params: {page: page, ordering: field, search: search}})
+  return axios.get('specifications/', {params: {page: page, ordering: field, search: search}})
 }
 
 const getFullSpecifications = () => {
-  return axios.get('guide/specifications/select')
+  return axios.get('specifications/select/')
 }
 
 const getSpecification = (id) => {
-  return axios.get(`guide/specifications/${id}/`)
+  return axios.get(`specifications/${id}/`)
 }
 
 const addSpecification = (specification) => {
-  return axios.post('guide/specifications/', specification)
+  return axios.post('specifications/', specification)
 }
 
 const editSpecification = (id, specification) => {
-  return axios.put(`guide/specifications/${id}/`, specification)
+  return axios.put(`specifications/${id}/`, specification)
 }
 
 const deleteSpecification = (id) => {
-  return axios.delete(`guide/specifications/${id}/`)
+  return axios.delete(`specifications/${id}/`)
 }
 
 export default {

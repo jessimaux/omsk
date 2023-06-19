@@ -27,19 +27,19 @@ const deleteProject = (id) => {
 }
 
 const fileUploadProject = (files) => {
-  return axios.post('projects/file/upload/', files)
+  return axios.post('projects/files/', files)
 }
 
 // SPECIFICATIONS
 
 const exportSpecification = (id, params) => {
-  return axios.get(`specifications/${id}/export/`, {params: params, responseType: 'arraybuffer' })
+  return axios.get(`specifications/${id}/report_xlsx/`, {params: params, responseType: 'arraybuffer' })
 }
 
 // REGISTRATION FORM
 
 const exportRegistrationForm = (id) => {
-  return axios.get(`projects/${id}/registration-form/`, {responseType: 'arraybuffer' })
+  return axios.get(`projects/${id}/report_registration/`, {responseType: 'arraybuffer' })
 }
 
 export default {

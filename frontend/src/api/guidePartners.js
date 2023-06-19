@@ -9,11 +9,11 @@ const getFullPartners = () => {
 }
 
 const exportPartners = () => {
-  return axios.get('guide/partners/export/', { responseType: 'arraybuffer' })
+  return axios.get('guide/partners/export_xlsx/', { responseType: 'arraybuffer' })
 }
 
 const importPartners = (file) => {
-  return axios.post('guide/partners/import/', file)
+  return axios.post('guide/partners/import_xlsx/', file)
 }
 
 const getPartner = (id) => {

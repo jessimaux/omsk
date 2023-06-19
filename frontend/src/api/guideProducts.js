@@ -9,11 +9,11 @@ const getProducts = (page, field, search) => {
 }
 
 const exportProducts = () => {
-  return axios.get('guide/products/export/', { responseType: 'arraybuffer' })
+  return axios.get('guide/products/export_xlsx/', { responseType: 'arraybuffer' })
 }
 
 const importProducts = (file) => {
-  return axios.post('guide/products/import/', file)
+  return axios.post('guide/products/import_xlsx/', file)
 }
 
 const getProduct = (id) => {
