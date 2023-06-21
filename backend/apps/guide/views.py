@@ -133,7 +133,7 @@ class ProviderViewSet(viewsets.ModelViewSet):
                         status=status.HTTP_200_OK)
         
     @action(detail=False, pagination_class=None)
-    def get_all(self, request: Request, *args, **kwargs):
+    def select(self, request: Request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
     
     @swagger_auto_schema(method='get', responses={200: ''})

@@ -26,6 +26,7 @@ class PurchaseService:
         purchase_obj = Purchase.objects.get(id=purchase_id)
         for attribute, value in validated_data.items():
             setattr(purchase_obj, attribute, value)
+        purchase_obj.save()
         
         for purchase_item in purchases:
             if PurchaseOffer.objects.filter(id=purchase_item['id']):

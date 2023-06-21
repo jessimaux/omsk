@@ -39,9 +39,9 @@ class ProjectsViewSet(viewsets.ModelViewSet):
                         status=status.HTTP_201_CREATED)
         
     def update(self, request: Request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
+        serializer = self.get_serializer(data=request.data, partial=kwargs['partial'])
         serializer.is_valid(raise_exception=True)
-        result = ProjectService().update(kwargs['pk'], serializer.validated_data)
+        result = ProjectService().update(kwargs['pk'], serializer.validated_data, kwargs['partial'])
         return Response(ProjectSerializer(result).data,
                         status=status.HTTP_200_OK)
         

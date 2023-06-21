@@ -46,9 +46,11 @@ class SpecificationsViewSet(viewsets.ModelViewSet):
                         status=status.HTTP_200_OK)
 
     
-    @action(detail=False, pagination_class=None, filter_backends=None, serializer_class=GuideSpecificationSerializer)
+    @action(detail=False, pagination_class=None, serializer_class=GuideSpecificationSerializer)
     def select(self, request: Request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = GuideSpecificationSerializer(queryset, many=True)
+        return Response(serializer.data)
     
     @swagger_auto_schema(method='get', responses={200: ''})
     @action(detail=False, url_path='(?P<pk>[^/.]+)/report_xlsx', pagination_class=None, filter_backends=None, serializer_class=None)

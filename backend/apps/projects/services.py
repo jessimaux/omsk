@@ -44,12 +44,15 @@ class ProjectService:
         return project_obj
     
     @transaction.atomic
-    def update(self, project_id: int, validated_data: dict) -> Project:
-        specifcation = validated_data.pop('specification')
+    def update(self, project_id: int, validated_data: dict, partial: bool) -> Project:
+        if not partial:
+            specification = validated_data.pop('specification')
         project_obj = Project.objects.get(id=project_id)
         for attribute, value in validated_data.items():
             setattr(project_obj, attribute, value)
-        self.specification_service.update(project_obj.specification.id, specifcation)
+        project_obj.save()
+        if not partial:
+            self.specification_service.update(project_obj.specification.id, specification)
         return project_obj
 
     def export_registration_form(self, project_id: int) -> bytes:
