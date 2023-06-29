@@ -2,6 +2,7 @@ from tempfile import NamedTemporaryFile
 from copy import copy
 
 from django.db import transaction
+from rest_framework.generics import get_object_or_404
 import openpyxl
 from openpyxl.worksheet.worksheet import Worksheet
 from openpyxl.styles.borders import Border, Side
@@ -64,6 +65,15 @@ class ProjectService:
                                 action='Update',
                                 created_by_id=user_id)
         return project_obj
+    
+    @transaction.atomic
+    def destroy(self, project_id: int, user_id: int):
+        project_obj = get_object_or_404(Project.objects.filter(id=project_id))
+        project_obj.delete()
+        self.log_service.create(obj_type='Project',
+                                obj_id=project_id,
+                                action='Delete',
+                                created_by_id=user_id)
 
     def export_registration_form(self, project_id: int) -> bytes:
         project_obj = Project.objects.get(id=project_id)

@@ -21,22 +21,26 @@ class UserViewSet(viewsets.ModelViewSet):
     ordering = ['id']
     my_tags = ['Users']
 
-    def create(self, request, *args, **kwargs):
+    def create(self, request: Request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        result = UserService().create(serializer.validated_data)
+        result = UserService().create(serializer.validated_data, request.user.id)
         return Response(UserSerializer(result).data,
                         status=status.HTTP_201_CREATED)
 
-    def update(self, request, *args, **kwargs):
+    def update(self, request: Request, *args, **kwargs):
         serializer = UserUpdateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        result = UserService().update(kwargs['pk'], serializer.validated_data)
+        result = UserService().update(kwargs['pk'], serializer.validated_data, request.user.id)
         return Response(UserSerializer(result).data,
                         status=status.HTTP_200_OK)
         
+    def destroy(self, request: Request, *args, **kwargs):
+        UserService().destroy(kwargs['pk'], request.user.id)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+        
     @action(detail=False, pagination_class=None)
-    def me(self, request, *args, **kwargs):
+    def me(self, request: Request, *args, **kwargs):
         result = UserService().get_me(request.user.id)
         return Response(UserSerializer(result).data,
                         status=status.HTTP_200_OK)

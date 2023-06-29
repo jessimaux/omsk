@@ -4,6 +4,7 @@ from tempfile import NamedTemporaryFile
 from django.db import transaction
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from rest_framework import status, exceptions
+from rest_framework.generics import get_object_or_404
 from tablib import Dataset
 from openpyxl import Workbook, load_workbook
 
@@ -38,6 +39,16 @@ class ProductService:
                                 action='Update',
                                 created_by_id=user_id)
         return product_obj
+    
+    @transaction.atomic
+    def destroy(self, product_id: int, user_id: int):
+        product_obj = get_object_or_404(ProductGuide.objects.filter(id=product_id))
+        product_obj.delete()
+        self.log_service.create(obj_type='Product',
+                                obj_id=product_id,
+                                action='Delete',
+                                created_by_id=user_id)
+        
 
     @transaction.atomic
     def import_xlsx(self, uploaded_file: InMemoryUploadedFile) -> OrderedDict:
@@ -132,6 +143,15 @@ class PartnerService:
                                 created_by_id=user_id)
 
         return partner_obj
+    
+    @transaction.atomic
+    def destroy(self, partner_id: int, user_id: int):
+        partner_obj = get_object_or_404(PartnerGuide.objects.filter(id=partner_id))
+        partner_obj.delete()
+        self.log_service.create(obj_type='Partner',
+                                obj_id=partner_id,
+                                action='Delete',
+                                created_by_id=user_id)
 
     def export_xlsx(self) -> bytes:
         wb = Workbook()
@@ -272,6 +292,15 @@ class ProviderService:
                                 created_by_id=user_id)
 
         return provider_obj
+    
+    @transaction.atomic
+    def destroy(self, provider_id: int, user_id: int):
+        provider_obj = get_object_or_404(ProviderGuide.objects.filter(id=provider_id))
+        provider_obj.delete()
+        self.log_service.create(obj_type='Provider',
+                                obj_id=provider_id,
+                                action='Delete',
+                                created_by_id=user_id)
 
     def export_xlsx(self) -> bytes:
         wb = Workbook()

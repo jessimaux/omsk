@@ -4,7 +4,6 @@ from django.db import transaction
 from openpyxl import Workbook
 
 from .models import *
-from apps.purchases.models import PurchaseOffer
 
 
 # TODO: split this with creation service for Request, Offer

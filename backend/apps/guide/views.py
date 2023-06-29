@@ -29,19 +29,23 @@ class ProductViewSet(viewsets.ModelViewSet):
     ordering = ['id']
     my_tags = ['ProductsGuide']
     
-    def create(self, request, *args, **kwargs):
+    def create(self, request: Request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         result = ProductService().create(serializer.validated_data, request.user.id)
         return Response(ProductGuideSerializer(result).data, 
                         status=status.HTTP_201_CREATED)
         
-    def update(self, request, *args, **kwargs):
+    def update(self, request: Request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         result = ProductService().update(kwargs['pk'], serializer.validated_data, request.user.id)
         return Response(ProductGuideSerializer(result).data, 
                         status=status.HTTP_200_OK)
+        
+    def destroy(self, request: Request, *args, **kwargs):
+        ProductService().destroy(kwargs['pk'], request.user.id)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(detail=False, pagination_class=LimitOffsetPagination)
     def search(self, request: Request, *args, **kwargs):
@@ -96,6 +100,10 @@ class PartnerViewSet(viewsets.ModelViewSet):
         result = PartnerService().update(kwargs['pk'], serializer.validated_data, request.user.id)
         return Response(PartnerGuideSerializer(result).data,
                         status=status.HTTP_200_OK)
+        
+    def destroy(self, request: Request, *args, **kwargs):
+        PartnerService().destroy(kwargs['pk'], request.user.id)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(detail=False, pagination_class=None)
     def select(self, request: Request, *args, **kwargs):
@@ -145,6 +153,10 @@ class ProviderViewSet(viewsets.ModelViewSet):
         result = ProviderService().update(kwargs['pk'], serializer.validated_data, request.user.id)
         return Response(ProviderGuideSerializer(result).data,
                         status=status.HTTP_200_OK)
+        
+    def destroy(self, request: Request, *args, **kwargs):
+        ProviderService().destroy(kwargs['pk'], request.user.id)
+        return Response(status=status.HTTP_204_NO_CONTENT)
         
     @action(detail=False, pagination_class=None)
     def select(self, request: Request, *args, **kwargs):

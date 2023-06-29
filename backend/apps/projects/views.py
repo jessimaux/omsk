@@ -45,6 +45,10 @@ class ProjectsViewSet(viewsets.ModelViewSet):
         return Response(ProjectSerializer(result).data,
                         status=status.HTTP_200_OK)
         
+    def destroy(self, request: Request, *args, **kwargs):
+        ProjectService().destroy(kwargs['pk'], request.user.id)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+        
     @swagger_auto_schema(method='get', responses={200: ''})
     @action(detail=False, url_path='(?P<pk>[^/.]+)/report_registration', pagination_class=None, filter_backends=None, serializer_class=None)
     def report_registration(self, request: Request, *args, **kwargs):
