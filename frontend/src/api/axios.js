@@ -1,27 +1,13 @@
 import axios from 'axios'
-import { getItem } from '@/tools/persistanceStorage'
+import {getCookie} from '@/tools/persistanceStorage'
 
 axios.defaults.baseURL = 'http://127.0.0.1:8000/api'
 
-// middleware: add auth header
 axios.interceptors.request.use((config) => {
-  const token = getItem('accessToken')
-  const authorizationToken = token ? `Token ${token}` : ''
+  const token = getCookie('access')
+  const authorizationToken = token ? `Bearer ${token}` : ''
   config.headers.Authorization = authorizationToken
   return config
 })
-
-// middleware: remove token when 401
-axios.interceptors.response.use(undefined, function (error) {
-  if (error) {
-    const originalRequest = error.config
-    if (error.response.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true
-      localStorage.removeItem('accessToken')
-    }
-  }
-  return Promise.reject(error)
-})
-
 
 export default axios

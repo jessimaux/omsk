@@ -256,7 +256,7 @@ h6 {
 }
 
 .card-title {
-	padding: 20px 0 15px 0;
+	display: flex;
 	font-size: 18px;
 	font-weight: 500;
 	color: #012970;
@@ -1296,3 +1296,12 @@ td {
 .purchase-status {
 	width: 125px;
 }
+
+/*--------------------------------------------------------------
+  # Forms
+  --------------------------------------------------------------*/
+
+.required:after {
+    content:" *";
+    color: red;
+  }

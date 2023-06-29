@@ -20,7 +20,7 @@
 
                 <div class="col-auto">
                   <router-link class="btn btn-primary me-2" :to="{ name: 'guide-specifications-create' }">
-                    <i class="bi bi-plus-square"></i>&nbspДобавить
+                    <i class="bi bi-plus-circle"></i>&nbspДобавить
                   </router-link>
                 </div>
               </div>

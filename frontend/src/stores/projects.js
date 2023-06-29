@@ -57,6 +57,15 @@ export const useProjectsStore = defineStore('projects', {
         })
     },
 
+    async fileDeleteProject(id){
+      this.errors = null
+      await projectsApi.fileDeleteProject(id)
+      .catch((result) => {
+        this.errors = result.response.data
+        throw result.response.data
+      })
+    },
+
     async addProject(credentials) {
       this.errors = null
       this.data = null

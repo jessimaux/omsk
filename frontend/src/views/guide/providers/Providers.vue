@@ -5,10 +5,10 @@
     </div>
 
     <section class="section">
-      <validation-errors v-if="guideProvidersStore.errorsImport"
-        :validationErrors="guideProvidersStore.errorsImport"></validation-errors>
-      <success-messages v-if="guideProvidersStore.successMessages"
-        :successMessages="guideProvidersStore.successMessages"></success-messages>
+      <validation-errors-import v-if="guideProvidersStore.errorsImport"
+        :validationErrors="guideProvidersStore.errorsImport"></validation-errors-import>
+      <success-messages-import v-if="guideProvidersStore.successMessages"
+        :successMessages="guideProvidersStore.successMessages"></success-messages-import>
       <div class="row">
         <div class="col-lg-12">
           <div v-if="!guideProvidersStore.loading" class="card">
@@ -27,7 +27,7 @@
                   <div class="row">
                     <div class="col-auto">
                       <router-link class="btn btn-primary me-2" :to="{ name: 'guide-providers-create' }">
-                        <i class="bi bi-plus-square"></i>&nbspДобавить
+                        <i class="bi bi-plus-circle"></i>&nbspДобавить
                       </router-link>
                     </div>
 
@@ -103,15 +103,15 @@
 <script>
 import { useGuideProvidersStore } from '@/stores/guideProviders.js'
 import Pagination from '@/components/Pagination.vue'
-import ValidationErrors from '@/components/ValidationErrors.vue'
-import SuccessMessages from '@/components/SuccessMessages.vue'
+import ValidationErrorsImport from '@/components/ValidationErrorsImport.vue'
+import SuccessMessagesImport from '@/components/SuccessMessagesImport.vue'
 
 export default {
   name: 'Providers',
   components: {
     Pagination,
-    ValidationErrors,
-    SuccessMessages
+    ValidationErrorsImport,
+    SuccessMessagesImport
   },
   setup() {
     const guideProvidersStore = useGuideProvidersStore()

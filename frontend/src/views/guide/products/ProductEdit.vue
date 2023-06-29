@@ -6,8 +6,7 @@
 
     <section class="section">
       <form v-if="!guideProductsStore.loading" @submit.prevent="onSubmit">
-        <validation-errors v-if="guideProductsStore.errors" :validationErrors="guideProductsStore.errors"></validation-errors>
-        <product-form :product="product"></product-form>
+        <product-form v-if="guideProductsStore.data" :product="guideProductsStore.data"></product-form>
         <div class="text-end mb-3">
           <button type="submit" class="btn btn-primary">Сохранить</button>
         </div>
@@ -19,45 +18,22 @@
 <script>
 import { useGuideProductsStore } from '@/stores/guideProducts'
 import ProductForm from '@/components/guide/ProductForm.vue'
-import ValidationErrors from '@/components/ValidationErrors.vue'
 
 export default {
   name: 'ProductEdit',
   components: {
     ProductForm,
-    ValidationErrors
   },
   setup() {
     const guideProductsStore = useGuideProductsStore()
     return { guideProductsStore }
-  },
-  computed: {
-    product() {
-      return {
-        str_by_order: this.guideProductsStore.data.str_by_order,
-        article: this.guideProductsStore.data.article,
-        name: this.guideProductsStore.data.name,
-        price_rrc: this.guideProductsStore.data.price_rrc,
-        price_buy: this.guideProductsStore.data.price_buy,
-        link: this.guideProductsStore.data.link,
-        country: this.guideProductsStore.data.country,
-        description: this.guideProductsStore.data.description,
-        description_tech: this.guideProductsStore.data.description_tech,
-        description_add: this.guideProductsStore.data.description_add,
-        recommendation: this.guideProductsStore.data.recommendation,
-        provider: this.guideProductsStore.data.provider,
-        provider_id: this.guideProductsStore.data.provider_id,
-        nds: this.guideProductsStore.data.nds,
-        available: this.guideProductsStore.data.available
-      }
-    }
   },
 
   methods: {
     onSubmit() {
       const id = this.$route.params.id
       this.guideProductsStore
-        .editProduct(id, this.product)
+        .editProduct(id, this.guideProductsStore.data)
         .then(() => {
           this.$router.push({ name: 'guide-products' })
         })

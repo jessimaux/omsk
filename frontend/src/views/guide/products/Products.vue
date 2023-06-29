@@ -6,7 +6,7 @@
 
     <section class="section">
       <validation-errors v-if="guideProductsStore.errorsImport" :validationErrors="guideProductsStore.errorsImport"></validation-errors>
-      <success-messages v-if="guideProductsStore.successMessages" :successMessages="guideProductsStore.successMessages"></success-messages>
+      <success-messages-import v-if="guideProductsStore.successMessages" :successMessages="guideProductsStore.successMessages"></success-messages-import>
       <div class="row">
         <div class="col-lg-12">
           <div class="card">
@@ -25,7 +25,7 @@
                   <div class="row">
                     <div class="col-auto">
                       <router-link class="btn btn-primary me-2" :to="{ name: 'guide-products-create' }">
-                        <i class="bi bi-plus-square"></i>&nbspДобавить
+                        <i class="bi bi-plus-circle"></i>&nbspДобавить
                       </router-link>
                     </div>
 
@@ -118,15 +118,15 @@
 
 <script>
 import { useGuideProductsStore } from '@/stores/guideProducts.js'
-import ValidationErrors from '@/components/ValidationErrors.vue'
-import SuccessMessages from '@/components/SuccessMessages.vue'
+import ValidationErrors from '@/components/ValidationErrorsImport.vue'
+import SuccessMessagesImport from '@/components/SuccessMessagesImport.vue'
 import Pagination from '@/components/Pagination.vue'
 
 export default {
   name: 'Products',
   components:{
     ValidationErrors,
-    SuccessMessages,
+    SuccessMessagesImport,
     Pagination
   },
   setup() {

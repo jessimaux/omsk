@@ -10,27 +10,27 @@
           </div>
 
           <div class="col-12">
-            <label class="form-label" name="article">Артикул</label>
+            <label class="form-label required" name="article">Артикул</label>
             <input type="text" class="form-control" v-model="product.article" required>
           </div>
 
           <div class="col-12">
-            <label class="form-label" name="name">Наименование</label>
+            <label class="form-label required" name="name">Наименование</label>
             <input type="text" class="form-control" v-model="product.name" required>
           </div>
 
           <div class="col-12">
-            <label class="form-label" name="price_rrc">РРЦ</label>
+            <label class="form-label required" name="price_rrc">РРЦ</label>
             <input type="number" class="form-control" v-model="product.price_rrc" required>
           </div>
 
           <div class="col-12">
-            <label class="form-label" name="price_buy">Закупочная стоимость</label>
+            <label class="form-label required" name="price_buy">Закупочная стоимость</label>
             <input type="number" class="form-control" v-model="product.price_buy" required>
           </div>
 
           <div class="col-12">
-            <label class="form-label" name="provider">Поставщик</label>
+            <label class="form-label required" name="provider">Поставщик</label>
             <select class="form-select" v-model="product.provider_id" required>
               <option v-if="!guideProvidersStore.loading" v-for="provider in guideProvidersStore.data" :key="provider.id" :value="provider.id">
                 {{ provider.name }}

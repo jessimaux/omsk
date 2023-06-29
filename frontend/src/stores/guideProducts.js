@@ -18,7 +18,8 @@ export const useGuideProductsStore = defineStore('guideProducts', {
       this.data = null
       this.errors = null
       this.loading = true
-      await guideProductsApi.searchProducts(query)
+      await guideProductsApi
+        .searchProducts(query)
         .then((response) => {
           this.data = response.data
           this.loading = false
@@ -33,7 +34,8 @@ export const useGuideProductsStore = defineStore('guideProducts', {
       this.data = null
       this.errors = null
       this.loading = true
-      await guideProductsApi.getProducts(page, field, search)
+      await guideProductsApi
+        .getProducts(page, field, search)
         .then((response) => {
           this.data = response.data
           this.loading = false
@@ -49,7 +51,8 @@ export const useGuideProductsStore = defineStore('guideProducts', {
       this.status = null
       this.errors = null
       this.loading = true
-      await guideProductsApi.getProduct(id)
+      await guideProductsApi
+        .getProduct(id)
         .then((response) => {
           this.data = response.data
           this.status = response.status
@@ -65,6 +68,9 @@ export const useGuideProductsStore = defineStore('guideProducts', {
     async addProduct(credentials) {
       this.data = null
       this.errors = null
+      credentials.nds = credentials.nds === '' ? null : credentials.nds
+      credentials.available = credentials.available === '' ? null : credentials.available
+      
       await guideProductsApi
         .addProduct(credentials)
         .then((response) => {
@@ -79,6 +85,9 @@ export const useGuideProductsStore = defineStore('guideProducts', {
     async editProduct(id, credentials) {
       this.data = null
       this.errors = null
+      credentials.nds = credentials.nds === '' ? null : credentials.nds
+      credentials.available = credentials.available === '' ? null : credentials.available
+
       await guideProductsApi
         .editProduct(id, credentials)
         .then((response) => {
@@ -126,13 +135,14 @@ export const useGuideProductsStore = defineStore('guideProducts', {
     async importProducts(file) {
       this.errorsImport = null
       this.successMessages = null
-      await guideProductsApi.importProducts(file)
-      .then((response) => {
-        this.successMessages = response.data
-      })
-      .catch((result) => {
-        this.errorsImport = result.response.data
-      })
-    },
+      await guideProductsApi
+        .importProducts(file)
+        .then((response) => {
+          this.successMessages = response.data
+        })
+        .catch((result) => {
+          this.errorsImport = result.response.data
+        })
+    }
   }
 })

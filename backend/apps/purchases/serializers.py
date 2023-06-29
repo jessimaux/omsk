@@ -16,6 +16,9 @@ class PurchaseOfferSerializer(serializers.ModelSerializer):
 class PurchaseSerializer(serializers.ModelSerializer):
     purchases = PurchaseOfferSerializer(many=True)
     
+    created_at = serializers.SkipField()
+    updated_at = serializers.SkipField()
+    
     class Meta:
         model = Purchase
         exclude = ['project']

@@ -27,10 +27,13 @@ import EditGuideSpecification from '@/views/guide/specifications/SpecificationEd
 
 import Users from '@/views/users/Users.vue'
 import UserCreate from '@/views/users/UserCreate.vue'
+import UserEdit from '@/views/users/UserEdit.vue'
+
+import Logs from '@/views/logs/Logs.vue'
 
 import NotFound from '@/views/NotFound.vue'
 
-import { getItem } from '@/tools/persistanceStorage.js'
+import { getCookie } from '@/tools/persistanceStorage'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -206,6 +209,24 @@ const router = createRouter({
         requiresAuth: true,
       }
     },
+    {
+      path: '/users/:id/edit',
+      name: 'user-edit',
+      component: UserEdit,
+      meta: {
+        requiresAuth: true,
+      }
+    },
+
+    // LOGS
+    {
+      path: '/logs/',
+      name: 'logs',
+      component: Logs,
+      meta: {
+        requiresAuth: true,
+      }
+    },
 
     // 404
     { 
@@ -217,15 +238,16 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const userIsAuthenticated = Boolean(getItem('accessToken'))
+  const userIsAuthenticated = Boolean(getCookie('access'))
+
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (userIsAuthenticated) {
       next()
     } else next('login')
-  } 
+  }
   else if (userIsAuthenticated && (to.name == 'login' || to.name == 'register')) {
     next('/')
-  } 
+  }
   else next()
 })
 

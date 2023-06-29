@@ -1,20 +1,19 @@
 import axios from '@/api/axios'
 
-
 const login = (user) => {
-  return axios.post('auth/token/login/', user)
-}
-
-const logout = () => {
-  return axios.post('auth/token/logout/')
+  return axios.post('token/', user)
 }
 
 const getCurrentUser = () => {
-  return axios.get('auth/users/me/')
+  return axios.get('users/me/')
+}
+
+const refresh = (refresh_token) => {
+  return axios.post('token/refresh/', { refresh: refresh_token })
 }
 
 export default {
   login,
-  logout,
-  getCurrentUser,
+  refresh,
+  getCurrentUser
 }

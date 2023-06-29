@@ -140,12 +140,12 @@
                   <td>{{ item.offer.product ? item.offer.product.name : "" }}</td>
                   <td>{{ item.offer.count }}</td>
                   <td>{{ item.offer.product ? item.offer.product.provider.name : "" }}</td>
-                  <td><input type="number" min="0" step="any" v-model="item.price_buy"></td>
+                  <td><input type="number" min="0" step="any" v-model="item.price_buy" required></td>
                   <td>{{ item.offer.request.amount * item.offer.count * item.price_buy }}</td>
                   <td>{{ item.offer.price }}</td>
                   <td>{{ item.offer.request.amount * item.offer.count * item.offer.price }}</td>
-                  <td><input type="number" min="0" v-model="item.nds_base"></td>
-                  <td><input type="number" min="0" v-model="item.nds_sell"></td>
+                  <td><input type="number" min="0" v-model="item.nds_base" required></td>
+                  <td><input type="number" min="0" v-model="item.nds_sell" required></td>
                   <td>{{ 1 - item.price_buy / item.offer.price }}</td>
                   <td>{{ item.offer.request.amount * item.offer.count * (item.offer.price - item.price_buy) }}</td>
                   <td><input type="text" v-model="item.delivery_period"></td>

@@ -6,7 +6,6 @@
 
     <section class="section">
       <form @submit.prevent="onSubmit">
-        <validation-errors v-if="guideProductsStore.errors" :validationErrors="guideProductsStore.errors"></validation-errors>
         <product-form :product="product"></product-form>
         <div class="text-end mb-3">
           <button type="submit" class="btn btn-primary">Сохранить</button>
@@ -19,13 +18,11 @@
 <script>
 import { useGuideProductsStore } from '@/stores/guideProducts'
 import ProductForm from '@/components/guide/ProductForm.vue'
-import ValidationErrors from '@/components/ValidationErrors.vue'
 
 export default {
   name: 'ProductsCreate',
   components: {
     ProductForm,
-    ValidationErrors,
   },
   setup() {
     const guideProductsStore = useGuideProductsStore()
@@ -46,8 +43,8 @@ export default {
         description_add: '',
         recommendation: '',
         provider: '',
-        nds: '',
-        available: ''
+        nds: null,
+        available: null
       }
     }
   },

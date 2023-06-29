@@ -9,12 +9,13 @@ from openpyxl.styles.borders import Border, Side
 from .models import *
 from apps.specifications.services import SpecificationService
 from apps.purchases.services import PurchaseService
-
+from apps.logs.services import LogService
 
 class ProjectService:
     def __init__(self) -> None:
         self.specification_service = SpecificationService()
         self.purchase_service = PurchaseService()
+        self.log_service = LogService()
         
     def _calculate_total_price(self, project: Project) -> int:
         total = 0
@@ -36,23 +37,32 @@ class ProjectService:
             ws.column_dimensions[column_letter].auto_size = True
             
     @transaction.atomic
-    def create(self, validated_data: dict) -> Project:
+    def create(self, validated_data: dict, user_id: int) -> Project:
         specifcation = validated_data.pop('specification')
-        project_obj = Project.objects.create(**validated_data)
+        project_obj = Project.objects.create(**validated_data, created_by_id=user_id)
         self.specification_service.create(specifcation, project_obj.id)
-        self.purchase_service.create(project_obj.id)
+        self.purchase_service.create(project_obj.id, user_id)
+        self.log_service.create(obj_type='Project',
+                                obj_id=project_obj.id,
+                                action='Create',
+                                created_by_id=user_id)
         return project_obj
     
     @transaction.atomic
-    def update(self, project_id: int, validated_data: dict, partial: bool) -> Project:
+    def update(self, project_id: int, validated_data: dict, user_id: int, partial: bool) -> Project:
         if not partial:
             specification = validated_data.pop('specification')
         project_obj = Project.objects.get(id=project_id)
         for attribute, value in validated_data.items():
             setattr(project_obj, attribute, value)
+        project_obj.updated_by_id = user_id
         project_obj.save()
         if not partial:
             self.specification_service.update(project_obj.specification.id, specification)
+        self.log_service.create(obj_type='Project',
+                                obj_id=project_obj.id,
+                                action='Update',
+                                created_by_id=user_id)
         return project_obj
 
     def export_registration_form(self, project_id: int) -> bytes:

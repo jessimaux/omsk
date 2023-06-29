@@ -6,7 +6,6 @@
 
     <section class="section">
       <form @submit.prevent="onSubmit">
-        <validation-errors v-if="guideSpecificationsStore.errors" :validationErrors="guideSpecificationsStore.errors"></validation-errors>
         <div class="row">
           <div class="col-lg-6">
             <div class="card">
@@ -39,13 +38,11 @@
 <script>
 import { useGuideSpecificationsStore } from '@/stores/guideSpecifications'
 import Specification from '@/components/specifications/Specification.vue'
-import ValidationErrors from '@/components/ValidationErrors.vue'
 
 export default {
   name: 'SpecificationCreate',
   components: {
-    Specification,
-    ValidationErrors
+    Specification
   },
   setup() {
     const guideSpecificationsStore = useGuideSpecificationsStore()

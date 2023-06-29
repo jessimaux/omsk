@@ -28,6 +28,20 @@ class ProductViewSet(viewsets.ModelViewSet):
     ordering_fields = '__all__'
     ordering = ['id']
     my_tags = ['ProductsGuide']
+    
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        result = ProductService().create(serializer.validated_data, request.user.id)
+        return Response(ProductGuideSerializer(result).data, 
+                        status=status.HTTP_201_CREATED)
+        
+    def update(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        result = ProductService().update(kwargs['pk'], serializer.validated_data, request.user.id)
+        return Response(ProductGuideSerializer(result).data, 
+                        status=status.HTTP_200_OK)
 
     @action(detail=False, pagination_class=LimitOffsetPagination)
     def search(self, request: Request, *args, **kwargs):
@@ -72,14 +86,14 @@ class PartnerViewSet(viewsets.ModelViewSet):
     def create(self, request: Request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        result = PartnerService().create(serializer.validated_data)
+        result = PartnerService().create(serializer.validated_data, request.user.id)
         return Response(PartnerGuideSerializer(result).data,
                         status=status.HTTP_201_CREATED)
 
     def update(self, request: Request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        result = PartnerService().update(kwargs['pk'], serializer.validated_data)
+        result = PartnerService().update(kwargs['pk'], serializer.validated_data, request.user.id)
         return Response(PartnerGuideSerializer(result).data,
                         status=status.HTTP_200_OK)
 
@@ -104,7 +118,7 @@ class PartnerViewSet(viewsets.ModelViewSet):
         elif request.FILES['file'].content_type not in IMPORT_EXTENSIONS:
             return Response({'non_field_errors': 'Выбран некорректный формат файла.'}, status=status.HTTP_400_BAD_REQUEST)
         PartnerService().import_xlsx(request.FILES.get('file'))
-        return Response({'success': 'Файл успешно загружен.'}, status=status.HTTP_200_OK)
+        return Response({'message': 'Файл успешно загружен.'}, status=status.HTTP_200_OK)
 
 
 class ProviderViewSet(viewsets.ModelViewSet):
@@ -121,14 +135,14 @@ class ProviderViewSet(viewsets.ModelViewSet):
     def create(self, request: Request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        result = ProviderService().create(serializer.validated_data)
+        result = ProviderService().create(serializer.validated_data, request.user.id)
         return Response(ProviderGuideSerializer(result).data,
                         status=status.HTTP_201_CREATED)
 
     def update(self, request: Request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        result = ProviderService().update(kwargs['pk'], serializer.validated_data)
+        result = ProviderService().update(kwargs['pk'], serializer.validated_data, request.user.id)
         return Response(ProviderGuideSerializer(result).data,
                         status=status.HTTP_200_OK)
         
@@ -153,4 +167,4 @@ class ProviderViewSet(viewsets.ModelViewSet):
         elif request.FILES['file'].content_type not in IMPORT_EXTENSIONS:
             return Response({'non_field_errors': 'Выбран некорректный формат файла.'}, status=status.HTTP_400_BAD_REQUEST)
         ProviderService().import_xlsx(request.FILES.get('file'))
-        return Response({'success': 'Файл успешно импортирован.'}, status=status.HTTP_200_OK)
+        return Response({'message': 'Файл успешно импортирован.'}, status=status.HTTP_200_OK)

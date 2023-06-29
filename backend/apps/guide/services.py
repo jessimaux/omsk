@@ -3,18 +3,42 @@ from tempfile import NamedTemporaryFile
 
 from django.db import transaction
 from django.core.files.uploadedfile import InMemoryUploadedFile
-from rest_framework import status
-from rest_framework.exceptions import ValidationError
+from rest_framework import status, exceptions
 from tablib import Dataset
 from openpyxl import Workbook, load_workbook
 
+from apps.logs.services import LogService
 from .resources import ProductGuideResource
 from .models import *
 
+
 # TODO: split services with contact by create contact service
-
-
 class ProductService:
+    def __init__(self) -> None:
+        self.log_service = LogService()
+
+    @transaction.atomic
+    def create(self, validated_data: dict, user_id: int) -> ProductGuide:
+        product_obj = ProductGuide.objects.create(**validated_data, created_by_id=user_id)
+        self.log_service.create(obj_type='Product',
+                                obj_id=product_obj.id,
+                                action='Create',
+                                created_by_id=user_id)
+        return product_obj
+
+    @transaction.atomic
+    def update(self, product_id: int, validated_data: dict, user_id: int) -> ProductGuide:
+        product_obj = ProductGuide.objects.get(id=product_id)
+        for attribute, value in validated_data.items():
+            setattr(product_obj, attribute, value)
+        product_obj.updated_by_id = user_id
+        product_obj.save()
+        self.log_service.create(obj_type='Product',
+                                obj_id=product_obj.id,
+                                action='Update',
+                                created_by_id=user_id)
+        return product_obj
+
     @transaction.atomic
     def import_xlsx(self, uploaded_file: InMemoryUploadedFile) -> OrderedDict:
         product_resource = ProductGuideResource()
@@ -22,7 +46,8 @@ class ProductService:
         dataset.load(uploaded_file)
         result = product_resource.import_data(dataset)
         if result.has_errors():
-            raise ValidationError({'non_field_errors': 'Ошибка импорта.'}, code=status.HTTP_400_BAD_REQUEST)
+            raise exceptions.ValidationError({'non_field_errors': 'Ошибка импорта.',
+                                              'details': result.row_errors()}, code=status.HTTP_400_BAD_REQUEST)
         return result.totals
 
 
@@ -38,6 +63,9 @@ class PartnerService:
     CONTACT_ROLE = 8
     CONTACT_PHONE = 9
     CONTACT_EMAIL = 10
+
+    def __init__(self) -> None:
+        self.log_service = LogService()
 
     def _contact_partner_handle(self, row: list, partner_id: int) -> None:
         contact_fields = ['partner_id', 'fio', 'role', 'phone', 'email']
@@ -60,15 +88,19 @@ class PartnerService:
                 return True
 
     @transaction.atomic
-    def create(self, validated_data: dict) -> PartnerGuide | None:
+    def create(self, validated_data: dict, user_id: int) -> PartnerGuide | None:
         contacts = validated_data.pop('contact_partner')
-        partner_obj = PartnerGuide.objects.create(**validated_data)
+        partner_obj = PartnerGuide.objects.create(**validated_data, created_by_id=user_id)
         for contact in contacts:
             ContactPartner.objects.create(partner_id=partner_obj.id, **contact)
+        self.log_service.create(obj_type='Partner',
+                                obj_id=partner_obj.id,
+                                action='Create',
+                                created_by_id=user_id)
         return partner_obj
 
     @transaction.atomic
-    def update(self, partner_id: int, validated_data: dict) -> PartnerGuide | None:
+    def update(self, partner_id: int, validated_data: dict, user_id: int) -> PartnerGuide | None:
         contacts = validated_data.pop('contact_partner')
         contacts_from_db = ContactPartner.objects.filter(partner_id=partner_id).values_list('id', flat=True)
         contacts_id_pool = []
@@ -91,7 +123,13 @@ class PartnerService:
         partner_obj = PartnerGuide.objects.get(id=partner_id)
         for attribute, value in validated_data.items():
             setattr(partner_obj, attribute, value)
+        partner_obj.updated_by_id = user_id
         partner_obj.save()
+        
+        self.log_service.create(obj_type='Partner',
+                                obj_id=partner_obj.id,
+                                action='Update',
+                                created_by_id=user_id)
 
         return partner_obj
 
@@ -131,22 +169,25 @@ class PartnerService:
         wb = load_workbook(upload_file)
         ws = wb.active
         partners_fields = ['name', 'inn', 'region', 'discount']
-        for row in ws.iter_rows(min_row=2, values_only=True):
-            if self._is_row_partner_handler(row):
-                if row[self.ID]:
-                    partner_obj = PartnerGuide.objects.get(id=row[self.ID])
-                    for index, attr in enumerate(partners_fields, self.NAME):
-                        setattr(partner_obj, attr, row[index])
-                    partner_obj.save()
-                    self._contact_partner_handle(row, partner_obj.id)
+        try:
+            for row in ws.iter_rows(min_row=2, values_only=True):
+                if self._is_row_partner_handler(row):
+                    if row[self.ID]:
+                        partner_obj = PartnerGuide.objects.get(id=row[self.ID])
+                        for index, attr in enumerate(partners_fields, self.NAME):
+                            setattr(partner_obj, attr, row[index])
+                        partner_obj.save()
+                        self._contact_partner_handle(row, partner_obj.id)
+                    else:
+                        partner_obj = PartnerGuide.objects.create(name=row[self.NAME],
+                                                                  inn=row[self.INN],
+                                                                  region=row[self.REGION],
+                                                                  discount=row[self.DISCOUNT])
+                        self._contact_partner_handle(row, partner_obj.id)
                 else:
-                    partner_obj = PartnerGuide.objects.create(name=row[self.NAME],
-                                                              inn=row[self.INN],
-                                                              region=row[self.REGION],
-                                                              discount=row[self.DISCOUNT])
                     self._contact_partner_handle(row, partner_obj.id)
-            else:
-                self._contact_partner_handle(row, partner_obj.id)
+        except Exception:
+            raise exceptions.ValidationError({'non_field_errors': 'Ошибка импорта.'})
 
 
 class ProviderService:
@@ -162,6 +203,9 @@ class ProviderService:
     CONTACT_ROLE = 9
     CONTACT_PHONE = 10
     CONTACT_EMAIL = 11
+    
+    def __init__(self) -> None:
+        self.log_service = LogService()
 
     def _is_row_provider_handler(self, row: list) -> bool:
         for attr in row[self.ID:self.DISCOUNT]:
@@ -172,7 +216,7 @@ class ProviderService:
         contact_fields = ['provider_id', 'fio', 'role', 'phone', 'email']
 
         if row[self.CONTACT_PROVIDER_ID]:
-            contact_obj = ContactProvider.objects.get(id=row[self.CONTACT_PROVIDER_ID])
+            contact_obj = ContactProvider.objects.get(id=row[self.CONTACT_ID])
             for index, attribute in enumerate(contact_fields, self.CONTACT_PROVIDER_ID):
                 setattr(contact_obj, attribute, row[index])
             contact_obj.save()
@@ -184,15 +228,19 @@ class ProviderService:
                                            email=row[self.CONTACT_EMAIL])
 
     @transaction.atomic
-    def create(self, validated_data: dict) -> ProviderGuide | None:
+    def create(self, validated_data: dict, user_id: int) -> ProviderGuide | None:
         contacts = validated_data.pop('contact_provider')
-        provider_obj = ProviderGuide.objects.create(**validated_data)
+        provider_obj = ProviderGuide.objects.create(**validated_data, created_by_id=user_id)
         for contact in contacts:
             ContactProvider.objects.create(provider_id=provider_obj.id, **contact)
+        self.log_service.create(obj_type='Provider',
+                                obj_id=provider_obj.id,
+                                action='Create',
+                                created_by_id=user_id)
         return provider_obj
 
     @transaction.atomic
-    def update(self, provider_id: int, validated_data: dict) -> ProviderGuide | None:
+    def update(self, provider_id: int, validated_data: dict, user_id: int) -> ProviderGuide | None:
         contacts = validated_data.pop('contact_provider')
         contacts_from_db = ContactProvider.objects.filter(provider_id=provider_id).values_list('id', flat=True)
         contacts_id_pool = []
@@ -215,7 +263,13 @@ class ProviderService:
         provider_obj = ProviderGuide.objects.get(id=provider_id)
         for attribute, value in validated_data.items():
             setattr(provider_obj, attribute, value)
+        provider_obj.updated_by_id = user_id
         provider_obj.save()
+        
+        self.log_service.create(obj_type='Provider',
+                                obj_id=provider_obj.id,
+                                action='Update',
+                                created_by_id=user_id)
 
         return provider_obj
 
@@ -255,20 +309,23 @@ class ProviderService:
         wb = load_workbook(upload_file)
         ws = wb.active
         providers_fields = ['name', 'sphere', 'inn', 'region', 'discount']
-        for row in ws.iter_rows(min_row=2, values_only=True):
-            if self._is_row_provider_handler(row):
-                if row[self.ID]:
-                    provider_obj = ProviderGuide.objects.get(id=row[self.ID])
-                    for index, attr in enumerate(providers_fields, self.NAME):
-                        setattr(provider_obj, attr, row[index])
-                    provider_obj.save()
-                    self._contact_provider_handle(row, provider_obj.id)
+        try:
+            for row in ws.iter_rows(min_row=2, values_only=True):
+                if self._is_row_provider_handler(row):
+                    if row[self.ID]:
+                        provider_obj = ProviderGuide.objects.get(id=row[self.ID])
+                        for index, attr in enumerate(providers_fields, self.NAME):
+                            setattr(provider_obj, attr, row[index])
+                        provider_obj.save()
+                        self._contact_provider_handle(row, provider_obj.id)
+                    else:
+                        provider_obj = ProviderGuide.objects.create(name=row[self.NAME],
+                                                                    sphere=row[self.SPHERE],
+                                                                    inn=row[self.INN],
+                                                                    region=row[self.REGION],
+                                                                    discount=row[self.DISCOUNT])
+                        self._contact_provider_handle(row, provider_obj.id)
                 else:
-                    provider_obj = ProviderGuide.objects.create(name=row[self.NAME],
-                                                                sphere=row[self.SPHERE],
-                                                                inn=row[self.INN],
-                                                                region=row[self.REGION],
-                                                                discount=row[self.DISCOUNT])
                     self._contact_provider_handle(row, provider_obj.id)
-            else:
-                self._contact_provider_handle(row, provider_obj.id)
+        except Exception:
+            raise exceptions.ValidationError({'non_field_errors': 'Ошибка импорта.'})

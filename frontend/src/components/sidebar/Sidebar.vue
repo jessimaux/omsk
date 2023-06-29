@@ -62,6 +62,12 @@
                     <i class=" bi bi-person"></i><span>Пользователи</span>
                 </router-link>
             </li>
+
+            <li class="nav-item">
+                <router-link class="nav-link" :to="{ name: 'logs' }" active-class="active">
+                    <i class="bi bi-file-earmark-text"></i><span>Логи действий</span>
+                </router-link>
+            </li>
         </ul>
 
     </aside>
@@ -89,7 +95,7 @@ export default defineComponent({
             return this.$route.name === 'project-create' || this.$route.name === 'project-edit' || this.$route.name === 'project-purchase'
         },
         isActiveUsers() {
-            return this.$route.name === 'user-create'
+            return this.$route.name === 'user-create' || this.$route.name === 'user-edit'
         },
     }
 })

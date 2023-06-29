@@ -6,7 +6,6 @@
 
     <section class="section">
       <form @submit.prevent="onSubmit">
-        <validation-errors v-if="projectsStore.errors" :validationErrors="projectsStore.errors"></validation-errors>
         <project-form :project="project"></project-form>
 
         <div class="row">
@@ -45,7 +44,6 @@ import { useGuideSpecificationsStore } from '@/stores/guideSpecifications'
 import ProjectForm from '@/components/projects/ProjectForm.vue'
 import Specification from '@/components/specifications/Specification.vue'
 import ProjectFileUpload from '@/components/projects/ProjectFileUpload.vue'
-import ValidationErrors from '@/components/ValidationErrors.vue'
 
 export default {
   name: 'ProjectCreate',
@@ -53,7 +51,6 @@ export default {
     ProjectForm,
     Specification,
     ProjectFileUpload,
-    ValidationErrors
   },
   setup() {
     const projectsStore = useProjectsStore()
@@ -112,7 +109,6 @@ export default {
               formData.append('files', file)
             }
             formData.append('project', this.projectsStore.project)
-
             this.projectsStore.fileUploadProject(formData)
           }
           

@@ -5,12 +5,12 @@
         <div class="card-body">
           <h5 class="card-title">Общее</h5>
           <div class="col-12">
-            <label class="form-label" name="name">Название проекта</label>
+            <label class="form-label required" name="name">Название проекта</label>
             <input type="text" class="form-control" v-model="project.name" required />
           </div>
 
           <div class="col-12">
-            <label class="form-label" name="status">Статус проекта</label>
+            <label class="form-label required" name="status">Статус проекта</label>
             <select class="form-select" v-model="project.status" required>
               <option v-for="attribute in statusSelect" :value="attribute">
                 {{ attribute }}
@@ -19,7 +19,7 @@
           </div>
 
           <div class="col-12">
-            <label class="form-label" name="partner">Партнер</label>
+            <label class="form-label required" name="partner">Партнер</label>
             <select class="form-select" v-model="project.partner_id" required>
               <option v-if="!guidePartnersStore.loading" v-for="partner in guidePartnersStore.data.results"
                 :key="partner.id" :value="partner.id">

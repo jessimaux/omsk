@@ -11,10 +11,8 @@
                   <h5 class="card-title text-center pb-0 fs-4">Авторизация</h5>
                 </div>
 
-                <validation-errors :validationErrors="authStore.errors"></validation-errors>
-
                 <form class="row g-3 needs-validation" @submit.prevent="onSubmit">
-
+                  <validation-errors v-if="authStore.errors" :validationErrors="authStore.errors"></validation-errors>
                   <div class="col-12">
                     <label for="yourUsername" class="form-label">Имя пользователя</label>
                     <div class="input-group has-validation">
@@ -47,17 +45,17 @@
 import { defineComponent } from "vue"
 import { useAuthStore } from '@/stores/auth'
 import { useGlobalStore } from "@/stores/global"
-import ValidationErrors from "@/components/ValidationErrors.vue"
+import ValidationErrors from '@/components/ValidationErrors.vue'
 
 export default defineComponent({
   name: "AppLogin",
-  components: {
-    ValidationErrors
-  },
   setup() {
     const authStore = useAuthStore()
     const globalStore = useGlobalStore()
     return { authStore, globalStore }
+  },
+  components: {
+    ValidationErrors,
   },
   data() {
     return {

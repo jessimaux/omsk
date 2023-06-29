@@ -1,6 +1,6 @@
 <template>
-  <Navbar v-if="globalStore.getShowNavbar && !authStore.getIsLoading" />
-  <Sidebar v-if="globalStore.getShowSidebar && !authStore.getIsLoading" />
+  <Navbar v-if="globalStore.getShowNavbar && !authStore.isLoading" />
+  <Sidebar v-if="globalStore.getShowSidebar && !authStore.isLoading" />
   <router-view></router-view>
 </template>
 
@@ -20,9 +20,6 @@ export default {
   components: {
     Sidebar,
     Navbar,
-  },
-  mounted() {
-    if(this.$route.name !== 'login' || this.$route.name !== 'register') this.authStore.getCurrentUser()
   }
 }
 </script>

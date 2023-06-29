@@ -24,7 +24,7 @@ class PurchaseViewSet(mixins.RetrieveModelMixin,
     def update(self, request: Request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        result = PurchaseService().update(kwargs['pk'], serializer.validated_data)
+        result = PurchaseService().update(kwargs['pk'], serializer.validated_data, request.user.id)
         return Response(PurchaseSerializer(result).data,
                         status=status.HTTP_200_OK)
 

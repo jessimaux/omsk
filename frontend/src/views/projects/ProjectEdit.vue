@@ -54,6 +54,13 @@ export default {
     onSubmit() {
       this.projectsStore.editProject(this.project.id, this.project)
         .then(() => {
+          const files_id = this.files.map((obj) => obj.id)
+          this.projectsStore.data.files.forEach((object)=>{
+            if(object.id in files_id === false){
+              this.projectsStore.fileDeleteProject(object.id)
+            } 
+          })
+
           if (this.files.length > 0) {
             const formData = new FormData()
             for (let file of this.files) {

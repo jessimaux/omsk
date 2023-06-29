@@ -37,7 +37,7 @@ export default {
         name: '',
         inn: '',
         region: '',
-        discount: '',
+        discount: 0,
         contacts: [{
           fio: '',
           role: '',

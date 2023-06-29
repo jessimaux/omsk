@@ -5,27 +5,27 @@
         <div class="card-body">
           <h5 class="card-title">Общее</h5>
           <div class="col-12">
-            <label class="form-label" name="name">Наименование</label>
+            <label class="form-label required" name="name">Наименование</label>
             <input type="text" class="form-control" v-model="provider.name" required>
           </div>
 
           <div class="col-12">
-            <label class="form-label" name="sphere">Сфера</label>
+            <label class="form-label required" name="sphere">Сфера</label>
             <input type="text" class="form-control" v-model="provider.sphere" required>
           </div>
 
           <div class="col-12">
-            <label class="form-label" name="inn">ИНН</label>
+            <label class="form-label required" name="inn">ИНН</label>
             <input type="text" class="form-control" v-model="provider.inn" required>
           </div>
 
           <div class="col-12">
-            <label class="form-label" name="region">Город / Регион</label>
+            <label class="form-label required" name="region">Город / Регион</label>
             <input type="text" class="form-control" v-model="provider.region" required>
           </div>
 
           <div class="col-12">
-            <label class="form-label" name="discount">Базовая скидка</label>
+            <label class="form-label required" name="discount">Базовая скидка</label>
             <input type="number" class="form-control" v-model="provider.discount" required>
           </div>
 
@@ -38,28 +38,29 @@
     <div v-for="(contact, index) in provider.contacts" :key="provider.id" class="col-lg-6">
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title">Контактное лицо
-            <i class="bi bi-plus-square" @click="addContact(provider.contacts)"></i>
-            <i v-show="(provider.contacts.length > 1)" class="bi bi-dash-square"
+          <div class="card-title">
+          <h5 class="me-1">Контактное лицо</h5>
+            <i class="bi bi-plus-square me-1" @click="addContact(provider.contacts)"></i>
+            <i v-show="(provider.contacts.length > 1)" class="bi bi-dash-square me-1"
               @click="deleteContact(provider.contacts, index)"></i>
-          </h5>
+            </div>
           <div class="col-12">
-            <label class="form-label" name="fio">ФИО</label>
+            <label class="form-label required" name="fio">ФИО</label>
             <input type="text" class="form-control" v-model="contact.fio" required>
           </div>
 
           <div class="col-12">
-            <label class="form-label" name="role">Роль</label>
+            <label class="form-label required" name="role">Роль</label>
             <input type="text" class="form-control" v-model="contact.role" required>
           </div>
 
           <div class="col-12">
-            <label class="form-label" name="phone">Контактный телефон</label>
+            <label class="form-label required" name="phone">Контактный телефон</label>
             <input type="text" class="form-control" v-model="contact.phone" required>
           </div>
 
           <div class="col-12">
-            <label class="form-label" name="email">E-mail</label>
+            <label class="form-label required" name="email">E-mail</label>
             <input type="text" class="form-control" v-model="contact.email" required>
           </div>
 

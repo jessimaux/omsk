@@ -30,6 +30,10 @@ const fileUploadProject = (files) => {
   return axios.post('files/', files)
 }
 
+const fileDeleteProject = (id) => {
+  return axios.delete(`files/${id}`)
+}
+
 // SPECIFICATIONS
 
 const exportSpecification = (id, params) => {
@@ -50,6 +54,7 @@ export default {
   addProject,
   deleteProject,
   fileUploadProject,
+  fileDeleteProject,
   exportSpecification,
   exportRegistrationForm,
 }

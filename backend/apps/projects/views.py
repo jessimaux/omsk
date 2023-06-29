@@ -34,14 +34,14 @@ class ProjectsViewSet(viewsets.ModelViewSet):
     def create(self, request: Request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        result = ProjectService().create(serializer.validated_data)
+        result = ProjectService().create(serializer.validated_data, request.user.id)
         return Response(ProjectSerializer(result).data,
                         status=status.HTTP_201_CREATED)
         
     def update(self, request: Request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data, partial=kwargs['partial'])
+        serializer = self.get_serializer(data=request.data, partial=kwargs.get('partial'))
         serializer.is_valid(raise_exception=True)
-        result = ProjectService().update(kwargs['pk'], serializer.validated_data, kwargs['partial'])
+        result = ProjectService().update(kwargs['pk'], serializer.validated_data, request.user.id, kwargs.get('partial'))
         return Response(ProjectSerializer(result).data,
                         status=status.HTTP_200_OK)
         

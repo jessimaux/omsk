@@ -23,7 +23,7 @@
                   <div class="row">
                     <div class="col-auto">
                       <router-link :to="{ name: 'project-create' }"><button class="btn btn-primary"><i
-                            class="bi bi-plus-square"></i>Добавить</button></router-link>
+                            class="bi bi-plus-circle"></i>&nbsp;Добавить</button></router-link>
                     </div>
                   </div>
                 </div>

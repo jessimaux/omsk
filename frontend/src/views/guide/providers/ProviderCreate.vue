@@ -37,7 +37,7 @@ export default {
         sphere: '',
         inn: '',
         region: '',
-        discount: '',
+        discount: 0,
         contacts: [{
           fio: '',
           role: '',
