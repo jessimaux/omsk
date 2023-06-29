@@ -1,7 +1,7 @@
 import axios from 'axios'
 import {getCookie} from '@/tools/persistanceStorage'
 
-axios.defaults.baseURL = 'http://127.0.0.1:8000/api'
+axios.defaults.baseURL = import.meta.env.VITE_BASEURL
 
 axios.interceptors.request.use((config) => {
   const token = getCookie('access')
